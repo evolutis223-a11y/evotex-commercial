@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>EVOTEX 1.0 — Connexion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="../css/tokens.css">
+<style>
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(1000px 600px at 50% -10%, rgba(63,150,234,0.28), transparent),
+      linear-gradient(180deg, var(--evx-navy-deep) 0%, var(--evx-navy) 100%);
+    padding: 24px; }
+  .login-card { width: 100%; max-width: 380px; background: #ffffff; border-radius: 18px;
+    padding: 32px 30px; box-shadow: 0 30px 70px rgba(8,16,30,0.4); }
+  .login-kicker { color: var(--evx-blue); font-weight: 800; letter-spacing: 2px; font-size: 11px; margin-bottom: 8px; }
+  .login-title { font-family: var(--font-display); font-size: 21px; font-weight: 900; color: #101828; margin: 0 0 22px; }
+  .login-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+  .login-field label { font-size: 12.5px; font-weight: 700; color: #1e293b; }
+  .login-field input { background: #f5f9ff; border: 1px solid #c3d6ee; border-radius: 7px;
+    padding: 10px 11px; font-size: 14px; color: #101828; font-family: var(--font-body); box-sizing: border-box; }
+  .login-field input:focus { outline: none; border-color: var(--evx-blue); background: #fff; }
+  .login-submit { margin-top: 8px; width: 100%; background: linear-gradient(135deg,#3f96ea,#1c6fd9);
+    border: none; color: #fff; font-weight: 800; font-size: 14px; padding: 12px 20px;
+    border-radius: 999px; cursor: pointer; font-family: var(--font-body); }
+  .login-submit:disabled { opacity: 0.6; cursor: default; }
+  .login-erreur { color: #b91c1c; font-size: 12.5px; font-weight: 600; margin-top: 12px; min-height: 16px; }
+</style>
+</head>
+<body>
+<div class="login-card">
+  <div class="login-kicker">EVOTEX 1.0 — ESPACE PROTÉGÉ</div>
+  <h1 class="login-title">Connexion</h1>
+  <form id="form-connexion">
+    <div class="login-field"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
+    <div class="login-field"><label for="mdp">Mot de passe</label><input id="mdp" type="password" autocomplete="current-password" required></div>
+    <button class="login-submit" type="submit">Se connecter</button>
+    <div class="login-erreur" id="erreur"></div>
+  </form>
+</div>
+<script>
+  const form = document.getElementById('form-connexion');
+  const erreurEl = document.getElementById('erreur');
+  // Retombée d'un lien d'accès invalide/expiré (/api/gestion/rejoindre) --
+  // retour du 16/09/2026, voir schema.sql pour le détail de ce lien.
+  if (new URLSearchParams(location.search).get('erreur') === 'lien_invalide') {
+    erreurEl.textContent = "Ce lien d'accès est invalide ou a expiré -- demandez-en un nouveau à la Direction.";
+  }
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    erreurEl.textContent = '';
+    const bouton = form.querySelector('.login-submit');
+    bouton.disabled = true;
+    try {
+      const reponse = await fetch('/api/gestion/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: document.getElementById('email').value, motDePasse: document.getElementById('mdp').value }),
+      });
+      const donnees = await reponse.json();
+      if (!donnees.ok) {
+        erreurEl.textContent = donnees.erreur || 'Connexion refusée.';
+        bouton.disabled = false;
+        return;
+      }
+      const params = new URLSearchParams(location.search);
+      location.href = params.get('suite') || '/gestion';
+    } catch (err) {
+      erreurEl.textContent = 'Erreur réseau, réessayez.';
+      bouton.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body{margin:0}
+  .lc-h{font-family:'Sora',sans-serif}
+  .lc-b{font-family:'IBM Plex Sans',sans-serif}
+  a{color:#5fa0e0}
+  a:hover{color:#8fb4de}
+  @media (max-width: 780px){
+    .lc-grid{grid-template-columns:1fr !important}
+    .lc-grid > div{transform:none !important}
+  }
+  .lc-modal::-webkit-scrollbar{width:6px}
+  .lc-modal::-webkit-scrollbar-track{background:transparent}
+  .lc-modal::-webkit-scrollbar-thumb{background:#2f6fb5;border-radius:999px}
+  .lc-modal::-webkit-scrollbar-thumb:hover{background:#4a90d9}
+  .lc-modal{scrollbar-width:thin;scrollbar-color:#2f6fb5 transparent}
+  .lc-tip{position:relative;display:inline-flex;vertical-align:middle}
+  .lc-tip-box{position:absolute;right:0;left:auto;bottom:calc(100% + 8px);opacity:0;visibility:hidden;transition:opacity .15s;pointer-events:none;z-index:60;width:200px;max-width:calc(100vw - 48px)}
+  .lc-tip:hover .lc-tip-box, .lc-tip:focus .lc-tip-box, .lc-tip:focus-within .lc-tip-box{opacity:1;visibility:visible;pointer-events:auto}
+</style>
+</helmet>
+
+<div id="lc-page-root" style="background:radial-gradient(1400px 900px at 50% -10%, rgba(63,127,196,0.35), transparent), linear-gradient(180deg,#0a1424 0%,#0e1b30 100%);min-height:100vh;padding:70px 24px 90px;box-sizing:border-box">
+
+  <div style="max-width:1000px;margin:0 auto;text-align:center;margin-bottom:56px">
+    <div class="lc-b" style="color:#5fa0e0;font-weight:800;letter-spacing:2.5px;font-size:12.5px;margin-bottom:14px">EVOTEX 1.0 — GRILLE DE LICENCES</div>
+    <h1 class="lc-h" style="font-size:38px;font-weight:900;color:#fff;margin:0 0 14px;line-height:1.2">Trois façons de posséder EVOTEX</h1>
+    <p class="lc-b" style="font-size:15.5px;color:#a9bfdb;max-width:560px;margin:0 auto;line-height:1.6">Du déploiement accompagné à la cession totale, chaque licence peut être enrichie de modules complémentaires, à tout moment.</p>
+
+    <div style="display:flex;justify-content:center;gap:10px;margin-top:32px;flex-wrap:wrap">
+      <button onClick="{{ goToPage0 }}" class="lc-b" style="background:{{ tab0Bg }};color:{{ tab0Fg }};border:1px solid {{ tab0Border }};font-weight:700;font-size:12.5px;padding:10px 20px;border-radius:999px;cursor:pointer;white-space:nowrap">Vue d'ensemble</button>
+      <button onClick="{{ goToPage1 }}" class="lc-b" style="background:{{ tab1Bg }};color:{{ tab1Fg }};border:1px solid {{ tab1Border }};font-weight:700;font-size:12.5px;padding:10px 20px;border-radius:999px;cursor:pointer;white-space:nowrap">Licence 01 — Déploiement à Vie</button>
+      <button onClick="{{ goToPage2 }}" class="lc-b" style="background:{{ tab2Bg }};color:{{ tab2Fg }};border:1px solid {{ tab2Border }};font-weight:700;font-size:12.5px;padding:10px 20px;border-radius:999px;cursor:pointer;white-space:nowrap">Licence 02 — Vente Totale</button>
+      <button onClick="{{ goToPage3 }}" class="lc-b" style="background:{{ tab3Bg }};color:{{ tab3Fg }};border:1px solid {{ tab3Border }};font-weight:700;font-size:12.5px;padding:10px 20px;border-radius:999px;cursor:pointer;white-space:nowrap">Licence 03 — SaaS + Modules</button>
+    </div>
+
+    <div style="display:inline-flex;align-items:center;gap:9px;margin-top:22px">
+      <span style="display:inline-flex;width:18px;height:13px;border-radius:1px;overflow:hidden;flex-shrink:0"><span style="flex:1;background:#14b53a"></span><span style="flex:1;background:#fcd116"></span><span style="flex:1;background:#ce1126"></span></span>
+      <span class="lc-b" style="color:#a9c4e6;font-weight:700;font-size:13.5px;letter-spacing:0.3px">Entièrement conçu et développé au Mali</span>
+    </div>
+  </div>
+
+  <sc-if value="{{ isPage0 }}" hint-placeholder-val="{{ true }}">
+  <div class="lc-grid" style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:start">
+
+    <div style="background:linear-gradient(160deg,#171006,#0c0904),linear-gradient(160deg,rgba(212,175,55,0.16),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.7);border-radius:20px;padding:38px 30px;display:flex;flex-direction:column;height:100%;box-sizing:border-box;min-width:0;box-shadow:0 28px 70px rgba(0,0,0,0.55), 0 0 50px rgba(212,175,55,0.18), inset 0 1.5px 0 rgba(255,231,160,0.5), inset 0 -4px 12px rgba(0,0,0,0.35), inset 2px 0 6px rgba(255,231,160,0.2), inset -2px 0 6px rgba(0,0,0,0.2);position:relative;transform:translateY(-10px)">
+      <div style="position:absolute;top:-14px;right:28px;background:linear-gradient(135deg,#f0d789,#d4af37);color:#3a2c05;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(212,175,55,0.4)">RECOMMANDÉ</div>
+      <div class="lc-b" style="color:#e9cc70;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 01</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px">Déploiement à Vie + Suivi</div>
+      <div class="lc-b" style="font-size:13px;color:#d9c894;line-height:1.55;margin-bottom:24px">Un paiement unique à la signature, un usage illimité et sans échéance. L'accompagnement se poursuit ensuite au rythme que vous choisissez.</div>
+
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#b89a4f;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#f0d789">Sur devis</div>
+      </div>
+
+      <div style="height:1px;background:rgba(212,175,55,0.3);margin-bottom:22px"></div>
+
+      <div style="display:flex;flex-direction:column;gap:13px;flex:1">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Usage à vie, sans limite de durée</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Socle EVOTEX complet installé chez vous</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Accompagnement et suivi mensuel inclus après les 6 premiers mois</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Mises à jour et corrections assurées en continu, tant que le contrat de suivi est actif <button class="lc-tip" tabindex="0" aria-label="Plus d'informations" style="width:15px;height:15px;border-radius:50%;border:1px solid #e9cc70;background:none;color:#e9cc70;font-size:9.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;cursor:help;padding:0;font-family:'IBM Plex Sans',sans-serif">?<span class="lc-tip-box lc-b" style="background:#171006;border:1px solid rgba(212,175,55,0.6);border-radius:8px;padding:11px 13px;font-size:12.5px;color:#fbf3dd;line-height:1.55;text-align:left;box-shadow:0 10px 24px rgba(0,0,0,0.5);white-space:normal">Si le contrat de suivi est interrompu, les mises à jour ne sont plus incluses : elles restent possibles soit via un nouvel abonnement de suivi, soit à la demande et facturées à part.</span></button></span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Modules complémentaires à la demande</span></div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;gap:14px;margin-top:28px">
+        <a href="./BATEXCI%20ERP%20-%20Presentation%20Executive%20(Pages%201-3).dc.html#licence-deploiement" class="lc-b" style="color:#e9cc70;font-weight:700;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap">En savoir plus <span style="font-size:14px">&#8594;</span></a>
+        <button onClick="{{ openModalDeploiement }}" style="background:linear-gradient(135deg,#f0d789,#d4af37);border:none;color:#3a2c05;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(212,175,55,0.4);white-space:nowrap;flex-shrink:0" style-hover="background:linear-gradient(135deg,#f5e2a8,#e0bd4a)">Demander un devis</button>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(160deg,#0f2340,#0a1a30);border:1px solid #2f6fb5;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column;height:100%;box-sizing:border-box;min-width:0;box-shadow:0 24px 60px rgba(0,0,0,0.4);position:relative">
+      <div style="position:absolute;top:-14px;right:28px;background:linear-gradient(135deg,#6b7789,#4a5568);color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,0.35)">BASIC</div>
+      <div style="position:absolute;top:-14px;left:14px;background:#c0362c;border:1px solid #fff;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:14px;text-align:center;line-height:1.3;white-space:normal;width:82px">BIENTÔT<br/>DISPONIBLE</div>
+      <div class="lc-b" style="color:#7fb2e5;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 03</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px">SaaS + Modules</div>
+      <div class="lc-b" style="font-size:13px;color:#a9bfdb;line-height:1.55;margin-bottom:24px">Adapté aux petites structures et industries en démarrage : un abonnement simple, sans investissement initial, avec un socle et un accompagnement volontairement réduits.</div>
+
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#4a7bab;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#fff">Sur devis</div>
+      </div>
+
+      <div style="height:1px;background:rgba(47,111,181,0.4);margin-bottom:22px"></div>
+
+      <div style="display:flex;flex-direction:column;gap:13px;flex:1">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Déploiement à la demande, étudié selon vos besoins</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Mises à jour et évolutions du socle incluses</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Licence annuelle + facturation par utilisateur</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Modules complémentaires activables à tout moment</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Sans engagement long terme</span></div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;gap:14px;margin-top:28px">
+        <a href="./BATEXCI%20ERP%20-%20Presentation%20Executive%20(Pages%201-3).dc.html#licence-saas" class="lc-b" style="color:#7fb2e5;font-weight:700;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap">En savoir plus <span style="font-size:14px">&#8594;</span></a>
+        <button onClick="{{ openModalSaas }}" style="background:linear-gradient(135deg,#4a90d9,#2f6fb5);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(47,111,181,0.45);white-space:nowrap;flex-shrink:0" style-hover="background:linear-gradient(135deg,#5ea0e5,#3a7fc5)">Demander un devis</button>
+      </div>
+    </div>
+
+    <div style="background:#ffffff;border:1px solid #c7ced6;border-radius:20px;padding:34px 30px;display:flex;flex-direction:column;height:100%;box-sizing:border-box;min-width:0;box-shadow:0 26px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -3px 8px rgba(15,23,42,0.1), inset 2px 0 4px rgba(255,255,255,0.6), inset -2px 0 4px rgba(15,23,42,0.06);position:relative">
+      <div style="position:absolute;top:-15px;right:22px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:0.5px;padding:8px 18px;border-radius:999px;white-space:nowrap;border:1px solid #0f172a;box-shadow:0 4px 14px rgba(0,0,0,0.35)">EXCEPTIONNEL</div>
+      <div class="lc-b" style="color:#667085;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 02</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#0f172a;line-height:1.25;margin-bottom:8px">Vente Totale <span style="color:#475467">(Propriété Intellectuelle)</span></div>
+      <div class="lc-b" style="font-size:13px;color:#475467;line-height:1.55;margin-bottom:24px">Cession complète du code source et des droits. Vous devenez pleinement propriétaire de la plateforme.</div>
+
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#98a2b3;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#0f172a">Sur devis</div>
+      </div>
+
+      <div style="height:1px;background:#e2e6ea;margin-bottom:22px"></div>
+
+      <div style="display:flex;flex-direction:column;gap:13px;flex:1">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Cession totale de la propriété intellectuelle</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Le client devient propriétaire du code source</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Paiement unique, aucune récurrence obligatoire</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Suivi disponible en option, facturé séparément</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Modules complémentaires vendus à part, sur demande</span></div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:10px;gap:14px;margin-top:28px">
+        <a href="./BATEXCI%20ERP%20-%20Presentation%20Executive%20(Pages%201-3).dc.html#licence-vente-totale" class="lc-b" style="color:#475467;font-weight:700;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center;gap:5px;white-space:nowrap">En savoir plus <span style="font-size:14px">&#8594;</span></a>
+        <button onClick="{{ openModalTotale }}" style="background:linear-gradient(135deg,#1e293b,#0f172a);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,0.3);white-space:nowrap;flex-shrink:0" style-hover="background:linear-gradient(135deg,#2d3b52,#1a2436)">Demander un devis</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="max-width:820px;margin:52px auto 0;text-align:center">
+    <div style="height:1px;background:rgba(255,255,255,0.12);margin-bottom:24px"></div>
+    <p class="lc-b" style="font-size:13px;color:#8fb4de;line-height:1.7">Les trois licences donnent accès au socle EVOTEX 1.0 complet. Quels qu'ils soient, les modules complémentaires restent disponibles à la carte, quel que soit le modèle choisi, et peuvent être ajoutés à tout moment de la relation.</p>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPage1 }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:420px 1fr;gap:48px;align-items:start" class="lc-grid">
+    <div style="background:linear-gradient(160deg,#171006,#0c0904),linear-gradient(160deg,rgba(212,175,55,0.16),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.7);border-radius:20px;padding:38px 30px;box-sizing:border-box;box-shadow:0 28px 70px rgba(0,0,0,0.55), 0 0 50px rgba(212,175,55,0.18), inset 0 1.5px 0 rgba(255,231,160,0.5), inset 0 -4px 12px rgba(0,0,0,0.35);position:relative">
+      <div style="position:absolute;top:-14px;right:28px;background:linear-gradient(135deg,#f0d789,#d4af37);color:#3a2c05;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(212,175,55,0.4)">RECOMMANDÉ</div>
+      <div class="lc-b" style="color:#e9cc70;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 01</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px">Déploiement à Vie + Suivi</div>
+      <div class="lc-b" style="font-size:13px;color:#d9c894;line-height:1.55;margin-bottom:24px">Un paiement unique à la signature, un usage illimité et sans échéance. L'accompagnement se poursuit ensuite au rythme que vous choisissez.</div>
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#b89a4f;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#f0d789">Sur devis</div>
+      </div>
+      <div style="height:1px;background:rgba(212,175,55,0.3);margin-bottom:22px"></div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Usage à vie, sans limite de durée</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Socle EVOTEX complet installé chez vous</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Accompagnement et suivi mensuel inclus après les 6 premiers mois</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Mises à jour et corrections assurées en continu, tant que le contrat de suivi est actif</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#e9cc70;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#f2ead2;line-height:1.5">Modules complémentaires à la demande</span></div>
+      </div>
+      <div style="margin-top:28px">
+        <button onClick="{{ openModalDeploiement }}" style="width:100%;background:linear-gradient(135deg,#f0d789,#d4af37);border:none;color:#3a2c05;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(212,175,55,0.4)" style-hover="background:linear-gradient(135deg,#f5e2a8,#e0bd4a)">Demander un devis</button>
+      </div>
+    </div>
+    <div>
+      <div class="lc-b" style="color:#e9cc70;font-weight:800;letter-spacing:2.5px;font-size:12px;margin-bottom:12px">LE CHOIX IDÉAL</div>
+      <h2 class="lc-h" style="font-size:30px;font-weight:900;color:#fff;margin:0 0 18px;line-height:1.25">Possédez votre outil, une fois pour toutes</h2>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.7;margin:0 0 16px">Vous investissez une fois et possédez durablement votre solution EVOTEX. Le socle complet est installé chez vous, avec un accompagnement humain sur les 6 premiers mois, incluant en option une formation sur-mesure de votre personnel, organisée de façon graduelle pour faciliter la transformation numérique de votre usine. Ensuite, vous choisissez librement de poursuivre un programme d'accompagnement mensuel, ou de reprendre la main en autonomie.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.7;margin:0 0 16px">Contrairement aux ERP du marché qui facturent par utilisateur ou par licence annuelle, EVOTEX repose sur un paiement unique. Vos modules, eux, sont pensés sur-mesure pour la réalité de votre usine, et non comme un standard générique.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.7;margin:0 0 16px">Pendant l'accompagnement, vous profitez en avant-première des améliorations en cours de développement. Une fois abouties, elles deviennent une nouvelle phase de déploiement, proposée séparément.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.7;margin:0 0 20px">Au-delà d'un tarif accessible, EVOTEX porte une conviction : concevoir des outils de gestion par l'Afrique et pour l'Afrique, sans intermédiaire, pour simplifier l'accès à une gestion moderne et faire avancer nos industries.</p>
+      <div style="background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);border-radius:14px;padding:20px 22px;margin-bottom:18px">
+        <div class="lc-b" style="color:#e9cc70;font-weight:800;font-size:12.5px;letter-spacing:1px;margin-bottom:10px">POINTS CLÉS</div>
+        <div class="lc-b" style="color:#f2ead2;font-size:14.5px;line-height:1.85">— Paiement unique, sans facturation par utilisateur ni par licence annuelle<br>— Aucun coût caché<br>— Modules sur-mesure, adaptés à votre usine<br>— Accès en avant-première aux évolutions en cours de développement<br>— Une solution pensée par et pour l'Afrique</div>
+      </div>
+      <p class="lc-b" style="font-size:13.5px;color:#8fb4de;line-height:1.6">En résumé : un investissement unique, un socle qui évolue avec vous, une solution pensée pour l'Afrique.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPage2 }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:420px 1fr;gap:48px;align-items:start" class="lc-grid">
+    <div style="background:#ffffff;border:1px solid #c7ced6;border-radius:20px;padding:34px 30px;box-sizing:border-box;box-shadow:0 26px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -3px 8px rgba(15,23,42,0.1);position:relative">
+      <div style="position:absolute;top:-15px;right:22px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:0.5px;padding:8px 18px;border-radius:999px;white-space:nowrap;border:1px solid #0f172a;box-shadow:0 4px 14px rgba(0,0,0,0.35)">EXCEPTIONNEL</div>
+      <div class="lc-b" style="color:#667085;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 02</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#0f172a;line-height:1.25;margin-bottom:8px">Vente Totale <span style="color:#475467">(Propriété Intellectuelle)</span></div>
+      <div class="lc-b" style="font-size:13px;color:#475467;line-height:1.55;margin-bottom:24px">Cession complète du code source et des droits. Vous devenez pleinement propriétaire de la plateforme.</div>
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#98a2b3;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#0f172a">Sur devis</div>
+      </div>
+      <div style="height:1px;background:#e2e6ea;margin-bottom:22px"></div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Cession totale de la propriété intellectuelle</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Le client devient propriétaire du code source</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Paiement unique, aucune récurrence obligatoire</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Suivi disponible en option, facturé séparément</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#0f172a;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#344054;line-height:1.5">Modules complémentaires vendus à part, sur demande</span></div>
+      </div>
+      <div style="margin-top:28px">
+        <button onClick="{{ openModalTotale }}" style="width:100%;background:linear-gradient(135deg,#1e293b,#0f172a);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,0.3)" style-hover="background:linear-gradient(135deg,#2d3b52,#1a2436)">Demander un devis</button>
+      </div>
+    </div>
+    <div>
+      <div class="lc-b" style="color:#7fb2e5;font-weight:800;letter-spacing:2.5px;font-size:12px;margin-bottom:12px">UN INVESTISSEMENT STRATÉGIQUE</div>
+      <h2 class="lc-h" style="font-size:30px;font-weight:900;color:#fff;margin:0 0 18px;line-height:1.25">Gardez le contrôle total, sans dépendance</h2>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.75;margin:0 0 20px">La Vente Totale s'adresse aux clients qui exigent une pleine propriété : ils reçoivent le code source et l'ensemble des droits sur la plateforme. Aucune redevance récurrente n'est due — le client paie une fois et devient totalement autonome, y compris pour faire évoluer ou héberger la solution comme il l'entend.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.75;margin:0 0 20px">C'est l'offre la plus haut de gamme de la grille : elle convient à des structures avec des moyens conséquents, ou à des clients institutionnels qui, pour des raisons stratégiques ou réglementaires, ne peuvent pas dépendre d'un tiers pour leur outil de gestion.</p>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.18);border-radius:14px;padding:20px 22px;margin-bottom:20px">
+        <div class="lc-b" style="color:#fff;font-weight:800;font-size:12px;letter-spacing:1px;margin-bottom:10px">POINTS CLÉS</div>
+        <div class="lc-b" style="color:#e4ecf7;font-size:14px;line-height:1.8">— Propriété intellectuelle et code source cédés intégralement ou partiellement, selon les clauses du contrat<br>— Zéro dépendance future envers EVOTEX<br>— Positionnement premium, prix le plus élevé de la grille<br>— Le suivi reste possible, mais en option facturée séparément</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPage3 }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:420px 1fr;gap:48px;align-items:start" class="lc-grid">
+    <div style="background:linear-gradient(160deg,#0f2340,#0a1a30);border:1px solid #2f6fb5;border-radius:20px;padding:34px 30px;box-sizing:border-box;box-shadow:0 24px 60px rgba(0,0,0,0.4);position:relative">
+      <div style="position:absolute;top:-14px;right:28px;background:linear-gradient(135deg,#6b7789,#4a5568);color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,0.35)">BASIC</div>
+      <div style="position:absolute;top:-14px;left:14px;background:#c0362c;border:1px solid #fff;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:0.5px;padding:6px 14px;border-radius:14px;text-align:center;line-height:1.3;white-space:normal;width:82px">BIENTÔT<br/>DISPONIBLE</div>
+      <div class="lc-b" style="color:#7fb2e5;font-weight:800;letter-spacing:1.5px;font-size:11px;margin-bottom:10px">LICENCE 03</div>
+      <div class="lc-h" style="font-size:21px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:8px">SaaS + Modules</div>
+      <div class="lc-b" style="font-size:13px;color:#a9bfdb;line-height:1.55;margin-bottom:24px">Adapté aux petites structures et industries en démarrage : un abonnement simple, sans investissement initial, avec un socle et un accompagnement volontairement réduits.</div>
+      <div style="margin-bottom:26px">
+        <div class="lc-b" style="font-size:11px;font-weight:700;color:#4a7bab;letter-spacing:1px;margin-bottom:4px">TARIFICATION</div>
+        <div class="lc-h" style="font-size:22px;font-weight:900;color:#fff">Sur devis</div>
+      </div>
+      <div style="height:1px;background:rgba(47,111,181,0.4);margin-bottom:22px"></div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Déploiement à la demande, étudié selon vos besoins</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Mises à jour et évolutions du socle incluses</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Licence annuelle + facturation par utilisateur</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Modules complémentaires activables à tout moment</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#4a90d9;font-weight:900;flex-shrink:0">✓</span><span class="lc-b" style="font-size:13.5px;color:#c4d6ec;line-height:1.5">Sans engagement long terme</span></div>
+      </div>
+      <div style="margin-top:28px">
+        <button onClick="{{ openModalSaas }}" style="width:100%;background:linear-gradient(135deg,#4a90d9,#2f6fb5);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:12.5px;padding:12px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(47,111,181,0.45)" style-hover="background:linear-gradient(135deg,#5ea0e5,#3a7fc5)">Demander un devis</button>
+      </div>
+    </div>
+    <div>
+      <div class="lc-b" style="color:#7fb2e5;font-weight:800;letter-spacing:2.5px;font-size:12px;margin-bottom:12px">CE QU'IL FAUT SAVOIR</div>
+      <h2 class="lc-h" style="font-size:30px;font-weight:900;color:#fff;margin:0 0 18px;line-height:1.25">Pensée pour les petites structures et les industries en démarrage</h2>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.75;margin:0 0 20px">La formule SaaS + Modules élimine la barrière de l'investissement initial : elle convient aux petites et nouvelles industries qui démarrent leur transformation numérique. En contrepartie, le socle de lancement et l'accompagnement fournis sont volontairement réduits : c'est une entrée dans l'écosystème EVOTEX, pas une prise en charge complète de votre projet.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.75;margin:0 0 20px">Le support couvre les mises à jour et le dépannage. La formation ou un accompagnement plus poussé restent possibles, mais uniquement sur demande et étudiés au cas par cas. Tout module au-delà du socle de lancement est facturé séparément.</p>
+      <p class="lc-b" style="font-size:15px;color:#c9d8ec;line-height:1.75;margin:0 0 20px">Si votre projet demande un accompagnement soutenu ou une évolution continue de vos modules, les licences Déploiement à Vie ou Vente Totale répondent mieux à ce besoin.</p>
+      <div style="background:rgba(74,144,217,0.1);border:1px solid rgba(74,144,217,0.35);border-radius:14px;padding:20px 22px;margin-bottom:20px">
+        <div class="lc-b" style="color:#7fb2e5;font-weight:800;font-size:12px;letter-spacing:1px;margin-bottom:10px">POINTS CLÉS</div>
+        <div class="lc-b" style="color:#dce8f7;font-size:14px;line-height:1.8">— Abonnement simple, sans investissement initial<br>— Socle de lancement limité et précis<br>— Support inclus pour les mises à jour et le dépannage<br>— Formation et accompagnement uniquement sur demande, au cas par cas<br>— Modules hors socle facturés séparément</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;background:rgba(6,12,22,0.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50;box-sizing:border-box">
+    <div onClick="{{ stop }}" class="lc-modal" style="background:linear-gradient(160deg,#0f2340,#0a1a30);border:1px solid #2f6fb5;border-radius:20px;padding:34px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;box-sizing:border-box;box-shadow:0 30px 70px rgba(0,0,0,0.5);position:relative">
+
+      <button onClick="{{ closeModal }}" style="position:absolute;top:18px;right:18px;background:none;border:none;color:#7fb2e5;font-size:20px;line-height:1;cursor:pointer;padding:4px">×</button>
+
+      <sc-if value="{{ !submitted }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px"><span class="lc-b" style="color:#7fb2e5;font-weight:800;letter-spacing:2px;font-size:11px">DEMANDE DE DEVIS</span><span class="lc-b" style="color:#5a7ba3;font-weight:700;letter-spacing:1px;font-size:9.5px">EVOTEX 1.0</span></div>
+        <div class="lc-h" style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">{{ offre }}</div>
+        <p class="lc-b" style="font-size:12.5px;color:#a9bfdb;line-height:1.5;margin:0 0 20px">Remplissez ces quelques informations pour que nous préparions un devis précis et adapté à votre situation.</p>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Nom complet</label><input class="lc-b" value="{{ nom }}" onChange="{{ onNom }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Entreprise</label><input class="lc-b" value="{{ entreprise }}" onChange="{{ onEntreprise }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Email</label><input class="lc-b" value="{{ email }}" onChange="{{ onEmail }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Téléphone</label><input class="lc-b" value="{{ telephone }}" onChange="{{ onTelephone }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Nombre d'utilisateurs estimé</label><input class="lc-b" value="{{ nbUtilisateurs }}" onChange="{{ onNbUtilisateurs }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Délai souhaité</label>
+              <select class="lc-b" value="{{ delai }}" onChange="{{ onDelai }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box">
+                <option>Dès que possible</option>
+                <option>Sous 1 mois</option>
+                <option>Sous 3 mois</option>
+                <option>Sous 6 mois</option>
+                <option>Non défini</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Pays</label><input class="lc-b" value="{{ pays }}" onChange="{{ onPays }}" placeholder="Ex. Mali" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700;white-space:nowrap">Durée de suivi souhaitée</label>
+              <select class="lc-b" value="{{ dureeSuivi }}" onChange="{{ onDureeSuivi }}" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box">
+                <option>1 an</option>
+                <option>2 ans</option>
+                <option>3 ans</option>
+                <option>5 ans</option>
+                <option>Non défini</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Budget indicatif (optionnel)</label><input class="lc-b" value="{{ budget }}" onChange="{{ onBudget }}" placeholder="Ex. 5 000 000 F" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box"></div>
+          <div style="display:flex;flex-direction:column;gap:5px"><label class="lc-b" style="font-size:13px;color:#a9bfdb;font-weight:700">Questions ou précisions supplémentaires — continuité du développement et des supports, ou toute autre précision</label><textarea class="lc-b" value="{{ questions }}" onChange="{{ onQuestions }}" placeholder="Décrivez vos besoins spécifiques, contraintes, ou toute question utile pour affiner le devis…" rows="4" style="background:#132c4d;border:1px solid #2f6fb5;border-radius:7px;padding:9px 10px;color:#fff;font-size:13px;box-sizing:border-box;resize:vertical;font-family:'IBM Plex Sans',sans-serif"></textarea></div>
+        </div>
+
+        <button onClick="{{ onSubmit }}" style="margin-top:22px;width:100%;background:linear-gradient(135deg,#4a90d9,#2f6fb5);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:13px;padding:13px 22px;border-radius:999px;cursor:pointer;box-shadow:0 10px 24px rgba(47,111,181,0.45)" style-hover="background:linear-gradient(135deg,#5ea0e5,#3a7fc5)">Envoyer la demande</button>
+      </sc-if>
+
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:38px;margin-bottom:14px">✓</div>
+          <div class="lc-h" style="font-size:19px;font-weight:800;color:#fff;margin-bottom:8px">Demande envoyée</div>
+          <p class="lc-b" style="font-size:13px;color:#a9bfdb;line-height:1.6;margin:0 0 20px">Merci{{ nomSuffix }}. Votre demande pour « {{ offre }} » a bien été enregistrée. Nous revenons vers vous avec un devis détaillé sous 48h.</p>
+          <button onClick="{{ closeModal }}" style="background:linear-gradient(135deg,#4a90d9,#2f6fb5);border:none;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-weight:800;font-size:13px;padding:11px 26px;border-radius:999px;cursor:pointer">Fermer</button>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    currentPage: 0,
+    modalOpen: false,
+    offre: '',
+    submitted: false,
+    nom: '', entreprise: '', email: '', telephone: '', pays: '',
+    nbUtilisateurs: '', delai: 'Dès que possible', dureeSuivi: '1 an', budget: '', questions: '',
+  };
+
+  makeSetter(key) {
+    return (e) => this.setState({ [key]: e.target.value });
+  }
+
+  openModal(offre) {
+    this.setState({
+      modalOpen: true, offre, submitted: false,
+      nom: '', entreprise: '', email: '', telephone: '', pays: '',
+      nbUtilisateurs: '', delai: 'Dès que possible', dureeSuivi: '1 an', budget: '', questions: '',
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const tabStyle = (n) => n === s.currentPage
+      ? { Bg: '#fff', Fg: '#0f172a', Border: '#fff' }
+      : { Bg: 'transparent', Fg: '#a9bfdb', Border: 'rgba(255,255,255,0.25)' };
+    const t0 = tabStyle(0), t1 = tabStyle(1), t2 = tabStyle(2), t3 = tabStyle(3);
+    return {
+      isPage0: s.currentPage === 0, isPage1: s.currentPage === 1, isPage2: s.currentPage === 2, isPage3: s.currentPage === 3,
+      goToPage0: () => this.setState({ currentPage: 0 }),
+      goToPage1: () => this.setState({ currentPage: 1 }),
+      goToPage2: () => this.setState({ currentPage: 2 }),
+      goToPage3: () => this.setState({ currentPage: 3 }),
+      tab0Bg: t0.Bg, tab0Fg: t0.Fg, tab0Border: t0.Border,
+      tab1Bg: t1.Bg, tab1Fg: t1.Fg, tab1Border: t1.Border,
+      tab2Bg: t2.Bg, tab2Fg: t2.Fg, tab2Border: t2.Border,
+      tab3Bg: t3.Bg, tab3Fg: t3.Fg, tab3Border: t3.Border,
+      modalOpen: s.modalOpen,
+      submitted: s.submitted,
+      offre: s.offre,
+      closeModal: () => this.setState({ modalOpen: false }),
+      stop: (e) => e.stopPropagation(),
+      openModalDeploiement: () => this.openModal('Déploiement à Vie + Suivi'),
+      openModalSaas: () => this.openModal('SaaS + Modules'),
+      openModalTotale: () => this.openModal('Vente Totale (Propriété Intellectuelle)'),
+
+      nom: s.nom, onNom: this.makeSetter('nom'),
+      entreprise: s.entreprise, onEntreprise: this.makeSetter('entreprise'),
+      email: s.email, onEmail: this.makeSetter('email'),
+      telephone: s.telephone, onTelephone: this.makeSetter('telephone'),
+      pays: s.pays, onPays: this.makeSetter('pays'),
+      nbUtilisateurs: s.nbUtilisateurs, onNbUtilisateurs: this.makeSetter('nbUtilisateurs'),
+      delai: s.delai, onDelai: this.makeSetter('delai'),
+      dureeSuivi: s.dureeSuivi, onDureeSuivi: this.makeSetter('dureeSuivi'),
+      budget: s.budget, onBudget: this.makeSetter('budget'),
+      questions: s.questions, onQuestions: this.makeSetter('questions'),
+      nomSuffix: s.nom ? ' ' + s.nom : '',
+
+      onSubmit: () => {
+        const s2 = this.state;
+        const body = `Offre: ${s2.offre}%0D%0ANom: ${s2.nom}%0D%0AEntreprise: ${s2.entreprise}%0D%0AEmail: ${s2.email}%0D%0ATéléphone: ${s2.telephone}%0D%0APays: ${s2.pays}%0D%0AUtilisateurs estimés: ${s2.nbUtilisateurs}%0D%0ADélai souhaité: ${s2.delai}%0D%0ADurée de suivi souhaitée: ${s2.dureeSuivi}%0D%0ABudget indicatif: ${s2.budget}%0D%0A%0D%0AQuestions/précisions:%0D%0A${s2.questions}`;
+        window.location.href = `mailto:evoluti223@gmail.com?subject=${encodeURIComponent('Demande de devis - ' + s2.offre)}&body=${body}`;
+        this.setState({ submitted: true });
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

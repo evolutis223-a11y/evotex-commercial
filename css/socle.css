@@ -1,0 +1,77 @@
+/* Socle de Lancement — reproduction fidele de la Presentation Executive
+   BATEXCI ERP d'origine (fichier de handoff, format diaporama paysage). */
+
+.bx-h1, .bx-h2, .bx-h3 { font-family: var(--font-display); }
+.bx-b { font-family: var(--font-body); }
+
+.socle {
+  min-height: 100vh;
+  background: #12151d;
+  display: flex;
+  flex-direction: column;
+}
+
+.socle-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; flex-shrink: 0;
+}
+.socle-topbar .evx-retour { color: var(--evx-blue-light); }
+.socle-topbar .evx-retour:hover { color: #8fb4de; }
+.socle-pager-info { font-family: var(--font-body); font-size: 12.5px; font-weight: 700; color: #8fb4de; letter-spacing: 0.5px; }
+
+.socle-viewport {
+  overflow: hidden;
+  flex-shrink: 0;
+  margin: 0 auto;
+}
+
+.socle-stage {
+  width: 1280px;
+  flex-shrink: 0;
+  transform-origin: top left;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.socle-stage .page {
+  width: 1280px;
+  height: auto;
+  min-height: 720px;
+}
+
+.socle-imgslot {
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.04) 10px, rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.01) 20px);
+  border: 1px dashed rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.5);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.socle-controls {
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  padding: 18px 24px 26px; flex-shrink: 0;
+}
+.socle-navbtn {
+  border: 1.5px solid var(--evx-blue); background: rgba(28,111,217,0.12); color: var(--evx-blue-light);
+  font-family: var(--font-body); font-weight: 700; font-size: 12.5px;
+  padding: 9px 18px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+}
+.socle-navbtn:hover { background: rgba(28,111,217,0.24); }
+.socle-navbtn:disabled { opacity: 0.35; cursor: default; }
+
+.socle-dots { display: flex; align-items: center; gap: 6px; }
+.socle-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.25);
+  border: none; padding: 0; cursor: pointer;
+}
+.socle-dot.is-active { background: var(--evx-blue-light); width: 18px; border-radius: 4px; }
+
+@media (max-width: 700px) {
+  .socle-controls { gap: 12px; flex-wrap: wrap; }
+  .socle-dots { order: 3; width: 100%; justify-content: center; }
+}

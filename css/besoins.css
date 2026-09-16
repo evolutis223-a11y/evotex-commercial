@@ -1,0 +1,105 @@
+/* Cahier des Charges Client — formulaire interactif d'expression de besoins.
+   Thème "mi-sombre mi-clair" délibéré : un bandeau bleu nuit en tête (accroche,
+   ambiance premium) sur lequel la carte du formulaire vient flotter à cheval,
+   puis se prolonge sur un fond clair pour la longueur du formulaire lui-même
+   -- ni tout sombre ni tout clair, un jeu entre les deux zones. */
+
+.bes {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 480px at 18% -10%, rgba(63,150,234,0.32), transparent),
+    linear-gradient(180deg, var(--evx-navy-deep) 0%, var(--evx-navy) 260px, var(--evx-paper-top) 260px, var(--evx-paper-bottom) 520px, var(--evx-paper-bottom) 100%);
+  padding: 26px 24px 90px;
+}
+
+.bes-topbar { max-width: 760px; margin: 0 auto 18px; position: relative; z-index: 1; }
+.bes-topbar .evx-retour { color: var(--evx-blue-light); }
+.bes-topbar .evx-retour:hover { color: #8fb4de; }
+
+.bes-head { max-width: 760px; margin: 0 auto 46px; text-align: center; position: relative; z-index: 1; }
+.bes-kicker { color: var(--evx-blue-light); font-weight: 800; letter-spacing: 2.5px; font-size: 12px; margin-bottom: 12px; }
+.bes-h1 { font-size: 30px; font-weight: 900; color: var(--evx-onDark-title); margin: 0 0 12px; line-height: 1.25; }
+.bes-sub { font-size: 14.5px; color: var(--evx-onDark-secondary); line-height: 1.6; }
+
+.bes-card {
+  max-width: 760px; margin: -16px auto 0;
+  background: #ffffff;
+  border: 1px solid #d7e4f5;
+  border-radius: 20px;
+  padding: 34px;
+  position: relative; z-index: 1;
+  box-shadow: 0 34px 70px rgba(8,16,30,0.32), 0 1px 0 rgba(255,255,255,0.7) inset;
+}
+
+.bes-group-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--evx-blue); margin: 0 0 12px;
+}
+.bes-group + .bes-group { margin-top: 26px; padding-top: 22px; border-top: 1px solid #e3ecf7; }
+
+.bes-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 560px) { .bes-form-row { grid-template-columns: 1fr; } }
+.bes-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+.bes-field label { font-size: 13px; color: #1e293b; font-weight: 700; }
+.bes-field .hint { font-size: 11.5px; color: #7f93ac; font-weight: 500; text-transform: none; letter-spacing: 0; }
+.bes-field input, .bes-field select, .bes-field textarea {
+  background: #f5f9ff; border: 1px solid #c3d6ee; border-radius: 7px;
+  padding: 9px 10px; color: #101828; font-size: 13px; font-family: var(--font-body);
+  box-sizing: border-box;
+}
+.bes-field input:focus, .bes-field textarea:focus { outline: none; border-color: var(--evx-blue); background: #fff; }
+.bes-field textarea { resize: vertical; }
+.bes-field input::placeholder, .bes-field textarea::placeholder { color: #94a7c2; }
+
+.bes-modules-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+@media (max-width: 560px) { .bes-modules-grid { grid-template-columns: 1fr; } }
+.bes-module-check {
+  display: flex; align-items: center; gap: 9px;
+  background: #eef4fb; border: 1px solid #d7e4f5; border-radius: 8px;
+  padding: 10px 12px; cursor: pointer; font-size: 13px; color: #1e293b; font-weight: 500;
+}
+.bes-module-check input { accent-color: var(--evx-blue); width: 16px; height: 16px; flex-shrink: 0; }
+.bes-module-check:hover { border-color: var(--evx-blue); }
+
+.bes-autres-modules { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.bes-autre-module-row { display: flex; align-items: center; gap: 8px; }
+.bes-autre-module {
+  flex: 1; width: 100%; box-sizing: border-box;
+  background: #f5f9ff; border: 1px dashed #a9c3e3; border-radius: 8px;
+  padding: 10px 12px; color: #101828; font-size: 13px; font-family: var(--font-body);
+}
+.bes-autre-module::placeholder { color: #7f93ac; }
+.bes-autre-module:focus { outline: none; border-color: var(--evx-blue); border-style: solid; background: #fff; }
+.bes-retirer-module {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px;
+  background: #f5f9ff; border: 1px solid #d7e4f5; color: #7f93ac;
+  font-size: 16px; line-height: 1; cursor: pointer; font-family: var(--font-body);
+}
+.bes-retirer-module:hover { border-color: #e0605f; color: #e0605f; }
+.bes-ajouter-module {
+  margin-top: 8px; background: none; border: none; padding: 4px 0;
+  color: var(--evx-blue); font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: var(--font-body);
+}
+.bes-ajouter-module:hover { text-decoration: underline; }
+
+.bes-submit {
+  margin-top: 26px; width: 100%;
+  background: linear-gradient(135deg,#3f96ea,#1c6fd9);
+  border: none; color: #fff; font-family: var(--font-body);
+  font-weight: 800; font-size: 14px; padding: 14px 22px;
+  border-radius: 999px; cursor: pointer;
+  box-shadow: 0 10px 24px rgba(28,111,217,0.35);
+}
+.bes-submit:hover { background: linear-gradient(135deg,#53a5f4,#2b83e8); }
+
+.bes-confirm { text-align: center; padding: 20px 0; }
+.bes-confirm .check-big { font-size: 40px; margin-bottom: 16px; }
+.bes-confirm h3 { font-size: 21px; font-weight: 800; color: #101828; margin-bottom: 10px; }
+.bes-confirm p { font-size: 13.5px; color: #475467; line-height: 1.65; margin: 0 0 22px; }
+.bes-confirm button {
+  background: linear-gradient(135deg,#3f96ea,#1c6fd9); border: none; color: #fff;
+  font-family: var(--font-body); font-weight: 800; font-size: 13px;
+  padding: 11px 26px; border-radius: 999px; cursor: pointer;
+}

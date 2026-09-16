@@ -1,0 +1,112 @@
+/* EVOTEX 1.0 — Hub commercial interne
+   Tokens de design partagés, tirés a l'identique du Cahier des Charges
+   EVOTEX (aucune réinterprétation des couleurs/typographies). */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Marque -- bleu ravivé (retour de l'utilisateur du 14/09/2026 : "fade et
+     pâle... un bleu mûr et vif"), inspiré du bleu déjà réel du Socle de
+     Lancement (js/socle-lancement.js, pages 4 et 12 -- #3f7fc4 du badge
+     "BX", #5fa0e0 en accent dominant sur fond sombre) plutôt qu'une couleur
+     éditoriale inventée. Même teinte/famille que l'ancien bleu (~211°),
+     saturation nettement relevée pour la vivacité demandée, luminosité
+     réajustée pour rester lisible en texte sur fond blanc (contraste ≥ 4.5,
+     vérifié) -- jamais aussi pâle que le bleu clair du Socle utilisé seul
+     en texte de contenu. socle-lancement.js n'est PAS retouché : c'est la
+     reproduction fidèle d'un document officiel, la référence elle-même,
+     pas un écran à harmoniser. */
+  --evx-blue: #1c6fd9;
+  --evx-blue-light: #3f96ea;
+  --evx-navy: #0e1b30;
+  --evx-navy-deep: #0a1424;
+
+  /* Sémantique (bénéfice / perte — seule exception à la palette bleue) */
+  --evx-green: #15803d;
+  --evx-red: #dc2626;
+
+  /* Mali (bandeau de provenance — couleurs officielles, jamais réinterprétées) */
+  --evx-mali-green: #009639;
+  --evx-mali-yellow: #fcd116;
+  --evx-mali-red: #ce1126;
+
+  /* Fonds clairs (Calculateur, Cahier des Charges) */
+  --evx-paper-top: #ffffff;
+  --evx-paper-bottom: #f3f9ff;
+  --evx-paper-panel: #eaf3ff;
+  --evx-paper-border: #bcd6ef;
+  --evx-paper-border-soft: #d7e3f2;
+  --evx-paper-hairline: #eef1f6;
+
+  /* Échelle de gris-bleu texte sur fond clair */
+  --evx-ink-900: #0f172a;
+  --evx-ink-800: #1e293b;
+  --evx-ink-700: #334155;
+  --evx-ink-600: #475467;
+  --evx-ink-500: #64748b;
+
+  /* Texte sur fonds sombres */
+  --evx-onDark-title: #ffffff;
+  --evx-onDark-body: #c4d6ec;
+  --evx-onDark-secondary: #a9bfdb;
+  --evx-onDark-label: #8fb4de;
+
+  --font-display: 'Sora', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: var(--evx-navy);
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+a { color: var(--evx-blue); text-decoration: none; }
+a:hover { color: #1553a3; }
+
+button { font-family: var(--font-body); }
+
+[hidden] { display: none !important; }
+
+/* Barre de défilement fine et thémée, site entier (Cahier des Charges 4.10) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--evx-blue) transparent;
+}
+*::-webkit-scrollbar { width: 7px; height: 7px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--evx-blue); border-radius: 999px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--evx-blue-light); }
+
+.evx-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Nombre à séparateurs d'espace, jamais de décimale sauf pourcentage (règle 3.6) */
+.evx-num { font-variant-numeric: tabular-nums; }
+
+.evx-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}

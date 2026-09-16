@@ -1,0 +1,20 @@
+{
+  "name": "evotex-commercial",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site commercial EVOTEX 1.0 + Espace Gestion du Projet & Négociations (evotex-commercial). Séparé du dépôt Batexci ERP.",
+  "scripts": {
+    "dev": "vercel dev",
+    "dev:local": "node dev-server.mjs",
+    "db:migrer": "node db/migrer.mjs",
+    "db:amorcer": "node db/amorcer.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "vercel": "^59.16.0"
+  }
+}
