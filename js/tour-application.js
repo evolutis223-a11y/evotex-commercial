@@ -99,7 +99,6 @@ Views.tourApplication = {
       {
         n: 6, color: '#1c6fd9', nom: 'Commercial & Relation Client', tag: 'CRM',
         img: '/assets/img/tour-commercial.png',
-        cropPrimary: true,
         titre: "L'espace de travail du commercial, pas un tableau de bord vide",
         desc: "Relances en attente, budget des commandes, accès rapide à ses outils — chaque commercial retrouve son activité réelle dès la connexion.",
         limite: '',
