@@ -28,6 +28,13 @@ Views.tourApplication = {
         desc: "Votre usine, en direct, où que vous soyez : performance financière, avancement de la production, gouvernance des dossiers — un seul écran qui réunit tout. Vous pilotez, vous validez, vous décidez, sans naviguer entre dix écrans différents — depuis votre bureau comme depuis votre smartphone.",
         script: "Votre usine, enfin sous vos yeux, à chaque instant.",
         limite: "La Matrice de Décision d'Urgence évolue vers une vision BI connectée à des données réelles — trajectoire Phase 2.",
+        extra: {
+          kicker: 'Tableau de Bord Direction',
+          img: '/assets/img/tour-tableau-de-bord.png',
+          titre: "Le Tableau de Bord Direction, tel qu'il existe aujourd'hui",
+          desc: "Pilotage financier, santé de l'usine et alertes de gouvernance réunis sur un seul écran — chiffre d'affaires encaissé, TRS par poste, dossiers bloqués ou en attente de clôture. Chaque donnée non encore disponible est signalée directement à l'écran, jamais masquée.",
+          script: "Le poste de pilotage que la Présidence attendait.",
+        },
       },
       {
         n: 1, color: '#1e3a5f', nom: 'Finance & Comptabilité', tag: 'Financial Management',
@@ -36,6 +43,13 @@ Views.tourApplication = {
         desc: "Proformas à valider, factures en attente de signature Direction, acomptes non atteints — la Comptabilité voit chaque dossier, jamais un chiffre agrégé sans détail derrière.",
         script: "Vous validez chaque document depuis votre écran, avec tout l'historique sous les yeux.",
         limite: "Le connecteur vers un logiciel comptable externe (SYSCOHADA/SAGE) rejoint la feuille de route Phase 2.",
+        extra: {
+          kicker: 'Rapport Financier de l\'Usine',
+          img: '/assets/img/tour-rapport-financier.png',
+          titre: "Le Rapport Financier de l'Usine, réservé à la Direction",
+          desc: "Chiffre d'affaires encaissé, marge nette par type de produit, valeur du stock, position de caisse — un rapport réservé à la Présidence, la Direction, le DAF, la Comptabilité et le Contrôle de Gestion, recalculé sur la période choisie.",
+          script: "Le chiffre exact, jamais une estimation.",
+        },
       },
       {
         n: 2, color: '#15803d', nom: 'Ressources Humaines', tag: 'Human Capital Management',
@@ -59,6 +73,7 @@ Views.tourApplication = {
         desc: "Un tableau unique — Commande, Studio Dessin, Validation, Production, Magasin, Livraison — tous les dossiers suivis en direct, étape par étape.",
         limite: '',
         extra: {
+          kicker: 'Ateliers de fabrication',
           img: '/assets/img/tour-atelier.png',
           titre: 'Chaque atelier, son écran, son rythme',
           desc: "Gravure, prétraitement, impression, vapo, lavage, rame, calandre, découpe, contrôle qualité : le Chef de Production suit chaque atelier depuis un seul espace, avec son rendement comparé à l'objectif et ses incidents machine tracés en direct. Rien n'entre en fabrication sans être passé par le circuit de signatures.",
@@ -72,6 +87,13 @@ Views.tourApplication = {
         desc: "Dossiers en livraison, export à traiter, sorties à livrer — chaque expédition suit un circuit contrôlé, du Commercial au Gardien.",
         script: "Rien ne bouge dans votre usine sans que vous le sachiez.",
         limite: "Le suivi des matières premières rejoint le module Stocks Avancé, prévu en Phase 2.",
+        extra: {
+          kicker: 'Valorisation & Stocks',
+          img: '/assets/img/tour-valorisation-stocks.png',
+          titre: "Le Magasin valorisé, pas seulement compté",
+          desc: "Valeur totale du stock, matières premières au prix moyen pondéré, écarts de dosage, impact financier du 2ᵉ choix — le Magasinier voit le flux physique, la Direction voit la valeur financière, sur le même écran.",
+          script: "Chaque mètre en stock, avec son prix réel.",
+        },
       },
       {
         n: 6, color: '#1c6fd9', nom: 'Commercial & Relation Client', tag: 'CRM',
@@ -87,6 +109,13 @@ Views.tourApplication = {
           { titre: 'Des chiffres qui se calculent seuls', desc: "Objectifs journaliers, bilan et commissions sont suivis automatiquement, sans tableur à tenir à la main." },
           { titre: 'Une équipe comparable, en un coup d’œil', desc: "La Direction voit la performance de chaque commercial, côte à côte, sans demander de rapport." },
         ],
+        extra: {
+          kicker: 'Vente Directe',
+          img: '/assets/img/tour-vente-directe.png',
+          titre: 'La Vente Directe, déjà opérationnelle',
+          desc: "Vente comptoir d'articles déjà en stock — client, mode de retrait, articles, total — sans circuit de production ni signature à attendre. Un bonus déjà livré en Phase 1, au-delà du socle prévu.",
+          script: "La vente au comptoir, en quelques clics.",
+        },
       },
       {
         n: 8, color: '#64748b', nom: 'Administration & Sécurité du Système', tag: 'System Administration',
@@ -95,6 +124,13 @@ Views.tourApplication = {
         desc: "Tarifs, coûts de revient, commissions, budgets, identité des documents — la configuration financière et documentaire de l'usine, organisée pièce par pièce.",
         script: "Votre usine, réglée à votre image.",
         limite: "Les notifications et alertes SMS automatiques rejoignent l'extension Phase 2.",
+        extra: {
+          kicker: 'Contrôle de Gestion',
+          img: '/assets/img/tour-controle-gestion.png',
+          titre: 'Le Contrôle de Gestion, structuré en 8 piliers',
+          desc: "Commercial, Industriel, Chimie & Énergie, Maintenance, Stocks, Achats, Trésorerie, RH — la structure complète des 8 piliers est déjà en place, avec les premiers indicateurs réels branchés (chiffre d'affaires, marge, valeur du stock).",
+          script: "Une structure prête à recevoir chaque donnée, pilier par pilier.",
+        },
       },
     ];
 
@@ -152,7 +188,7 @@ Views.tourApplication = {
 
               ${b.extra ? `
                 <div style="margin-top:20px">
-                  ${screenBlock(b, b.extra.titre, b.extra.desc, b.extra.img, null, 'Ateliers de fabrication', b.extra.script)}
+                  ${screenBlock(b, b.extra.titre, b.extra.desc, b.extra.img, null, b.extra.kicker, b.extra.script)}
                 </div>
               ` : ''}
             </div>
