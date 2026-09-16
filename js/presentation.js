@@ -14,8 +14,8 @@ Views.presentation = {
       { icon: '🎨', title: 'EVOTEX Studio Dessin 1.0 & BAT', desc: 'Motifs, gabarits, circuit de validation BAT — et déjà livré en bonus, le Registre Gravure (cadres et cylindres suivis par motif, couleur et version).' },
       { icon: '🏭', title: 'Production & Maintenance Atelier', desc: "Ordre de Fabrication, suivi de production poste par poste, supervision technique des machines et chaudières." },
       { icon: '🚚', title: 'Supply Chain & Logistique', desc: 'Magasin, valorisation de stock, inventaires, achats et expéditions — jusqu’au Pass QR de sortie usine.' },
-      { icon: '🛍️', title: 'Commercial & Relation Client', desc: 'Prise de commande, clients, actions commerciales — et déjà livrés en bonus, Showroom & Vente Directe pleinement opérationnels.' },
-      { icon: '🧭', title: 'Pilotage & Gouvernance', desc: "Tour de Contrôle Direction et tableaux de bord personnalisables — chiffre d'affaires, marge, objectifs et alertes en direct." },
+      { icon: '🛍️', title: 'Commercial & Relation Client', desc: 'Prise de commande, clients, actions commerciales — et déjà livrés en bonus, Showroom & Vente Directe opérationnels sur l’essentiel (comptoir, encaissement).' },
+      { icon: '🧭', title: 'Pilotage & Gouvernance', desc: "Tour de Contrôle Direction et tableaux de bord personnalisables — chiffre d'affaires, marge et objectifs suivis en direct par la Présidence et la Direction, au fil de la trajectoire du Socle 1." },
       { icon: '🔐', title: 'Administration & Sécurité du Système', desc: 'Paramètres, rôles & permissions, et une gouvernance des dossiers tracée (réattribution, réouverture) à chaque étape.' },
     ];
 

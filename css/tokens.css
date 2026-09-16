@@ -2,7 +2,7 @@
    Tokens de design partagés, tirés a l'identique du Cahier des Charges
    EVOTEX (aucune réinterprétation des couleurs/typographies). */
 
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap');
 
 :root {
   /* Marque -- bleu ravivé (retour de l'utilisateur du 14/09/2026 : "fade et
@@ -53,6 +53,12 @@
 
   --font-display: 'Sora', -apple-system, 'Segoe UI', sans-serif;
   --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+  /* Police calligraphique -- réservée aux courtes phrases de clôture
+     commerciales (Tour de l'Application, demande du 17/09/2026). Caveat :
+     police Google très répandue, rendu fiable sur tous navigateurs, accents
+     français correctement supportés -- jamais pour un titre ou un corps de
+     texte entier, seulement la signature en fin de bloc. */
+  --font-script: 'Caveat', cursive;
 
   color-scheme: light;
 }

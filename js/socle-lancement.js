@@ -145,7 +145,7 @@ window.Views = window.Views || {};
     </div>
     <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:10px 14px;box-shadow:0 4px 10px rgba(18,42,86,0.28), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(18,42,86,0.08)">
       <div class="bx-h3" style="font-size:16.5px;font-weight:700;color:#101828;margin-bottom:6px">BAT Zéro Défaut</div>
-      <div class="bx-b" style="font-size:16.5px;color:#475467;line-height:1.4">Le Moteur de Validation &amp; Signature Multi-Postes verrouille chaque étape avant gravure pour protéger la propriété intellectuelle des motifs.</div>
+      <div class="bx-b" style="font-size:16.5px;color:#475467;line-height:1.4">Le Moteur de Validation &amp; Signature Multi-Postes structure et trace chaque étape avant gravure pour protéger la propriété intellectuelle des motifs.</div>
     </div>
     <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:10px 14px;box-shadow:0 4px 10px rgba(18,42,86,0.28), inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -1px 0 rgba(18,42,86,0.08)">
       <div class="bx-h3" style="font-size:16.5px;font-weight:700;color:#101828;margin-bottom:6px">Transparence &amp; Sécurité des Données</div>
@@ -163,8 +163,8 @@ window.Views = window.Views || {};
       </div>
       <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:9px 12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 3px 8px rgba(18,42,86,0.24)">
         <div class="bx-h3" style="font-size:15.5px;font-weight:700;color:#101828;margin-bottom:4px">2. Ressources Humaines</div>
-        <div class="bx-b" style="font-size:13px;color:#475467;line-height:1.3"><b>Inclus :</b> Annuaire du personnel, rôles et permissions de base.</div>
-        <div class="bx-b" style="font-size:13px;color:#2f6fb5;line-height:1.3;margin-top:4px"><b>Résultat :</b> Chaque intervenant a un accès taillé à son métier.</div>
+        <div class="bx-b" style="font-size:13px;color:#475467;line-height:1.3"><b>Inclus :</b> Annuaire du personnel en consultation, rôles et permissions de base.</div>
+        <div class="bx-b" style="font-size:13px;color:#2f6fb5;line-height:1.3;margin-top:4px"><b>Résultat :</b> Chaque intervenant a un accès taillé à son métier — brique RH complémentaire, appelée à s'enrichir au-delà du Socle 1.</div>
       </div>
       <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:9px 12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 3px 8px rgba(18,42,86,0.24)">
         <div class="bx-h3" style="font-size:15.5px;font-weight:700;color:#101828;margin-bottom:4px">3. Studio Dessin 1.0 &amp; BAT</div>
@@ -183,7 +183,7 @@ window.Views = window.Views || {};
       </div>
       <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:9px 12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 3px 8px rgba(18,42,86,0.24)">
         <div class="bx-h3" style="font-size:15.5px;font-weight:700;color:#101828;margin-bottom:4px">6. Commercial &amp; Relation Client</div>
-        <div class="bx-b" style="font-size:13px;color:#475467;line-height:1.3"><b>Inclus :</b> Commandes, clients, Showroom &amp; Vente Directe.</div>
+        <div class="bx-b" style="font-size:13px;color:#475467;line-height:1.3"><b>Inclus :</b> Commandes, clients, Showroom &amp; Vente Directe (comptoir, encaissement, inventaire de base).</div>
         <div class="bx-b" style="font-size:13px;color:#2f6fb5;line-height:1.3;margin-top:4px"><b>Résultat :</b> Visibilité directe sur tout le portefeuille commercial.</div>
       </div>
       <div style="background:#ffffff;border:1px solid #d7dee8;border-radius:8px;padding:9px 12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 3px 8px rgba(18,42,86,0.24)">
@@ -251,18 +251,18 @@ window.Views = window.Views || {};
         </div>
 
         <div style="background:#1e293b;border:1px solid rgba(59,130,246,0.25);border-radius:14px;padding:16px 20px;min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center">
-          <div class="bx-b" style="color:#5fa0e0;font-weight:800;font-size:16.5px;letter-spacing:1.5px;margin-bottom:12px">MATURITÉ DES 8 BLOCS — SOCLE (80%)</div>
+          <div class="bx-b" style="color:#5fa0e0;font-weight:800;font-size:16.5px;letter-spacing:1.5px;margin-bottom:12px">MATURITÉ DES 8 BLOCS DU SOCLE</div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">1. Finance &amp; Comptabilité</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">2. Ressources Humaines</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">3. Studio Dessin 1.0 &amp; BAT</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">4. Production &amp; Maintenance</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">5. Supply Chain &amp; Logistique</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">6. Commercial &amp; Relation Client</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">7. Pilotage &amp; Gouvernance</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
-            <div style="display:grid;grid-template-columns:1fr 28px;align-items:center;gap:8px"><div><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1;display:block;margin-bottom:3px">8. Administration &amp; Sécurité</span><div style="height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden"><div style="width:80%;height:100%;background:#5fa0e0;border-radius:2px"></div></div></div><span class="bx-b" style="font-size:16.5px;font-weight:800;color:#5fa0e0;text-align:right">80%</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">1. Finance &amp; Comptabilité</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">2. Ressources Humaines</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">3. Studio Dessin 1.0 &amp; BAT</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">4. Production &amp; Maintenance</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">5. Supply Chain &amp; Logistique</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">6. Commercial &amp; Relation Client</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">7. Pilotage &amp; Gouvernance</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
+            <div style="display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px"><span class="bx-b" style="font-size:15.5px;font-weight:600;color:#cbd5e1">8. Administration &amp; Sécurité</span><span class="bx-b" style="font-size:11.5px;font-weight:700;color:#5fa0e0;background:rgba(95,160,224,0.15);border:1px solid rgba(95,160,224,0.4);border-radius:999px;padding:3px 10px;white-space:nowrap">Socle actif</span></div>
           </div>
-          <div class="bx-b" style="font-size:13px;color:#8fb4de;line-height:1.4;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.12)">+ Avances Opérationnelles déjà livrées, hors courbe (déjà à 100%) : Registre Gravure, Showroom &amp; Vente Directe, Gouvernance des Dossiers, Tableaux de bord personnalisables.</div>
+          <div class="bx-b" style="font-size:13px;color:#8fb4de;line-height:1.4;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.12)">+ Avances Opérationnelles — 100% opérationnelles sur leur périmètre Usine : Registre Gravure, Showroom &amp; Vente Directe, Gouvernance des Dossiers, Tableaux de bord personnalisables.</div>
         </div>
       </div>
 
@@ -367,57 +367,57 @@ window.Views = window.Views || {};
     </div>
   </div>
 
-  <div class="bx-b" style="color:#2f6fb5;font-weight:800;font-size:18px;letter-spacing:2px;margin-top:12px;flex-shrink:0">MOIS 2 · LES 8 BLOCS DU SOCLE (80%)</div>
+  <div class="bx-b" style="color:#2f6fb5;font-weight:800;font-size:18px;letter-spacing:2px;margin-top:12px;flex-shrink:0">MOIS 2 · LES 8 BLOCS DU SOCLE</div>
 
   <div style="flex:1;display:grid;grid-template-columns:1fr 25%;gap:20px;margin-top:10px;min-height:0">
 
     <div style="display:flex;flex-direction:column;justify-content:center;gap:0px;min-height:0;min-width:0">
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">1. Finance &amp; Comptabilité</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Comptabilité, Caisse, DAF, Contrôle de Gestion (consultation).</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">2. Ressources Humaines</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
-        <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Annuaire et accès cloisonnés par rôle métier.</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
+        <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Annuaire du personnel en consultation, accès cloisonnés par rôle métier — brique évolutive au-delà du Socle 1.</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">3. Studio Dessin 1.0 &amp; BAT</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Motifs, création graphique, circuit BAT, Registre Gravure inclus.</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">4. Production &amp; Maintenance</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Traçabilité temps réel des ODF, supervision technique des utilités.</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">5. Supply Chain &amp; Logistique</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Magasin, valorisation de stock, inventaires, achats, expéditions.</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">6. Commercial &amp; Relation Client</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
-        <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Prise de commande, clients, Showroom &amp; Vente Directe.</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
+        <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Prise de commande, clients, Showroom &amp; Vente Directe (comptoir, encaissement, inventaire de base).</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0;border-bottom:1px solid #d7dee8">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid #d7dee8">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">7. Pilotage &amp; Gouvernance</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Tour de Contrôle Direction, tableaux de bord personnalisables.</span>
       </div>
-      <div style="display:grid;grid-template-columns:230px 45px 1fr;gap:14px;align-items:start;padding:6px 0">
+      <div style="display:grid;grid-template-columns:230px 110px 1fr;gap:14px;align-items:center;padding:6px 0">
         <span class="bx-h3" style="font-size:17.5px;font-weight:700;color:#101828;line-height:1.25">8. Administration &amp; Sécurité</span>
-        <span class="bx-b" style="font-size:19.5px;color:#2f6fb5;font-weight:800">80%</span>
+        <span class="bx-b" style="font-size:12.5px;font-weight:700;color:#2f6fb5;background:rgba(47,111,181,0.1);border:1px solid rgba(47,111,181,0.35);border-radius:999px;padding:4px 10px;white-space:nowrap;text-align:center">Socle actif</span>
         <span class="bx-b" style="font-size:18px;color:#4b5565;line-height:1.4">Paramètres, rôles &amp; permissions, gouvernance des dossiers.</span>
       </div>
     </div>
 
     <div style="background:#0e1b30;border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:center;min-width:0;box-sizing:border-box;box-shadow:0 4px 14px rgba(18,42,86,0.3)">
       <div class="bx-b" style="color:#5fa0e0;font-weight:800;font-size:17px;letter-spacing:1.5px;margin-bottom:12px">DÉJÀ OPÉRATIONNEL</div>
-      <span class="bx-b" style="font-size:17.5px;font-weight:500;color:#f1f5f9;line-height:1.55;overflow-wrap:break-word">Le socle garantit l'exploitation immédiate des flux vitaux usine dès le Mois 2 : validation technique/visuelle des BAT, suivi en temps réel des ODF, gestion du magasin, Showroom &amp; Vente Directe pleinement opérationnels, et émission des Pass QR de sortie d'usine.</span>
-      <span class="bx-b" style="font-size:17.5px;font-weight:500;color:#c4d6ec;line-height:1.55;margin-top:12px;overflow-wrap:break-word">Bonus déjà livré en Avance Opérationnelle : le Registre Gravure (suivi des cadres et cylindres par motif, couleur et version) et la Gouvernance des Dossiers (réattribution, réouverture tracée).</span>
+      <span class="bx-b" style="font-size:17.5px;font-weight:500;color:#f1f5f9;line-height:1.55;overflow-wrap:break-word">Le socle garantit l'exploitation immédiate des flux vitaux usine dès le Mois 2 : validation technique/visuelle des BAT, suivi en temps réel des ODF, gestion du magasin, Showroom &amp; Vente Directe opérationnels sur l'essentiel (comptoir, encaissement), et émission des Pass QR de sortie d'usine.</span>
+      <span class="bx-b" style="font-size:17.5px;font-weight:500;color:#c4d6ec;line-height:1.55;margin-top:12px;overflow-wrap:break-word">100% opérationnels sur le périmètre Usine dès la Phase 1 : le Registre Gravure (suivi des cadres et cylindres par motif, couleur et version) et la Gouvernance des Dossiers (réattribution, réouverture tracée).</span>
     </div>
 
   </div>
@@ -493,9 +493,9 @@ window.Views = window.Views || {};
       </div>
 
       <div style="background:#0e1b30;border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:center;min-width:0;box-sizing:border-box;box-shadow:0 4px 14px rgba(18,42,86,0.3)">
-        <div class="bx-b" style="color:#5fa0e0;font-weight:800;font-size:15px;letter-spacing:1.5px;margin-bottom:9px">TRAJECTOIRE COMPLÈTE</div>
-        <span class="bx-b" style="font-size:15px;font-weight:500;color:#f1f5f9;line-height:1.4;overflow-wrap:break-word">À l'issue du Mois 6, l'ensemble des flux usine est piloté, tracé et sécurisé sur une seule plateforme, en 8 Blocs Fonctionnels.</span>
-        <span class="bx-b" style="font-size:15px;font-weight:500;color:#c4d6ec;line-height:1.4;margin-top:8px;overflow-wrap:break-word">Un accompagnement continu jusqu'à la couverture totale, sans rupture des habitudes de travail déjà en place.</span>
+        <div class="bx-h1" style="color:#fff;font-weight:900;font-size:36px;line-height:1.1;letter-spacing:0.2px;margin-bottom:16px">Trajectoire <span style="color:#5fa0e0">complète</span></div>
+        <span class="bx-b" style="font-size:19px;font-weight:600;color:#f1f5f9;line-height:1.45;overflow-wrap:break-word">À l'issue du Mois 6, l'ensemble des flux usine est piloté, tracé et sécurisé sur une seule plateforme, en 8 Blocs Fonctionnels.</span>
+        <span class="bx-b" style="font-size:16px;font-weight:500;color:#c4d6ec;line-height:1.45;margin-top:12px;overflow-wrap:break-word">Un accompagnement continu jusqu'à la couverture totale, sans rupture des habitudes de travail déjà en place.</span>
       </div>
 
     </div>
@@ -592,7 +592,7 @@ window.Views = window.Views || {};
     <div class="bx-b" style="color:#2dd4bf;font-weight:900;font-size:15.5px;letter-spacing:1.5px">2 · AVANCE OPÉRATIONNELLE — BONUS OFFERT DÈS LA PHASE 1</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px">
       <div style="border:1px solid rgba(45,212,191,0.4);border-radius:7px;padding:7px 10px;background:rgba(45,212,191,0.08)"><span class="bx-h3" style="font-size:14.5px;font-weight:700;color:#2dd4bf">Registre Gravure</span><div class="bx-b" style="font-size:13px;color:#c4d6ec;line-height:1.3;margin-top:3px">Cadres/cylindres suivis par motif, couleur, version. Évolue vers la Séparation des Couleurs en Phase 2.</div></div>
-      <div style="border:1px solid rgba(45,212,191,0.4);border-radius:7px;padding:7px 10px;background:rgba(45,212,191,0.08)"><span class="bx-h3" style="font-size:14.5px;font-weight:700;color:#2dd4bf">Showroom &amp; Vente Directe</span><div class="bx-b" style="font-size:13px;color:#c4d6ec;line-height:1.3;margin-top:3px">Encaissement comptoir/boutique déjà pleinement opérationnel.</div></div>
+      <div style="border:1px solid rgba(45,212,191,0.4);border-radius:7px;padding:7px 10px;background:rgba(45,212,191,0.08)"><span class="bx-h3" style="font-size:14.5px;font-weight:700;color:#2dd4bf">Showroom &amp; Vente Directe</span><div class="bx-b" style="font-size:13px;color:#c4d6ec;line-height:1.3;margin-top:3px">Encaissement comptoir/boutique — 100% opérationnel sur le circuit de vente et d'encaissement.</div></div>
       <div style="border:1px solid rgba(45,212,191,0.4);border-radius:7px;padding:7px 10px;background:rgba(45,212,191,0.08)"><span class="bx-h3" style="font-size:14.5px;font-weight:700;color:#2dd4bf">Gouvernance des Dossiers</span><div class="bx-b" style="font-size:13px;color:#c4d6ec;line-height:1.3;margin-top:3px">Réattribution de commercial et réouverture archivée, motif tracé.</div></div>
       <div style="border:1px solid rgba(45,212,191,0.4);border-radius:7px;padding:7px 10px;background:rgba(45,212,191,0.08)"><span class="bx-h3" style="font-size:14.5px;font-weight:700;color:#2dd4bf">Tableaux de Bord Personnalisables</span><div class="bx-b" style="font-size:13px;color:#c4d6ec;line-height:1.3;margin-top:3px">Widgets réorganisables par glisser-déposer.</div></div>
     </div>
@@ -735,7 +735,7 @@ window.Views = window.Views || {};
 
   <div style="flex-shrink:0;margin-top:18px;text-align:center;position:relative;z-index:1">
     <div class="bx-h1" style="font-size:27px;font-weight:900;color:#fff;line-height:1.2">BRIQUE TRANSVERSALE — MOTEUR DE VALIDATION &amp; SIGNATURE MULTI-POSTES</div>
-    <div class="bx-b" style="font-size:19px;font-weight:500;color:#8fb4de;line-height:1.5;margin-top:6px">Finance ↔ Studio Dessin ↔ Production — un regard permanent sur chaque étape du cycle textile, de la création client jusqu'au quitus financier</div>
+    <div class="bx-b" style="font-size:19px;font-weight:500;color:#8fb4de;line-height:1.5;margin-top:6px">Finance ↔ Studio Dessin ↔ Production — un circuit de gouvernance et de traçabilité des validations, structuré pour sécuriser chaque lancement en fabrication tout en gardant la souplesse du workflow terrain</div>
   </div>
 
   <div style="flex:1;display:grid;grid-template-columns:1.05fr 0.95fr;gap:36px;align-items:center;min-height:0;position:relative;z-index:1;margin-top:14px">
@@ -769,7 +769,7 @@ window.Views = window.Views || {};
           <span class="bx-b" style="font-size:17.5px;color:#e2e8f0;line-height:1.5"><b style="color:#fff">Clôture Direction &amp; Archivage —</b> émission de la Facture définitive (double signature) et génération automatique du rapport d'exploitation.</span>
         </div>
       </div>
-      <div class="bx-b" style="font-size:16.5px;font-weight:600;color:#8a9bb8;margin-top:8px">Inclus dès le premier lancement — brique transversale du socle de déploiement.</div>
+      <div class="bx-b" style="font-size:16.5px;font-weight:600;color:#8a9bb8;margin-top:8px">Brique transversale du socle de déploiement, activée dès le lancement et affinée sur la trajectoire de finalisation.</div>
     </div>
 
     <div style="display:flex;justify-content:center;min-width:0">
@@ -1206,6 +1206,19 @@ window.Views = window.Views || {};
       document.addEventListener("keydown", onKeydown);
 
       renderStage();
+
+      // Certaines pages utilisent la police d'affichage (Sora) dans des
+      // titres denses : si computeScale() mesure stage.scrollHeight avant
+      // que cette police ait fini de se charger, le texte se redessine
+      // ensuite dans une police plus large/haute et deborde du conteneur
+      // (overflow: hidden sur .socle-viewport) -- retour utilisateur du
+      // 17/09/2026, bug intermittent au tout premier affichage, jamais
+      // revu apres un aller-retour de page (police alors deja en cache).
+      // Une seconde mesure une fois les polices reellement pretes evite ce
+      // decalage, sans rien changer au comportement normal.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(computeScale);
+      }
     },
 
     unmount() {

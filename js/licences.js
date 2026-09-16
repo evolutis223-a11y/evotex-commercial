@@ -106,7 +106,7 @@ window.Views = window.Views || {};
     badge: 'RECOMMANDÉ', offre: 'Déploiement à Vie + Suivi', ancre: 'licence-deploiement',
     features: [
       feature('Usage à vie, sans limite de durée'),
-      feature('Socle EVOTEX 1.0 complet installé chez vous'),
+      feature('Le socle EVOTEX 1.0 installé chez vous, sur sa trajectoire de déploiement en 6 mois'),
       feature('Accompagnement et suivi mensuel inclus après les 6 premiers mois'),
       feature('Mises à jour et corrections assurées en continu, tant que le contrat de suivi est actif', "Si le contrat de suivi est interrompu, les mises à jour ne sont plus incluses&nbsp;: elles restent possibles soit via un nouvel abonnement de suivi, soit à la demande et facturées à part."),
       feature('Modules complémentaires à la demande'),
@@ -146,7 +146,7 @@ window.Views = window.Views || {};
       </div>
       <div class="lic-footer">
         <div class="lic-footer-line"></div>
-        <p>Les trois licences donnent accès au socle EVOTEX 1.0 complet. Quels qu'ils soient, les modules complémentaires restent disponibles à la carte, quel que soit le modèle choisi, et peuvent être ajoutés à tout moment de la relation.</p>
+        <p>Les trois licences donnent accès à l'ensemble du socle EVOTEX 1.0, sur sa trajectoire de déploiement. Quels qu'ils soient, les modules complémentaires restent disponibles à la carte, quel que soit le modèle choisi, et peuvent être ajoutés à tout moment de la relation.</p>
       </div>
     `;
   }
