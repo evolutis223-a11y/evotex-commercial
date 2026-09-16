@@ -61,6 +61,7 @@ Views.tourApplication = {
       {
         n: 3, color: '#7c3aed', nom: 'EVOTEX Studio Dessin 1.0 & BAT', tag: 'PLM Textile',
         img: '/assets/img/tour-studio-dessin.png',
+        cropPrimary: true,
         titre: 'Du premier trait au Bon à Tirer',
         desc: "Suivi en direct des maquettes par salle (départ, création, modification, validation, production) et Registre Gravure des cadres et cylindres — en avance sur le calendrier dès la Phase 1. Une innovation pensée sur mesure pour le mode de fonctionnement de BATEXCI, appelée à évoluer vers un outil encore plus personnalisé.",
         script: "Votre exclusivité, protégée dès le premier trait.",
@@ -98,6 +99,7 @@ Views.tourApplication = {
       {
         n: 6, color: '#1c6fd9', nom: 'Commercial & Relation Client', tag: 'CRM',
         img: '/assets/img/tour-commercial.png',
+        cropPrimary: true,
         titre: "L'espace de travail du commercial, pas un tableau de bord vide",
         desc: "Relances en attente, budget des commandes, accès rapide à ses outils — chaque commercial retrouve son activité réelle dès la connexion.",
         limite: '',
@@ -134,9 +136,9 @@ Views.tourApplication = {
       },
     ];
 
-    const screenBlock = (b, titre, desc, img, placeholderLabel, kicker, script) => `
+    const screenBlock = (b, titre, desc, img, placeholderLabel, kicker, script, crop) => `
       <div class="tour-screen">
-        <div class="tour-screen-frame">
+        <div class="tour-screen-frame${crop ? ' -crop' : ''}">
           <div class="tour-screen-framebar"><span></span><span></span><span></span></div>
           ${placeholderLabel
             ? `<div class="tour-imgslot">${placeholderLabel}</div>`
@@ -172,7 +174,7 @@ Views.tourApplication = {
                 </div>
               </div>
 
-              ${screenBlock(b, b.titre, b.desc, b.img, null, `Bloc ${b.n} · ${b.nom}`, b.script)}
+              ${screenBlock(b, b.titre, b.desc, b.img, null, `Bloc ${b.n} · ${b.nom}`, b.script, b.cropPrimary)}
               ${b.limite ? `<div class="tour-limite"><p>${b.limite}</p></div>` : ''}
 
               ${b.avantages ? `
@@ -188,7 +190,7 @@ Views.tourApplication = {
 
               ${b.extra ? `
                 <div style="margin-top:20px">
-                  ${screenBlock(b, b.extra.titre, b.extra.desc, b.extra.img, null, b.extra.kicker, b.extra.script)}
+                  ${screenBlock(b, b.extra.titre, b.extra.desc, b.extra.img, null, b.extra.kicker, b.extra.script, b.extra.crop)}
                 </div>
               ` : ''}
             </div>
