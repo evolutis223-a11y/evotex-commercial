@@ -5517,6 +5517,13 @@ function rendreMenuMembre(m, peutAgir) {
 // déjà active (Tchat Client / Notes / Échanges) referme le panneau au lieu
 // de ne rien faire, pour les 3 icônes, que ce soit depuis la bande repliée,
 // les onglets ouverts, ou le nouvel accès rapide du bandeau du haut (mobile).
+// Retour du 17/09/2026 : "le bar de chat... prend du temps à l'ouverture"
+// -- ouvrir/fermer/changer d'onglet dans la colonne latérale appelait tout
+// rendreNegociation() (en-tête, frise, bande d'outils, Grand Aperçu compris)
+// pour ce qui n'est qu'un panneau à afficher/masquer. rendreColonneLaterale()
+// suffit seule -- déjà ce qu'utilisent les autres panneaux (RH, Tableau de
+// Bord...) pour cette même colonne partagée -- rien d'autre à l'écran ne
+// doit changer quand on ouvre son chat.
 function ouvrirOngletColonne(id) {
   if (!etat.colonneRepliee && etat.colonneOnglet === id) { reduireColonne(); return; }
   etat.colonneOnglet = id;
@@ -5524,20 +5531,28 @@ function ouvrirOngletColonne(id) {
   localStorage.setItem(CLE_COLONNE_REPLIEE, '0');
   localStorage.setItem(CLE_COLONNE_ONGLET, id);
   if (id === 'chat') marquerChatVu();
-  if (etat.panneau === 'negociation') rendreNegociation();
-  else rendreColonneLaterale(etat.detail);
+  rendreColonneLaterale(etat.detail);
 }
 
 function reduireColonne() {
   etat.colonneRepliee = true;
   localStorage.setItem(CLE_COLONNE_REPLIEE, '1');
-  if (etat.panneau === 'negociation') rendreNegociation();
-  else rendreColonneLaterale(etat.detail);
+  rendreColonneLaterale(etat.detail);
 }
 
 function rendreColonneLaterale(d) {
   const colonne = document.getElementById('colonne-laterale');
   if (!colonne) return;
+  // Ne jamais reconstruire le pied de colonne pendant un enregistrement
+  // vocal en cours -- même bug déjà corrigé ailleurs pour la modale
+  // d'ajout de membre (retour du 16/09/2026, "à chaque fois que j'écris,
+  // ça se renouvelle") : le sondage silencieux de 12s détruisait et
+  // recréait tout le pied (bouton micro, bulle d'enregistrement, zone de
+  // texte) toutes les 12s, coupant l'enregistrement en plein vol -- plus
+  // de bouton pour l'arrêter, plus de bulle pour l'envoyer (retour du
+  // 17/09/2026 : "les secondes comptaient, il n'y a pas moyen d'arrêter...
+  // pas moyen d'envoyer non plus le vocal").
+  if (enregistrementVocal) return;
   // Retour du 16/09/2026, tranché : le client garde cette même colonne
   // partagée -- mais UNIQUEMENT l'onglet Tchat (Notes/Échanges sont des
   // consignes internes, jamais pour lui). Forcé ici, pas juste caché --
