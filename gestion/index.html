@@ -721,9 +721,14 @@
      l'identité de la barre latérale gauche pour donner un vrai style. */
   .g-colonne-top { display: flex; align-items: center; gap: 4px; padding: 9px 10px; flex-shrink: 0;
     background: linear-gradient(135deg, var(--evx-navy-deep), var(--evx-navy)); }
-  .g-colonne-onglet { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px 4px;
+  .g-colonne-onglet { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 7px 4px 6px;
     border-radius: 8px; border: none; background: none; cursor: pointer; font-size: 14px; color: rgba(255,255,255,0.5); font-family: var(--font-body); }
   .g-colonne-onglet.-actif { background: rgba(255,255,255,0.16); color: #fff; }
+  /* Libellé minuscule sous l'icône (retour du 17/09/2026) : "tout le monde
+     n'a pas le réflexe de reconnaître les boutons à l'icône" -- très fin
+     pour ne prendre presque aucune place, jamais un vrai libellé de bouton. */
+  .g-colonne-onglet-label { font-size: 7.5px; font-weight: 700; letter-spacing: 0.2px; text-transform: uppercase;
+    line-height: 1; opacity: 0.85; white-space: nowrap; }
   /* Le bouton de repli doit se distinguer nettement des 3 onglets -- retour
      du 14/09/2026 : "confondu aux différents boutons... utilise juste des
      flèches, mais plus grandes et plus visibles" -- une simple flèche nue,
@@ -1043,9 +1048,9 @@ const CLE_COLONNE_REPLIEE = 'evx_gestion_colonne_repliee';
 const CLE_COLONNE_ONGLET = 'evx_gestion_colonne_onglet';
 const CLE_COLONNE_LARGEUR = 'evx_gestion_colonne_largeur';
 const ONGLETS_COLONNE = [
-  { id: 'chat', titre: 'Tchat avec le Client' },
-  { id: 'notes', titre: "Notes de l'équipe" },
-  { id: 'notif', titre: "Échanges de l'équipe" },
+  { id: 'chat', titre: 'Tchat avec le Client', libelleCourt: 'Chat client' },
+  { id: 'notes', titre: "Notes de l'équipe", libelleCourt: 'Notes' },
+  { id: 'notif', titre: "Échanges de l'équipe", libelleCourt: "Chat équipe" },
 ];
 
 // Icônes maison (traits fins, currentColor) -- retour du 14/09/2026 : les
@@ -5387,7 +5392,7 @@ function rendreColonneLaterale(d) {
   colonne.innerHTML = `
     <div class="g-colonne-resize" id="colonne-resize"></div>
     <div class="g-colonne-top">
-      ${onglets.map(o => `<button class="g-colonne-onglet ${etat.colonneOnglet === o.id ? '-actif' : ''}" data-onglet="${o.id}" title="${escapeHtml(o.titre)}">${iconeOnglet(o.id)}${pastilleDe(o.id)}</button>`).join('')}
+      ${onglets.map(o => `<button class="g-colonne-onglet ${etat.colonneOnglet === o.id ? '-actif' : ''}" data-onglet="${o.id}" title="${escapeHtml(o.titre)}">${iconeOnglet(o.id)}${pastilleDe(o.id)}<span class="g-colonne-onglet-label">${escapeHtml(o.libelleCourt)}</span></button>`).join('')}
       <button class="g-toggle-colonne" id="btn-toggle-colonne" title="Réduire">→</button>
     </div>
     <div class="g-colonne-corps">${corps}</div>
