@@ -31,7 +31,7 @@ Views.tourApplication = {
         extra: {
           kicker: 'Tableau de Bord Direction',
           img: '/assets/img/tour-tableau-de-bord.png',
-          titre: "Le Tableau de Bord Direction, tel qu'il existe aujourd'hui",
+          titre: 'Toute la gouvernance, sous un même regard',
           desc: "Pilotage financier, santé de l'usine et alertes de gouvernance réunis sur un seul écran — chiffre d'affaires encaissé, TRS par poste, dossiers bloqués ou en attente de clôture. Chaque donnée non encore disponible est signalée directement à l'écran, jamais masquée.",
           script: "Le poste de pilotage que la Présidence attendait.",
         },
@@ -46,9 +46,9 @@ Views.tourApplication = {
         extra: {
           kicker: 'Rapport Financier de l\'Usine',
           img: '/assets/img/tour-rapport-financier.png',
-          titre: "Le Rapport Financier de l'Usine, réservé à la Direction",
+          titre: 'La photo financière exacte, jamais une estimation',
           desc: "Chiffre d'affaires encaissé, marge nette par type de produit, valeur du stock, position de caisse — un rapport réservé à la Présidence, la Direction, le DAF, la Comptabilité et le Contrôle de Gestion, recalculé sur la période choisie.",
-          script: "Le chiffre exact, jamais une estimation.",
+          script: "Vous voyez la marge réelle, pas un chiffre rond.",
         },
       },
       {
@@ -113,7 +113,7 @@ Views.tourApplication = {
         extra: {
           kicker: 'Vente Directe',
           img: '/assets/img/tour-vente-directe.png',
-          titre: 'La Vente Directe, déjà opérationnelle',
+          titre: 'La vente au comptoir, déjà prête à servir',
           desc: "Vente comptoir d'articles déjà en stock — client, mode de retrait, articles, total — sans circuit de production ni signature à attendre. Un bonus déjà livré en Phase 1, au-delà du socle prévu.",
           script: "La vente au comptoir, en quelques clics.",
         },
@@ -128,7 +128,7 @@ Views.tourApplication = {
         extra: {
           kicker: 'Contrôle de Gestion',
           img: '/assets/img/tour-controle-gestion.png',
-          titre: 'Le Contrôle de Gestion, structuré en 8 piliers',
+          titre: '8 piliers de gestion, une seule vue',
           desc: "Commercial, Industriel, Chimie & Énergie, Maintenance, Stocks, Achats, Trésorerie, RH — la structure complète des 8 piliers est déjà en place, avec les premiers indicateurs réels branchés (chiffre d'affaires, marge, valeur du stock).",
           script: "Une structure prête à recevoir chaque donnée, pilier par pilier.",
         },
