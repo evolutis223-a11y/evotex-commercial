@@ -62,8 +62,8 @@ const DUREE_MAX_VOCAL_SECONDES = 10 * 60;
 
 // Messages de bienvenue automatiques (retour du 17/09/2026), postés une
 // seule fois, à la toute première arrivée d'un membre dans une négociation.
-const MESSAGE_BIENVENUE_CLIENT = "Bonjour et bienvenue ! Je suis votre interlocuteur EVOTEX pour ce projet. Vous retrouverez ici l'avancement de votre dossier, les documents que nous vous transmettons, et vous pouvez m'écrire directement à tout moment. Le Guide (icône en haut) répond aux questions les plus courantes sur votre espace.";
-const MESSAGE_BIENVENUE_EQUIPE = "Bienvenue dans l'équipe de négociation ! Ce fil est réservé en interne, jamais visible du client -- utilisez-le pour échanger sur le dossier. Le Guide, dans le menu, détaille votre rôle et ce que vous pouvez faire.";
+const MESSAGE_BIENVENUE_CLIENT = "Bonjour et bienvenue ! Je suis votre interlocuteur EVOTEX pour ce projet. Vous retrouverez ici l'avancement de votre dossier et les documents que nous vous transmettons. Dans ce chat, vous pouvez à tout moment m'écrire un message, joindre un fichier, ou envoyer un message vocal -- simplement, en direct. Le Guide (icône en haut) répond aux questions les plus courantes sur votre espace.";
+const MESSAGE_BIENVENUE_EQUIPE = "Bienvenue dans l'équipe de négociation ! Ce fil est réservé en interne, jamais visible du client. Vous pouvez à tout moment y écrire un message, joindre un fichier, ou envoyer un vocal -- simplement, en direct. Le Guide, dans le menu, détaille votre rôle et ce que vous pouvez faire.";
 
 // Filtre de langage (retour du 14/09/2026) -- "qu'un message lui dise
 // clairement que ces mots ne sont pas acceptés sur cette plateforme".
