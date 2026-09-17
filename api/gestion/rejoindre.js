@@ -8,7 +8,7 @@
 // JavaScript avant. Pose le cookie puis renvoie vers /gestion/, qui à ce
 // stade a déjà une session valide et passe donc le middleware de protection
 // (celui-ci bloque tout /gestion/* sans session, sauf /gestion/login).
-import { invitationParJeton, invitationValide, enregistrerConnexion, marquerVu } from "../../lib/negociations.js";
+import { invitationParJeton, invitationValide, enregistrerConnexion, marquerVu, sessionDejaActive, ouvrirSessionUtilisateur } from "../../lib/negociations.js";
 import { signerSession, nomCookie, dureeSessionSecondes } from "../../lib/auth.js";
 
 export default async function handler(req, res) {
@@ -21,7 +21,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  const session = await signerSession({ utilisateurId: invitation.utilisateur_id });
+  // Session unique par compte (retour du 17/09/2026) : un lien d'accès ne
+  // contourne pas la règle -- si le compte est déjà connecté ailleurs, on
+  // renvoie vers la connexion classique plutôt que de remplacer la session
+  // en silence.
+  if (await sessionDejaActive(invitation.utilisateur_id)) {
+    res.writeHead(302, { Location: "/gestion/login?erreur=deja_connecte" });
+    res.end();
+    return;
+  }
+
+  const jetonSession = await ouvrirSessionUtilisateur(invitation.utilisateur_id, dureeSessionSecondes());
+  const session = await signerSession({ utilisateurId: invitation.utilisateur_id, jeton: jetonSession });
   await enregistrerConnexion(invitation.utilisateur_id, req.headers["user-agent"]);
   await marquerVu(invitation.utilisateur_id);
 

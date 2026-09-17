@@ -4908,6 +4908,8 @@ function rendreMenuMembre(m, peutAgir) {
     <div class="g-membre-menu-nom">${escapeHtml(m.nom)} · ${escapeHtml(libelleRole(m.role, m.titre_autre))}</div>
     ${peutAgir ? `<button data-voircomme="${m.utilisateur_id}">Voir comme</button>` : ''}
     ${peutAgir && m.role !== 'direction' ? `<button data-lien-invitation="${m.utilisateur_id}">Lien d'accès</button>` : ''}
+    ${peutAgir ? `<button data-reinitialiser="${m.utilisateur_id}" data-reinitialiser-nom="${escapeHtml(m.nom)}">Réinitialiser le mot de passe</button>` : ''}
+    ${peutAgir ? `<button data-forcer-deconnexion="${m.utilisateur_id}">Forcer la déconnexion</button>` : ''}
     ${peutAgir && m.role !== 'direction' ? `<button class="-danger" data-retirer="${m.utilisateur_id}">Retirer de la négociation</button>` : ''}
     ${!peutAgir ? '<div class="g-hint" style="padding:6px 8px">Lecture seule.</div>' : ''}
   </div>`;
@@ -5339,6 +5341,32 @@ function attacherEvenementsNegociation(d) {
       if (!confirm('Retirer ce membre de la négociation ?')) return;
       await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ negociationId: etat.negociationId, action: 'retirer_membre', utilisateurId: Number(btn.dataset.retirer) }) });
+      await chargerNegociation();
+    });
+  });
+
+  document.querySelectorAll('[data-reinitialiser]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const nom = btn.dataset.reinitialiserNom || 'ce membre';
+      const nouveauMotDePasse = prompt(`Nouveau mot de passe pour ${nom} (6 caractères minimum) :`);
+      if (!nouveauMotDePasse) return;
+      const reponse = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ negociationId: etat.negociationId, action: 'reinitialiser_mot_de_passe', utilisateurId: Number(btn.dataset.reinitialiser), nouveauMotDePasse }) });
+      if (!reponse.ok) { alert(reponse.erreur || 'Échec de la réinitialisation.'); return; }
+      alert(`Mot de passe mis à jour pour ${nom}. Toute session déjà ouverte pour ce compte a été coupée.`);
+      etat.menuMembreOuvert = null;
+      await chargerNegociation();
+    });
+  });
+
+  document.querySelectorAll('[data-forcer-deconnexion]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!confirm('Forcer la déconnexion de ce membre ? Sa session active (si elle existe) sera coupée immédiatement.')) return;
+      await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ negociationId: etat.negociationId, action: 'forcer_deconnexion', utilisateurId: Number(btn.dataset.forcerDeconnexion) }) });
+      etat.menuMembreOuvert = null;
       await chargerNegociation();
     });
   });

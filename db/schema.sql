@@ -18,6 +18,18 @@ create table if not exists utilisateurs (
 -- temps réel promise à tort.
 alter table utilisateurs add column if not exists dernier_vu timestamptz;
 
+-- Session unique par compte (retour du 17/09/2026 -- "quand il est connecté,
+-- il est connecté. Si une deuxième personne essaie de se connecter... ça
+-- ressemble à du piratage, c'est pas permis") : un identifiant partagé à un
+-- tiers pendant que le titulaire est déjà connecté est refusé au login, pas
+-- silencieusement remplacé. session_jeton est en outre embarqué dans le
+-- cookie signé (lib/auth.js) -- si les deux ne correspondent plus (session
+-- coupée par la Direction, ou mot de passe réinitialisé), la session en
+-- cours est invalidée immédiatement côté API, même si le cookie reste
+-- cryptographiquement valide.
+alter table utilisateurs add column if not exists session_jeton text;
+alter table utilisateurs add column if not exists session_expire_le timestamptz;
+
 -- Profil (retour du 14/09/2026) : chaque membre a son propre compte et son
 -- propre profil, pas juste une ligne technique -- photo optionnelle pour
 -- commencer, colonne pensée pour accueillir d'autres détails de profil plus tard.

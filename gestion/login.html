@@ -44,8 +44,11 @@
   const erreurEl = document.getElementById('erreur');
   // Retombée d'un lien d'accès invalide/expiré (/api/gestion/rejoindre) --
   // retour du 16/09/2026, voir schema.sql pour le détail de ce lien.
-  if (new URLSearchParams(location.search).get('erreur') === 'lien_invalide') {
+  const erreurUrl = new URLSearchParams(location.search).get('erreur');
+  if (erreurUrl === 'lien_invalide') {
     erreurEl.textContent = "Ce lien d'accès est invalide ou a expiré -- demandez-en un nouveau à la Direction.";
+  } else if (erreurUrl === 'deja_connecte') {
+    erreurEl.textContent = "Ce compte est déjà connecté ailleurs -- demandez à la Direction de forcer la déconnexion si besoin.";
   }
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

@@ -1,6 +1,6 @@
 // POST { email, motDePasse } -> pose le cookie de session si valide.
 // Runtime Node (par défaut sur Vercel) -- seul endroit où bcrypt est utilisé.
-import { utilisateurParEmail, enregistrerConnexion, marquerVu } from "../../lib/negociations.js";
+import { utilisateurParEmail, enregistrerConnexion, marquerVu, sessionDejaActive, ouvrirSessionUtilisateur } from "../../lib/negociations.js";
 import { verifierMotDePasse, signerSession, nomCookie, dureeSessionSecondes } from "../../lib/auth.js";
 
 export default async function handler(req, res) {
@@ -25,7 +25,15 @@ export default async function handler(req, res) {
     return;
   }
 
-  const session = await signerSession({ utilisateurId: utilisateur.id });
+  // Session unique par compte (retour du 17/09/2026) : refusée, pas
+  // remplacée en silence, si ce compte a déjà une session active ailleurs.
+  if (await sessionDejaActive(utilisateur.id)) {
+    res.status(409).json({ ok: false, erreur: "Ce compte est déjà connecté ailleurs. Demandez à la Direction de forcer la déconnexion si besoin." });
+    return;
+  }
+
+  const jeton = await ouvrirSessionUtilisateur(utilisateur.id, dureeSessionSecondes());
+  const session = await signerSession({ utilisateurId: utilisateur.id, jeton });
   await enregistrerConnexion(utilisateur.id, req.headers["user-agent"]);
   await marquerVu(utilisateur.id);
 

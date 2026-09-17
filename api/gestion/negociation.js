@@ -35,6 +35,7 @@ import {
   fichiersLusParUtilisateur,
   engagementClientSurFichiers,
   enregistrerDocumentVu,
+  fermerSessionUtilisateur,
 } from "../../lib/negociations.js";
 import { sql } from "../../lib/db.js";
 import { hacherMotDePasse } from "../../lib/auth.js";
@@ -454,6 +455,54 @@ async function gerer_post(req, res, session) {
       values (${negociationId}, ${utilisateurId}, ${role}, ${role === "autre" ? titreAutre : null})
       on conflict (negociation_id, utilisateur_id) do update set role = excluded.role, actif = true, titre_autre = excluded.titre_autre
     `;
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  // Réinitialisation de mot de passe (retour du 17/09/2026 -- jusqu'ici
+  // impossible : ajouter_membre n'écrase jamais le mot de passe d'un compte
+  // existant). Réservé à la Direction, même garde que retirer_membre. Coupe
+  // aussi la session active de la cible : un mot de passe qu'on vient de
+  // changer ne doit pas laisser une session ouverte avec l'ancien.
+  if (action === "reinitialiser_mot_de_passe") {
+    if (monAppartenance.role !== "direction") {
+      res.status(403).json({ ok: false, erreur: "Réservé à la Direction." });
+      return;
+    }
+    const utilisateurId = Number(req.body.utilisateurId);
+    const nouveauMotDePasse = (req.body.nouveauMotDePasse || "").toString();
+    if (!utilisateurId || nouveauMotDePasse.length < 6) {
+      res.status(400).json({ ok: false, erreur: "Mot de passe trop court (6 caractères minimum)." });
+      return;
+    }
+    const cible = await membreDe(negociationId, utilisateurId);
+    if (!cible || !cible.actif) {
+      res.status(400).json({ ok: false, erreur: "Ce membre ne fait pas partie de la négociation." });
+      return;
+    }
+    const hash = await hacherMotDePasse(nouveauMotDePasse);
+    await sql()`update utilisateurs set mot_de_passe_hash = ${hash} where id = ${utilisateurId}`;
+    await fermerSessionUtilisateur(utilisateurId);
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  // Déconnexion forcée (retour du 17/09/2026, session unique par compte) --
+  // débloque un compte dont la session est restée marquée active (fenêtre
+  // fermée sans se déconnecter) sans attendre l'expiration naturelle (14
+  // jours). Réservé à la Direction, même garde que retirer_membre.
+  if (action === "forcer_deconnexion") {
+    if (monAppartenance.role !== "direction") {
+      res.status(403).json({ ok: false, erreur: "Réservé à la Direction." });
+      return;
+    }
+    const utilisateurId = Number(req.body.utilisateurId);
+    const cible = utilisateurId ? await membreDe(negociationId, utilisateurId) : null;
+    if (!cible) {
+      res.status(400).json({ ok: false, erreur: "Ce membre ne fait pas partie de la négociation." });
+      return;
+    }
+    await fermerSessionUtilisateur(utilisateurId);
     res.status(200).json({ ok: true });
     return;
   }

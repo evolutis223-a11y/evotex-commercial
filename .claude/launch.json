@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["--yes", "serve", ".", "-l", "4173"],
       "port": 4173
+    },
+    {
+      "name": "evotex-gestion-local",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["dev-server.mjs"],
+      "port": 4300
     }
   ]
 }
