@@ -26,8 +26,11 @@
 <script src="../js/licences.js"></script>
 <script src="../js/tour-application.js"></script>
 <!-- QR code des documents de facturation -- généré entièrement dans le
-     navigateur, aucune donnée client n'est envoyée à un service externe. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+     navigateur, aucune donnée client n'est envoyée à un service externe.
+     defer (17/09/2026, diagnostic de lenteur au démarrage) : cette
+     dépendance externe ne bloque plus le premier rendu -- svgQRCode() se
+     protège déjà de QRCode pas encore chargé (typeof QRCode === 'undefined'). -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
 <style>
   /* <html> hérite du fond bleu marine du site public (tokens.css, pensé
      pour les pages sombres) -- jamais corrigé ici, alors que cette page est
@@ -1274,7 +1277,15 @@ async function demarrer() {
     }
   }
   await chargerNegociation();
-  if (estDirection()) { await rafraichirMurRoles(); setInterval(rafraichirMurRoles, 45000); }
+  if (estDirection()) {
+    // Si on atterrit directement sur le Tableau de Bord (cas par défaut de
+    // la Direction), son propre chargement vient déjà de rafraîchir
+    // etat.tableauBordEquipes -- retour du 17/09/2026, diagnostic de
+    // lenteur au démarrage : évite un aller-retour identique en double dès
+    // la première seconde (mesuré : ~450-900ms perdus pour rien).
+    if (etat.panneau !== 'tableau-de-bord') await rafraichirMurRoles();
+    setInterval(rafraichirMurRoles, 45000);
+  }
   verifierPremiereConnexionGuide();
 
   setInterval(() => { api('/api/gestion/ping', { method: 'POST' }); }, 45000);

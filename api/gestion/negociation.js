@@ -144,35 +144,41 @@ async function gerer_get(req, res, session) {
     }
   }
 
-  const infoRows = await sql()`
-    select nom, statut_libelle, etape, cree_le, ticket_ouvert_le, ticket_expire_le, etape_libelles_visibles_client
-    from negociations where id = ${negociationId} limit 1
-  `;
+  // Requêtes indépendantes, lancées en parallèle plutôt qu'en séquence
+  // (retour du 17/09/2026, diagnostic de lenteur -- "le panneau du chat...
+  // ça prend du temps, ça bloque") : cette route enchaînait une dizaine
+  // d'allers-retours base l'un après l'autre, chacun payant son propre
+  // round-trip réseau (~150-200ms), jusqu'à 2s au total mesurés en
+  // conditions réelles. Aucune de ces requêtes ne dépend du résultat d'une
+  // autre -- seul le TRAITEMENT qui suit (fichiersVisibles, etc.) a besoin
+  // qu'elles soient toutes revenues.
+  const [infoRows, liensClient, fichiersBruts, fichiersLus, engagementClient] = await Promise.all([
+    sql()`
+      select nom, statut_libelle, etape, cree_le, ticket_ouvert_le, ticket_expire_le, etape_libelles_visibles_client
+      from negociations where id = ${negociationId} limit 1
+    `,
+    liensClientDeLaNegociation(negociationId),
+    // Dossier d'échange : jamais le contenu_base64 ici (déjà exclu par la
+    // requête), et jamais les fichiers qu'un client a masqués de sa propre
+    // vue quand c'est lui qui regarde -- filtré plus bas, après coup.
+    fichiersPartagesDeLaNegociation(negociationId),
+    // "nouveau" par fichier (pas seulement le total) -- distinct du "vu" du
+    // dossier dans son ensemble (dossier_partage_vu_le, ci-dessous) : ouvrir
+    // le dossier montre la liste, mais chaque fichier reste "nouveau" tant
+    // que CE fichier précis n'a pas été cliqué (retour du 14/09/2026).
+    // Toujours la lecture de la PERSONNE RÉELLEMENT connectée, jamais la
+    // cible d'un "voir comme" -- prévisualiser ne doit jamais éteindre le
+    // badge à la place du vrai client.
+    fichiersLusParUtilisateur(negociationId, session.utilisateurId),
+    // Engagement du CLIENT (vu/lu, avec horodatage) -- pour affichage côté
+    // équipe seulement (jamais reconstruit ni montré quand roleAffiche est
+    // "client", "voir comme" inclus : un client qui prévisualise sa propre
+    // vue ne doit jamais voir cette mention interne). Retour du 14/09/2026.
+    roleAffiche !== "client" ? engagementClientSurFichiers(negociationId) : Promise.resolve(null),
+  ]);
   const negociation = infoRows[0] || null;
-  const liensClient = await liensClientDeLaNegociation(negociationId);
   const verrouille = negociation ? ticketVerrouille(negociation) : false;
-
-  // Dossier d'échange : jamais le contenu_base64 ici (déjà exclu par la
-  // requête), et jamais les fichiers qu'un client a masqués de sa propre vue
-  // quand c'est lui qui regarde. "Nouveaux" compte ce qui est arrivé depuis
-  // le dernier "vu" de LA PERSONNE RÉELLEMENT connectée (pas la cible d'un
-  // "voir comme" -- prévisualiser ne doit jamais éteindre le badge du vrai
-  // client à sa place).
-  const fichiersBruts = await fichiersPartagesDeLaNegociation(negociationId);
   const fichiersVisiblesBruts = roleAffiche === "client" ? fichiersBruts.filter((f) => !f.masque_pour_client) : fichiersBruts;
-  // "nouveau" par fichier (pas seulement le total) -- distinct du "vu" du
-  // dossier dans son ensemble (dossier_partage_vu_le, ci-dessous) : ouvrir le
-  // dossier montre la liste, mais chaque fichier reste "nouveau" tant que
-  // CE fichier précis n'a pas été cliqué (retour du 14/09/2026). Toujours la
-  // lecture de la PERSONNE RÉELLEMENT connectée, jamais la cible d'un "voir
-  // comme" -- prévisualiser ne doit jamais éteindre le badge à la place du
-  // vrai client.
-  const fichiersLus = await fichiersLusParUtilisateur(negociationId, session.utilisateurId);
-  // Engagement du CLIENT (vu/lu, avec horodatage) -- pour affichage côté
-  // équipe seulement (jamais reconstruit ni montré quand roleAffiche est
-  // "client", "voir comme" inclus : un client qui prévisualise sa propre
-  // vue ne doit jamais voir cette mention interne). Retour du 14/09/2026.
-  const engagementClient = roleAffiche !== "client" ? await engagementClientSurFichiers(negociationId) : null;
   const fichiersVisibles = fichiersVisiblesBruts.map((f) => {
     const base = { ...f, nouveau: !fichiersLus.has(String(f.id)) };
     if (!engagementClient) return base;
@@ -188,8 +194,10 @@ async function gerer_get(req, res, session) {
   };
 
   if (roleAffiche === "client") {
-    const messagesClient = await messagesClientDeLaNegociation(negociationId);
-    const directionId = await idDirectionDeLaNegociation(negociationId);
+    const [messagesClient, directionId] = await Promise.all([
+      messagesClientDeLaNegociation(negociationId),
+      idDirectionDeLaNegociation(negociationId),
+    ]);
     // Les 6 points sont toujours visibles au client (juste les numéros) --
     // mais ce qu'ils signifient (le libellé) reste caché tant que la
     // Direction n'a pas explicitement décidé de le révéler (retour du
@@ -221,14 +229,6 @@ async function gerer_get(req, res, session) {
     return;
   }
 
-  const membres = await membresDeLaNegociation(negociationId);
-  const messages = await messagesDeLaNegociation(negociationId);
-  const messagesClient = await messagesClientDeLaNegociation(negociationId);
-  // Retour du 14/09/2026 : la couleur d'un message suit désormais le RÔLE de
-  // son auteur (Support toujours dans sa couleur propre, où qu'il apparaisse
-  // et quel que soit qui regarde), pas juste "est-ce moi qui l'ai écrit".
-  const directionId = membres.find((m) => m.role === "direction")?.utilisateur_id || null;
-
   // Bloc-notes : on montre la note de la personne prévisualisée ("voir
   // comme" inclus, pour un aperçu fidèle) -- jamais éditable en mode
   // "voir comme" (appliqué côté page). Notes visibles par toute l'équipe,
@@ -236,8 +236,17 @@ async function gerer_get(req, res, session) {
   // favorise les idées/solutions croisées, seule l'écriture reste réservée
   // à son propre auteur.
   const utilisateurPourNote = voirComme || session.utilisateurId;
-  const maNote = await noteDe(negociationId, utilisateurPourNote);
-  const notesEquipe = await toutesLesNotes(negociationId);
+  const [membres, messages, messagesClient, maNote, notesEquipe] = await Promise.all([
+    membresDeLaNegociation(negociationId),
+    messagesDeLaNegociation(negociationId),
+    messagesClientDeLaNegociation(negociationId),
+    noteDe(negociationId, utilisateurPourNote),
+    toutesLesNotes(negociationId),
+  ]);
+  // Retour du 14/09/2026 : la couleur d'un message suit désormais le RÔLE de
+  // son auteur (Support toujours dans sa couleur propre, où qu'il apparaisse
+  // et quel que soit qui regarde), pas juste "est-ce moi qui l'ai écrit".
+  const directionId = membres.find((m) => m.role === "direction")?.utilisateur_id || null;
 
   res.status(200).json({
     ok: true,
