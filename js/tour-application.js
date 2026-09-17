@@ -43,6 +43,10 @@ Views.tourApplication = {
         desc: "Proformas à valider, factures en attente de signature Direction, acomptes non atteints — la Comptabilité voit chaque dossier, jamais un chiffre agrégé sans détail derrière.",
         script: "Vous validez chaque document depuis votre écran, avec tout l'historique sous les yeux.",
         limite: "Le connecteur vers un logiciel comptable externe (SYSCOHADA/SAGE) rejoint la feuille de route Phase 2.",
+        overlay: [
+          { titre: 'La facture, sans paperasse.', comment: 'Signature, suivi, historique — tout depuis l\'écran.' },
+          { titre: 'Chaque écart, visible à temps.', comment: 'Acomptes, dérogations — rien n\'attend la clôture.' },
+        ],
         extra: {
           kicker: 'Rapport Financier de l\'Usine',
           img: '/assets/img/tour-rapport-financier.png',
@@ -64,7 +68,7 @@ Views.tourApplication = {
         cropPrimary: true,
         titre: 'Du premier trait au Bon à Tirer',
         desc: "Suivi en direct des maquettes par salle (départ, création, modification, validation, production) et Registre Gravure des cadres et cylindres — en avance sur le calendrier dès la Phase 1. Une innovation pensée sur mesure pour le mode de fonctionnement de BATEXCI, appelée à évoluer vers un outil encore plus personnalisé.",
-        script: "Votre exclusivité, protégée dès le premier trait.",
+        script: "Un studio conçu pour BATEXCI, pas un logiciel générique.",
         limite: "Un intitulé de colonne repéré comme trompeur reste affiché tel quel, avec son badge — jamais corrigé en silence tant que ce n'est pas fait.",
       },
       {
@@ -72,7 +76,8 @@ Views.tourApplication = {
         img: '/assets/img/tour-suivi-production.png',
         titre: 'Le circuit complet, de la commande à la clôture',
         desc: "Un tableau unique — Commande, Studio Dessin, Validation, Production, Magasin, Livraison — tous les dossiers suivis en direct, étape par étape.",
-        limite: '',
+        script: "Suivez toutes vos commandes, en direct, étape par étape.",
+        limite: "Le suivi de commande ouvert au client à distance rejoint la feuille de route Phase 2 — aujourd'hui, le suivi reste interne à l'usine.",
         extra: {
           kicker: 'Ateliers de fabrication',
           img: '/assets/img/tour-atelier.png',
@@ -101,6 +106,7 @@ Views.tourApplication = {
         img: '/assets/img/tour-commercial.png',
         titre: "L'espace de travail du commercial, pas un tableau de bord vide",
         desc: "Relances en attente, budget des commandes, accès rapide à ses outils — chaque commercial retrouve son activité réelle dès la connexion.",
+        script: "Vous arrivez, tout est déjà là.",
         limite: '',
         avantages: [
           { titre: 'Une seule entrée, la commande part', desc: "Prise de commande directe depuis l'écran, sans ressaisie ailleurs — le point de départ de tout le circuit." },
@@ -135,13 +141,25 @@ Views.tourApplication = {
       },
     ];
 
-    const screenBlock = (b, titre, desc, img, placeholderLabel, kicker, script, crop) => `
+    const screenBlock = (b, titre, desc, img, placeholderLabel, kicker, script, crop, overlay) => `
       <div class="tour-screen">
         <div class="tour-screen-frame${crop ? ' -crop' : ''}">
           <div class="tour-screen-framebar"><span></span><span></span><span></span></div>
           ${placeholderLabel
             ? `<div class="tour-imgslot">${placeholderLabel}</div>`
-            : `<img src="${img}" alt="${b.nom} — capture d'écran réelle BATEXCI ERP" loading="lazy">`}
+            : `<div class="tour-screen-imgwrap">
+                <img src="${img}" alt="${b.nom} — capture d'écran réelle BATEXCI ERP" loading="lazy">
+                ${overlay ? `
+                  <div class="tour-overlay-row">
+                    ${overlay.map((o) => `
+                      <div class="tour-overlay-item">
+                        <p class="tour-overlay-title">${o.titre}</p>
+                        <p class="tour-overlay-comment">${o.comment}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+               </div>`}
         </div>
         <div class="tour-screen-info">
           <div class="tour-screen-kicker">${kicker}</div>
@@ -173,7 +191,7 @@ Views.tourApplication = {
                 </div>
               </div>
 
-              ${screenBlock(b, b.titre, b.desc, b.img, null, `Bloc ${b.n} · ${b.nom}`, b.script, b.cropPrimary)}
+              ${screenBlock(b, b.titre, b.desc, b.img, null, `Bloc ${b.n} · ${b.nom}`, b.script, b.cropPrimary, b.overlay)}
               ${b.limite ? `<div class="tour-limite"><p>${b.limite}</p></div>` : ''}
 
               ${b.avantages ? `

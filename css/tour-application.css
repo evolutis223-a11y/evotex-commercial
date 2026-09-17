@@ -97,6 +97,39 @@
 .tour-screen-framebar span { width: 9px; height: 9px; border-radius: 999px; background: #c3d6ee; }
 .tour-screen-frame img { display: block; width: 100%; height: auto; }
 
+.tour-screen-imgwrap { position: relative; }
+.tour-overlay-row {
+  position: absolute;
+  left: 14%;
+  top: 72.5%;
+  width: 35%;
+  height: 16%;
+  display: flex;
+  gap: 6%;
+  pointer-events: none;
+}
+.tour-overlay-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tour-overlay-title {
+  font-family: var(--font-script);
+  font-weight: 700;
+  color: var(--evx-blue);
+  font-size: clamp(9px, 1.35vw, 15px);
+  line-height: 1.1;
+  margin: 0 0 2px;
+}
+.tour-overlay-comment {
+  font-size: clamp(6.5px, 0.72vw, 9px);
+  color: #3d4a5c;
+  line-height: 1.2;
+  margin: 0;
+}
+
 .tour-screen-info {
   display: flex;
   flex-direction: column;
