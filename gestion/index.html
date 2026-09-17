@@ -503,6 +503,23 @@
   .g-card { background: #fff; border: 1px solid #d7e4f5; border-radius: 16px; padding: 22px; box-shadow: 0 12px 30px rgba(26,58,99,0.06); margin-bottom: 20px; }
   .g-card h2 { font-family: var(--font-display); font-size: 14.5px; font-weight: 800; color: #101828; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.5px; }
 
+  /* ---- Guide d'utilisation (17/09/2026) -- onglets par rôle (Direction
+     seulement), sections/blocs pour le reste. */
+  .g-doc-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .g-doc-tab { font-family: var(--font-body); font-size: 12.5px; font-weight: 700; color: #5a6779; background: #eef3fa; border: 1px solid #d7e4f5; border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+  .g-doc-tab.-actif { background: var(--evx-blue); border-color: var(--evx-blue); color: #fff; }
+  .g-guide-bloc { padding: 12px 0; border-top: 1px solid #eef1f6; }
+  .g-guide-bloc:first-of-type { border-top: none; padding-top: 0; }
+  .g-guide-bloc-titre { font-family: var(--font-display); font-size: 13.5px; font-weight: 800; color: #101828; margin-bottom: 5px; }
+  .g-guide-bloc-texte { font-size: 12.5px; color: #475467; line-height: 1.65; }
+  .g-guide-bloc-texte b { color: #101828; }
+  .g-guide-exemple { display: block; margin-top: 6px; font-size: 12px; color: #3d6fa8; background: #f2f7fd; border-left: 3px solid var(--evx-blue); padding: 7px 10px; border-radius: 0 6px 6px 0; }
+  .g-glossaire { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 24px; }
+  @media (max-width: 720px) { .g-glossaire { grid-template-columns: 1fr; } }
+  .g-glossaire-item { padding-bottom: 10px; border-bottom: 1px solid #eef1f6; }
+  .g-glossaire-terme { font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--evx-blue); margin-bottom: 3px; }
+  .g-glossaire-def { font-size: 12px; color: #5a6779; line-height: 1.55; }
+
   /* ---- Tableau de Bord -- écran ENTIÈREMENT DÉDIÉ de la Direction, jamais
      une carte posée sur une page (retour du 16/09/2026 : "une plaque au
      milieu d'une feuille ne peut pas être un tableau de bord"). Couleurs
@@ -1109,6 +1126,10 @@ function iconeMenu(id) {
     <path d="M5.8 3.2h5.4l3 3v10.1c0 .6-.5 1.1-1.1 1.1H5.8c-.6 0-1.1-.5-1.1-1.1V4.3c0-.6.5-1.1 1.1-1.1z"/>
     <path d="M11.2 3.2v3h3"/><path d="M6.7 15.2c1.5-1.3 4.4-1.3 6 0"/>
   </svg>`;
+  if (id === 'guide') return `<svg ${attrs}>
+    <path d="M10 4.6C8.7 3.6 6.7 3.2 4.6 3.4c-.5 0-.9.4-.9.9v9.8c0 .5.5.9 1 .8 1.9-.2 3.7.2 4.9 1.1.3.2.7.2.9 0 1.2-.9 3-1.3 4.9-1.1.5 0 1-.3 1-.8V4.3c0-.5-.4-.8-.9-.9-2.1-.2-4.1.2-5.4 1.2Z"/>
+    <path d="M10 4.9v10.3"/>
+  </svg>`;
   return '';
 }
 
@@ -1343,6 +1364,7 @@ function rendreSidebar() {
     // moment, il n'a pas les outils" -- un seul écran, jamais l'Espace
     // Commercial ni quoi que ce soit d'interne.
     html += item('negociation', 'Suivi du projet');
+    html += item('guide', 'Guide');
   } else {
     html += rendreMurRoles();
     if (estDir) html += item('tableau-de-bord', 'Tableau de Bord');
@@ -1357,6 +1379,11 @@ function rendreSidebar() {
       html += item('calculateur', 'Comptabilité');
       html += item('conventions', 'Documents');
     }
+    // Retour du 17/09/2026 : chacun doit pouvoir consulter SON guide sans
+    // dépendre de la Direction pour le lui transmettre -- rendreGuide()
+    // n'affiche que la part utile au rôle réel de qui regarde (sauf
+    // Direction, qui voit les trois + le glossaire, comme référence).
+    html += item('guide', 'Guide');
   }
   html += `<div class="g-sidebar-bas"><div class="g-sidebar-user">${escapeHtml(etat.moi.nom)}</div><button id="btn-deconnexion" title="Déconnexion"><span class="g-nav-icone">${iconeDeconnexion()}</span><span class="g-btn-label">Déconnexion</span></button></div>`;
 
@@ -1424,6 +1451,7 @@ async function rendrePanneau() {
   if (etat.panneau === 'boite-noire') { await rendreBoiteNoire(); return; }
   if (etat.panneau === 'calculateur') { rendreComptabilite(); return; }
   if (etat.panneau === 'conventions') { rendreConventions(); return; }
+  if (etat.panneau === 'guide') { rendreGuide(); return; }
   // etat.detail peut devenir nul si la négociation active vient d'être
   // supprimée depuis le Tableau de Bord (retour du 16/09/2026) -- dans ce
   // cas précis seulement, on recharge au lieu de planter sur un détail absent.
@@ -2042,7 +2070,187 @@ function rendreConventions() {
     CONVENTIONS.map(c => `<div class="g-item" style="align-items:center">
       <div class="info"><b>${escapeHtml(c.titre)}</b><span>${escapeHtml(c.sous)}</span></div>
       <a class="g-inline-btn" href="${escapeHtml(c.url)}" target="_blank" rel="noopener">Consulter</a>
-    </div>`).join('') + `</div></div>`;
+    </div>`).join('') + `</div></div>` +
+    `<div class="g-card"><h2>Guide d'utilisation</h2>
+      <div class="g-guide-bloc" style="border-top:none;padding-top:0">
+        <div class="g-guide-bloc-texte">Le mode d'emploi complet de l'application — Direction, Négociateur, Client, plus un glossaire commun.</div>
+      </div>
+      <button class="g-inline-btn" data-panneau="guide">Ouvrir le Guide</button>
+    </div>`;
+  const btnOuvrirGuide = document.getElementById('corps').querySelector('[data-panneau="guide"]');
+  if (btnOuvrirGuide) btnOuvrirGuide.addEventListener('click', async () => { etat.panneau = 'guide'; await rendrePanneau(); rendreSidebar(); });
+}
+
+// ---- Guide d'utilisation (17/09/2026, demande explicite) -- trois volets
+// par rôle réel (jamais le mot "négociateur" dans le volet Client : "il n'a
+// pas à savoir que le négociateur est un corps extérieur... il a affaire à
+// une société structurée, point" -- on dit "votre Commercial") + un
+// glossaire commun. Chacun accède directement à SON volet depuis la
+// sidebar ; la Direction seule voit les trois (onglets) + le glossaire,
+// comme référence complète.
+function blocGuide(titre, texte, exemple) {
+  return `<div class="g-guide-bloc">
+    <div class="g-guide-bloc-titre">${escapeHtml(titre)}</div>
+    <div class="g-guide-bloc-texte">${texte}${exemple ? `<span class="g-guide-exemple"><b>Exemple —</b> ${exemple}</span>` : ''}</div>
+  </div>`;
+}
+
+const GUIDE_DIRECTION = [
+  { titre: "Vue d'ensemble de l'Espace de Travail", blocs: [
+    ["Le mur de rôle", "À gauche, chaque membre d'une négociation, avec un point vert s'il est en ligne (vu il y a moins de quelques minutes). Cliquer sur un avatar ouvre son menu : Voir comme, Réinitialiser le mot de passe, Forcer la déconnexion, Retirer.",
+      "Awa (négociateur) dit ne plus rien voir sur son écran. Cliquez sur son avatar → « Voir comme » : vous voyez exactement ce qu'elle voit, avec ses propres restrictions."],
+    ["Le menu de gauche", "Il s'adapte au rôle réellement connecté. En tant que Direction, vous avez accès à tout : Tableau de Bord, Espace Commercial, Négociation, RH & Personnel, Boîte noire, Comptabilité, Documents, Guide."],
+  ]},
+  { titre: 'Tableau de Bord', blocs: [
+    ['Vue d\'ensemble', 'Solde caisse, reste à percevoir et nombre de négociations actives, en un coup d\'œil.'],
+    ['Équipes de négociation', '« + Créer une équipe » ouvre un nouveau dossier de négociation. Chaque équipe existante propose « Gérer les membres » et « Supprimer ».'],
+    ['Liens d\'accès (tickets)', 'La fenêtre de temps pendant laquelle l\'équipe a un accès actif à un dossier. Une fois expirée, la négociation se verrouille (étapes et tchat client bloqués) jusqu\'à réactivation par vous.'],
+  ]},
+  { titre: 'Salle de Négociation', blocs: [
+    ['Les 6 étapes', 'Premier contact → Présentation effectuée → Besoins exprimés → Devis envoyé → Négociation tarifaire → Convention signée. Cliquables pour faire avancer le dossier.'],
+    ['Outils de négociation', 'Présentation Exécutive, Cahier des Charges, Grille de Licences : à envoyer au client d\'un clic (flèche), ou à ouvrir en grand pour les commenter ensemble en direct.'],
+    ['Deux fils de discussion, jamais à confondre', 'Le tchat d\'ÉQUIPE (vous, le négociateur, l\'apporteur d\'affaires — jamais vu du client) et le tchat DIRECT avec le client, dans le même écran mais bien séparés.'],
+    ['Dossier d\'échange', 'Fichiers envoyés dans les deux sens avec le client. « Envoyer vers Mes Documents » promeut un fichier reçu vers l\'espace que le client garde durablement.'],
+    ['Notes privées', 'Propres à chaque négociation, jamais partagées avec le client ni les autres négociations.'],
+  ]},
+  { titre: 'Gestion des membres', blocs: [
+    ['Ajouter un membre', 'Depuis votre compte Direction, vous pouvez ajouter n\'importe quel rôle — y compris un second compte « Direction », avec exactement vos droits.',
+      'Vous partez en congé et voulez que votre associé supervise à votre place : ajoutez-le en rôle « Direction ». Il aura accès à tout, comme vous.'],
+    ['Le rôle « Autre »', 'Une personne qui suit en lecture seule, avec un titre libre — jamais un rôle de négociation à part entière.',
+      'Un développeur veut observer comment se déroule une négociation pour améliorer l\'outil : ajoutez-le en « Autre », titre « Développeur ». Il voit tout, ne peut rien écrire.'],
+    ['Lien d\'accès', 'Connexion directe pour un membre, sans email ni mot de passe à retenir. Se coupe à tout moment depuis son menu (« Couper »), et se régénère sans changer d\'adresse.'],
+    ['Réinitialiser le mot de passe', 'Menu du membre → « Réinitialiser le mot de passe » → tapez le nouveau (6 caractères minimum). Coupe automatiquement toute session déjà ouverte avec l\'ancien mot de passe.'],
+    ['Forcer la déconnexion', 'Débloque un compte resté marqué « connecté » après une fermeture de fenêtre sans déconnexion propre — sinon il resterait bloqué jusqu\'à 14 jours (voir « Sécurité des comptes » plus bas).'],
+    ['Retirer un membre', 'Coupe son accès à la négociation dès sa prochaine action — immédiat, pas besoin qu\'il se déconnecte.'],
+  ]},
+  { titre: 'RH & Personnel', blocs: [
+    ['Annuaire', 'La liste du personnel de l\'équipe, ses rôles.'],
+  ]},
+  { titre: 'Boîte noire', blocs: [
+    ['Journal des connexions', 'Qui s\'est connecté, quand, depuis quel appareil — toutes négociations confondues. Utile pour repérer une anomalie (ex. deux connexions rapprochées et inhabituelles pour un même compte).'],
+  ]},
+  { titre: 'Comptabilité', blocs: [
+    ['Caisse, ventes, dépenses', 'Le poste d\'un comptable de petite entreprise, en un seul espace.'],
+    ['Calculateur de coût et rentabilité', 'Simule le coût réel et la marge d\'une négociation selon la licence envisagée (Déploiement à Vie, Vente Totale, SaaS + Modules).'],
+  ]},
+  { titre: 'Documents', blocs: [
+    ['Vos documents internes', 'Conventions, modèles contractuels — jamais montrés au client. Ce Guide est aussi accessible depuis cet écran.'],
+  ]},
+  { titre: 'Espace Commercial et partage', blocs: [
+    ['Le site public', 'Le hub et ses 5 pages (Présentation, Tour de l\'Application, Socle de Lancement, Licences, Cahier des Charges) — intégré tel quel, c\'est le vrai site que voit un visiteur.'],
+    ['Bouton « Partager » sur chaque carte', 'Copie un lien verrouillé sur CETTE page précise. Le destinataire ne peut atteindre aucune autre page du site, même en modifiant l\'adresse à la main.',
+      'Vous voulez envoyer uniquement le Tour de l\'Application à un prospect, sans qu\'il tombe sur le Socle de Lancement : ouvrez le hub, cliquez « Partager » sur la carte Tour de l\'Application, collez le lien où vous voulez (WhatsApp, email...).'],
+    ['« Partager toute l\'application »', 'Un lien qui donne accès à tout le site, en navigation libre — utile si une session en direct dans la Salle de Négociation n\'est pas possible. Le titre du hub s\'adapte automatiquement pour un lecteur client.'],
+  ]},
+  { titre: 'Sécurité des comptes', blocs: [
+    ['Une session à la fois', 'Chaque compte ne peut être connecté qu\'à un seul endroit en même temps. Une deuxième tentative de connexion pendant que le compte est déjà actif ailleurs est refusée, pas silencieusement acceptée.'],
+    ['Si quelqu\'un reste bloqué', 'Message « déjà connecté ailleurs » sans raison apparente (fenêtre fermée sans déconnexion propre) : utilisez « Forcer la déconnexion » depuis son menu, dans le mur de rôle.'],
+  ]},
+];
+
+const GUIDE_NEGOCIATEUR = [
+  { titre: 'Votre rôle', blocs: [
+    ['Ce que vous représentez', 'Vous portez EVOTEX auprès du client, dans le cadre d\'une négociation précise. Vous ne voyez que ce qui concerne votre ou vos négociations.'],
+  ]},
+  { titre: 'Ce que vous pouvez faire', blocs: [
+    ['Vos deux pages', 'L\'Espace Commercial (le site public, pour vous y référer ou vous en inspirer) et votre Salle de Négociation — le reste ne vous concerne pas.'],
+    ['Faire avancer le dossier', 'Les 6 étapes de la négociation, cliquables au fil de l\'avancement réel.'],
+    ['Envoyer les outils', 'Présentation Exécutive, Cahier des Charges, Grille de Licences : un clic pour les transmettre au client.'],
+    ['Discuter', 'Deux fils séparés — le tchat d\'ÉQUIPE (avec la Direction, jamais vu du client) et le tchat DIRECT avec le client. Ne confondez jamais les deux.'],
+    ['Le dossier d\'échange', 'Déposer ou recevoir des fichiers avec le client, dans les deux sens.'],
+    ['Ajouter le client', 'Le seul rôle que vous pouvez créer vous-même, directement.',
+      'Le client veut suivre son dossier en ligne : depuis le menu d\'ajout, créez-lui un compte « Client » avec son email.'],
+    ['Notes privées', 'Pour vous seul et la Direction, jamais visibles du client.'],
+  ]},
+  { titre: 'Ce que vous ne pouvez pas faire', blocs: [
+    ['Hors de votre portée', 'RH & Personnel, Comptabilité, Boîte noire et Documents internes restent réservés à la Direction — ils n\'apparaissent même pas dans votre menu.'],
+    ['Membres', 'Vous ne pouvez pas ajouter un autre Négociateur, un Apporteur d\'affaires ou un observateur « Autre » — seule la Direction le fait. Vous ne pouvez pas réinitialiser un mot de passe ni forcer une déconnexion.'],
+  ]},
+  { titre: 'En cas de problème', blocs: [
+    ['Mot de passe oublié, ou compte bloqué « déjà connecté »', 'Contactez la Direction : elle peut réinitialiser votre mot de passe ou forcer votre déconnexion depuis votre menu.'],
+    ['Bandeau rouge « Ticket expiré »', 'Le lien d\'accès de l\'équipe a expiré — la négociation reste visible mais verrouillée (étapes et tchat client bloqués) jusqu\'à ce que la Direction le réactive.'],
+  ]},
+];
+
+const GUIDE_CLIENT = [
+  { titre: 'Bienvenue', blocs: [
+    ['Votre espace', 'Vous suivez ici l\'avancement de votre projet avec EVOTEX, échangez avec votre Commercial, et retrouvez les documents qui vous concernent — un seul écran, pensé pour rester simple.'],
+  ]},
+  { titre: 'Suivre votre projet', blocs: [
+    ['La frise d\'étapes', 'En haut de votre écran, elle montre où en est votre dossier. Certaines étapes peuvent rester masquées si votre Commercial choisit de ne pas les afficher pour le moment.'],
+  ]},
+  { titre: 'Discuter avec votre Commercial', blocs: [
+    ['Le fil de discussion', 'Posez vos questions ou demandez des précisions à tout moment — votre Commercial vous répond directement ici.'],
+  ]},
+  { titre: 'Vos documents', blocs: [
+    ['« Mes Documents »', 'Réunit ce que votre Commercial vous a transmis (présentation, devis, grille de licences...) et ce que vous lui envoyez.',
+      'Vous avez un exemplaire signé à transmettre : ouvrez « Mes Documents », bouton d\'envoi, choisissez le fichier (image ou PDF).'],
+    ['Retirer un envoi par erreur', 'Possible tant qu\'il s\'agit d\'un fichier que VOUS avez envoyé — il reste conservé de notre côté, simplement retiré de votre vue.'],
+  ]},
+  { titre: 'Comment vous connecter', blocs: [
+    ['Deux façons', 'Par email + mot de passe, ou par un lien direct envoyé par votre Commercial (aucun mot de passe à retenir dans ce cas).'],
+    ['Une seule connexion à la fois', 'Pour la sécurité de votre dossier, votre compte ne peut être connecté qu\'à un seul endroit en même temps. Une tentative de connexion ailleurs pendant que vous êtes déjà connecté sera refusée.'],
+  ]},
+  { titre: 'Ce que vous ne voyez pas', blocs: [
+    ['Réservé à EVOTEX', 'Vous ne voyez que votre propre projet — jamais les échanges internes de l\'équipe, ni les autres clients.'],
+  ]},
+];
+
+const GLOSSAIRE = [
+  ['Bloc Fonctionnel', 'Chacun des 8 grands domaines métier de BATEXCI ERP : Finance, RH, Studio Dessin, Production, Supply Chain, Commercial, Pilotage, Administration.'],
+  ['Socle 1', 'Le périmètre de base livré et installé lors du déploiement initial (6 mois).'],
+  ['Phase 2', 'Modules complémentaires, au-delà du Socle 1, ajoutables plus tard, à la demande.'],
+  ['Brique Transversale', 'Une fonctionnalité qui traverse plusieurs Blocs Fonctionnels à la fois plutôt que de vivre dans un seul (ex. l\'Exclusivité des Motifs, entre Commercial et Studio Dessin).'],
+  ['Ticket', 'La fenêtre de temps pendant laquelle l\'équipe de négociation a un accès actif à un dossier ; expire et se renouvelle.'],
+  ['Dossier d\'échange', 'L\'espace de fichiers partagé entre l\'équipe et le client, propre à chaque négociation.'],
+  ['Mes Documents', 'Les fichiers du dossier d\'échange que le client garde comme « les siens » (envoyés ou reçus).'],
+  ['Voir comme', 'Fonction réservée à la Direction pour prévisualiser l\'écran exact d\'un membre, avec ses propres restrictions.'],
+  ['Lien d\'accès', 'Lien de connexion directe pour un membre, sans email ni mot de passe à taper.'],
+  ['Boîte noire', 'Le journal des connexions (qui, quand, depuis quel appareil), consultable par la Direction.'],
+  ['Session unique', 'Un compte ne peut être connecté qu\'à un seul endroit à la fois ; une deuxième connexion pendant que la première est active est refusée.'],
+  ['Rôle « Autre »', 'Une personne ajoutée à une négociation en lecture seule, avec un titre libre (assistant, développeur...), sans faire partie de l\'équipe de négociation à proprement parler.'],
+];
+
+function rendreSectionsGuide(sections) {
+  return sections.map((s) => `<div class="g-card"><h2>${escapeHtml(s.titre)}</h2>${s.blocs.map((b) => blocGuide(b[0], b[1], b[2])).join('')}</div>`).join('');
+}
+
+function rendreGlossaireGuide() {
+  return `<div class="g-card"><h2>Glossaire</h2><div class="g-glossaire">${GLOSSAIRE.map((g) => `
+    <div class="g-glossaire-item"><div class="g-glossaire-terme">${escapeHtml(g[0])}</div><div class="g-glossaire-def">${escapeHtml(g[1])}</div></div>
+  `).join('')}</div></div>`;
+}
+
+function rendreGuide() {
+  document.getElementById('verrou-bandeau').innerHTML = '';
+  const estDir = estDirection() && !etat.voirCommeId;
+  const clientSeul = estClient() || (!!etat.voirCommeId && etat.detail?.role === 'client');
+  if (!etat.guideOnglet) etat.guideOnglet = estDir ? 'direction' : (clientSeul ? 'client' : 'negociateur');
+
+  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Guide d'utilisation</div>
+    <div class="g-hero-sous">${estDir ? "Comment fonctionne chaque écran — ce que vous pouvez faire, et où." : clientSeul ? 'Comment utiliser votre espace.' : 'Ce que vous pouvez faire dans la Salle de Négociation.'}</div></div>`;
+  attacherBoutonRetour();
+
+  const onglets = [
+    { id: 'direction', label: 'Direction' },
+    { id: 'negociateur', label: 'Négociateur' },
+    { id: 'client', label: 'Client' },
+    { id: 'glossaire', label: 'Glossaire' },
+  ];
+  const tabsHtml = estDir ? `<div class="g-doc-tabs">${onglets.map((o) => `<button class="g-doc-tab ${etat.guideOnglet === o.id ? '-actif' : ''}" data-guide-onglet="${o.id}">${escapeHtml(o.label)}</button>`).join('')}</div>` : '';
+
+  let corpsHtml;
+  if (!estDir) {
+    corpsHtml = clientSeul ? rendreSectionsGuide(GUIDE_CLIENT) : rendreSectionsGuide(GUIDE_NEGOCIATEUR);
+  } else if (etat.guideOnglet === 'negociateur') corpsHtml = rendreSectionsGuide(GUIDE_NEGOCIATEUR);
+  else if (etat.guideOnglet === 'client') corpsHtml = rendreSectionsGuide(GUIDE_CLIENT);
+  else if (etat.guideOnglet === 'glossaire') corpsHtml = rendreGlossaireGuide();
+  else corpsHtml = rendreSectionsGuide(GUIDE_DIRECTION);
+
+  document.getElementById('corps').innerHTML = tabsHtml + corpsHtml;
+  document.querySelectorAll('[data-guide-onglet]').forEach((btn) => {
+    btn.addEventListener('click', () => { etat.guideOnglet = btn.dataset.guideOnglet; rendreGuide(); });
+  });
 }
 
 // ---- Informations légales de la société émettrice, signature & cachet --
