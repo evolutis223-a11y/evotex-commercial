@@ -208,3 +208,78 @@
 }
 .hub-mali .stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 26px; display: flex; }
 .hub-mali .stripe span { flex: 1; }
+
+/* Bouton "Partager" par carte (17/09/2026) -- copie un lien pret a
+   envoyer, sans que le commercial ait a taper un hash a la main. */
+.hub-card-share {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--evx-onDark-label);
+  background: rgba(10,20,36,0.55);
+  border: 1px solid rgba(133,178,230,0.4);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.hub-card-share:hover {
+  background: rgba(28,111,217,0.4);
+  border-color: rgba(63,150,234,0.75);
+  color: #fff;
+}
+.hub-card-share.-copie {
+  background: rgba(21,128,61,0.4);
+  border-color: rgba(21,128,61,0.75);
+  color: #d7f5e3;
+}
+
+.hub-partage-tout {
+  margin-top: 30px;
+  text-align: center;
+}
+.hub-partage-tout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(28,111,217,0.28);
+  border: 1px solid rgba(63,150,234,0.55);
+  border-radius: 999px;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.hub-partage-tout-btn:hover {
+  background: rgba(28,111,217,0.45);
+  border-color: rgba(63,150,234,0.8);
+}
+.hub-partage-tout-btn.-copie {
+  background: rgba(21,128,61,0.4);
+  border-color: rgba(21,128,61,0.75);
+}
+.hub-partage-tout-note {
+  margin: 10px auto 0;
+  max-width: 460px;
+  font-size: 11.5px;
+  color: var(--evx-onDark-label);
+  line-height: 1.5;
+}
+
+/* Mode partage complet (client autonome) : les outils de partage sont un
+   geste commercial interne, jamais montres a un client qui recoit deja un
+   lien "tout" -- il n'a pas a re-partager depuis sa propre copie. */
+html.evx-partage-complet .hub-card-share,
+html.evx-partage-complet .hub-partage-tout {
+  display: none !important;
+}

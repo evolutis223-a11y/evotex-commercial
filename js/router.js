@@ -8,6 +8,13 @@
 // Le corps de la page reçoit la classe "evx-partage", qui masque en CSS
 // (tokens.css) tous les boutons de navigation inter-pages (.evx-retour,
 // .pres-cta, .lic-more) pour qu'aucun lien mort ne s'affiche.
+//
+// Mode partage complet (17/09/2026) : "?partage=complet" donne accès à
+// toute l'application, sans aucun verrouillage — utile si le client n'est
+// pas disponible en salle de négociation et doit explorer seul. Purement
+// cosmétique côté routeur (classe "evx-partage-complet" sur <html>, lue par
+// js/hub.js pour adapter le titre du hub à un lecteur client plutôt qu'à un
+// commercial).
 (function () {
   function currentViewKey() {
     const hash = window.location.hash;
@@ -21,9 +28,13 @@
 
   const params = new URLSearchParams(window.location.search);
   const partageActif = params.get("partage") === "1";
+  const partageComplet = params.get("partage") === "complet";
   const vueVerrouillee = partageActif ? window.location.hash || "#/" : null;
   if (partageActif) {
     document.documentElement.classList.add("evx-partage");
+  }
+  if (partageComplet) {
+    document.documentElement.classList.add("evx-partage-complet");
   }
 
   let mounted = null;
