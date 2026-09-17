@@ -448,6 +448,23 @@
   .g-grand-apercu { flex: 1; display: flex; flex-direction: column; background: #fff; border: 1.5px solid var(--evx-blue-light); border-radius: 16px;
     overflow: hidden; box-shadow: 0 14px 34px rgba(26,58,99,0.08); }
   .g-grand-image { flex: 1; min-height: 200px; position: relative; overflow: auto; }
+  /* Navigation precedent/suivant entre sous-elements d'un meme outil (retour
+     du 17/09/2026) -- "pour que l'utilisateur puisse avancer sans revenir
+     jusqu'a l'entete ou rechoisir un autre numero". position:fixed (jamais
+     absolute) : l'apercu grandit avec son contenu reel (une page Presentation
+     entiere depasse largement la fenetre) et toute la zone defile avec la
+     page -- des fleches "absolute" se seraient retrouvees a mi-hauteur du
+     CONTENU, hors ecran des qu'on defile. Fixees a l'ecran, elles restent
+     visibles quel que soit le defilement ; leur position gauche/droite est
+     calculee en JS (rafraichirGrandApercu) pour coller aux bords reels de
+     l'apercu, pas a ceux de la fenetre entiere. */
+  .g-grand-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 34px; height: 34px; border-radius: 999px; border: 1px solid #d7e4f5; background: rgba(255,255,255,0.92);
+    color: #1c6fd9; font-size: 18px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(18,42,86,0.18); }
+  .g-grand-nav:hover { background: #fff; border-color: #1c6fd9; }
+  .g-grand-nav:disabled { opacity: 0.3; cursor: default; }
+  .g-grand-nav:disabled:hover { background: rgba(255,255,255,0.92); border-color: #d7e4f5; }
   .g-grand-legende { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-top: 1px solid #eef1f6; }
   .g-grand-nom { font-family: var(--font-display); font-size: 14px; font-weight: 800; color: #101828; }
   .g-grand-envoye { color: #22c55e; font-weight: 700; font-size: 13px; border: none; background: none; padding: 0; font-family: var(--font-body); }
@@ -5070,12 +5087,44 @@ function rafraichirGrandApercu(d, estDirectionReelle) {
     }
     return;
   }
+  const composants = COMPOSANTS[outil.id];
+  const composant = focus.composantId ? (composants || []).find(c => c.id === focus.composantId) : null;
   if (outil.id === 'captures' || (outil.id === 'licences' && focus.composantId)) {
-    const composants = COMPOSANTS[outil.id];
-    const composant = focus.composantId ? (composants || []).find(c => c.id === focus.composantId) : null;
     imageZone.innerHTML = `<img src="${escapeHtml(composant ? composant.url : outil.url)}" alt="">`;
   } else {
     montrerVueReelle(imageZone, CLE_VUE_PAR_OUTIL[outil.id], focus.composantId);
+  }
+  // Précédent/suivant entre sous-éléments du même outil (retour du
+  // 17/09/2026) -- "pour que l'utilisateur puisse avancer sans revenir
+  // jusqu'à l'en-tête ou rechoisir un autre numéro". Insérées dans
+  // .g-grand-apercu pour disparaître automatiquement dès que zone.innerHTML
+  // est réécrit (changement d'outil, sortie de la négociation, etc.) -- mais
+  // en position:fixed (voir CSS) car .g-grand-apercu grandit avec son
+  // contenu réel (ex. la page Présentation entière) et défile avec toute la
+  // page ; des flèches "absolute" se seraient retrouvées à mi-hauteur du
+  // CONTENU, hors écran dès qu'on défile. Le calage gauche/droite est donc
+  // calculé ici, une fois, sur les bords réels de l'apercu (pas ceux de la
+  // fenêtre entière, qui peuvent déborder sur une autre colonne).
+  const apercu = zone.querySelector('.g-grand-apercu');
+  if (composant && composants && apercu) {
+    const index = composants.findIndex(c => c.id === composant.id);
+    apercu.insertAdjacentHTML('beforeend',
+      `<button class="g-grand-nav -precedent" data-nav-composant="prec" title="Précédent"${index <= 0 ? ' disabled' : ''}>‹</button>
+       <button class="g-grand-nav -suivant" data-nav-composant="suiv" title="Suivant"${index >= composants.length - 1 ? ' disabled' : ''}>›</button>`);
+    const rectApercu = apercu.getBoundingClientRect();
+    const btnPrecPos = apercu.querySelector('[data-nav-composant="prec"]');
+    if (btnPrecPos) btnPrecPos.style.left = Math.max(10, rectApercu.left + 10) + 'px';
+    const btnSuivPos = apercu.querySelector('[data-nav-composant="suiv"]');
+    if (btnSuivPos) btnSuivPos.style.right = Math.max(10, window.innerWidth - rectApercu.right + 10) + 'px';
+    const allerVers = (nouvelIndex) => {
+      etat.itemFocus = { outilId: outil.id, composantId: composants[nouvelIndex].id };
+      marquerDocumentVuSiClient(d, outil.id, composants[nouvelIndex].id);
+      rendreNegociation();
+    };
+    const btnPrec = apercu.querySelector('[data-nav-composant="prec"]');
+    if (btnPrec) btnPrec.addEventListener('click', (e) => { e.stopPropagation(); if (index > 0) allerVers(index - 1); });
+    const btnSuiv = apercu.querySelector('[data-nav-composant="suiv"]');
+    if (btnSuiv) btnSuiv.addEventListener('click', (e) => { e.stopPropagation(); if (index < composants.length - 1) allerVers(index + 1); });
   }
 }
 
