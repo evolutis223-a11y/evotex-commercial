@@ -590,7 +590,16 @@ async function gerer_post(req, res, session) {
       res.status(400).json({ ok: false, erreur: "Libellé et URL requis." });
       return;
     }
-    await sql()`insert into negociation_liens_client (negociation_id, libelle, url, ordre) values (${negociationId}, ${libelle}, ${url}, 0)`;
+    // Garde-fou anti-doublon (retour du 17/09/2026) -- un double-clic ou un
+    // rechargement pendant l'envoi créait deux lignes identiques, jamais
+    // fusionnées ensuite par "annuler l'envoi" (qui les retire bien toutes
+    // les deux d'un coup, mais le doublon restait visible tant que personne
+    // ne cliquait) : deux vignettes "Socle de Lancement" côté client, sans
+    // aucune différence entre elles.
+    const dejaEnvoye = await sql()`select 1 from negociation_liens_client where negociation_id = ${negociationId} and libelle = ${libelle} limit 1`;
+    if (dejaEnvoye.length === 0) {
+      await sql()`insert into negociation_liens_client (negociation_id, libelle, url, ordre) values (${negociationId}, ${libelle}, ${url}, 0)`;
+    }
     res.status(200).json({ ok: true });
     return;
   }
