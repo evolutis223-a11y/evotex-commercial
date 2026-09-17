@@ -899,6 +899,16 @@
   .g-form-row input, .g-form-row select { font-size: 12.5px; padding: 8px 9px; border-radius: 7px; border: 1px solid #c3d6ee; font-family: var(--font-body); }
   .g-form-row textarea { flex: 1; min-width: 200px; font-size: 13px; padding: 9px 10px; border-radius: 7px; border: 1px solid #c3d6ee; font-family: var(--font-body); resize: vertical; }
   .g-form-row button { background: linear-gradient(135deg,#3f96ea,#1c6fd9); border: none; color: #fff; font-weight: 800; font-size: 12.5px; padding: 9px 16px; border-radius: 999px; cursor: pointer; font-family: var(--font-body); }
+  /* Retour du 17/09/2026 : "il n'y a rien sur ce bouton [micro]" -- le
+     bouton micro est un <button> (contrairement à la trombone, un <label>
+     jamais touchée par la règle ci-dessus) : .g-form-row button (classe +
+     balise) passait devant le padding:0 de .g-btn-icone-tchat (classe
+     seule), plus spécifique en apparence mais perdant sur ce point précis
+     -- 9px/16px de marge intérieure dans un bouton de 38px ne laissait que
+     6px de large pour l'icône, invisible. Vrai depuis toujours (même
+     bug derrière "trop petit" et "on dirait un point" avant), juste
+     beaucoup plus visible avec une icône pleine qu'avec un simple contour. */
+  .g-form-row button.g-btn-icone-tchat { padding: 0; }
 
   .g-notes-mine { width: 100%; box-sizing: border-box; font-size: 13px; padding: 10px; border-radius: 8px; border: 1px solid #c3d6ee;
     font-family: var(--font-body); resize: vertical; background: #fff; box-shadow: 0 2px 8px rgba(26,58,99,0.07); }

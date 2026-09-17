@@ -94,7 +94,16 @@ const DUREE_ACCES_MIN_HEURES = 1 / 60;
 function verifierVocal(req) {
   const { audioBase64, typeMime, dureeSecondes } = req.body || {};
   if (!audioBase64 || !typeMime) return { erreur: "Vocal incomplet." };
-  if (!TYPES_AUDIO_AUTORISES.includes(String(typeMime))) return { erreur: "Format audio non reconnu." };
+  // Retour du 17/09/2026 : "Format audio non reconnu" au tout premier essai
+  // réel -- recorder.mimeType (envoyé tel quel par le navigateur) inclut
+  // presque toujours le codec, ex. "audio/webm;codecs=opus", jamais juste
+  // "audio/webm" comme dans TYPES_AUDIO_AUTORISES -- la comparaison exacte
+  // rejetait donc systématiquement tout vocal. On ne compare que la partie
+  // avant le ";", mais on garde le typeMime complet (avec codec) pour le
+  // stockage : c'est lui qui sert de Content-Type à la relecture, et le
+  // codec précis aide le lecteur audio du navigateur.
+  const typeMimeBase = String(typeMime).split(";")[0].trim();
+  if (!TYPES_AUDIO_AUTORISES.includes(typeMimeBase)) return { erreur: "Format audio non reconnu." };
   const tailleOctets = Buffer.byteLength(audioBase64, "base64");
   if (tailleOctets > TAILLE_MAX_VOCAL_OCTETS) return { erreur: "Vocal trop volumineux (4 Mo maximum)." };
   const duree = Math.max(0, Math.round(Number(dureeSecondes) || 0));
