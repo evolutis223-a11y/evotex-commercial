@@ -1044,15 +1044,17 @@ const COMPOSANTS = {
     { id: "cta", libelle: "Appel à l'action" },
   ],
   // Vrais titres des 12 pages (retour du 17/09/2026), miroir de
-  // lib/etapes.js#COMPOSANTS_OUTILS -- voir ce fichier pour le détail.
+  // lib/etapes.js#COMPOSANTS_OUTILS -- voir ce fichier pour le détail (ids
+  // p1/p4/p7 remplacés par les vraies ancres déjà présentes dans
+  // socle-lancement.js, les 9 autres ajoutées le 17/09/2026 -- feu vert).
   socle: [
-    { id: "p1", libelle: "Couverture & Vision Stratégique" },
+    { id: "licence-vente-totale", libelle: "Couverture & Vision Stratégique" },
     { id: "p2", libelle: "Architecture en 8 Blocs…" },
     { id: "p3", libelle: "Le Cœur de la Plateforme…" },
-    { id: "p4", libelle: "Socle Opérationnel — Mois 1-2" },
+    { id: "licence-deploiement", libelle: "Socle Opérationnel — Mois 1-2" },
     { id: "p5", libelle: "Détail du Socle Opérationnel" },
     { id: "p6", libelle: "Trajectoire de Finalisation…" },
-    { id: "p7", libelle: "Catalogue : Socle, Avance…" },
+    { id: "licence-saas", libelle: "Catalogue : Socle, Avance…" },
     { id: "p8", libelle: "Plan d'Accompagnement…" },
     { id: "p9", libelle: "Moteur de Validation…" },
     { id: "p10", libelle: "Gouvernance des Accès…" },
@@ -1607,7 +1609,15 @@ function montrerVueReelle(containerEl, cleVue, ancreId) {
   const vue = window.Views && window.Views[cleVue];
   if (!vue) { containerEl.innerHTML = '<div class="g-hint">Contenu introuvable.</div>'; return; }
   containerEl.innerHTML = vue.render();
-  if (typeof vue.mount === 'function') vue.mount(containerEl);
+  // L'ancre est aussi transmise à mount() (pas seulement au scrollIntoView
+  // ci-dessous) -- indispensable pour le Socle de Lancement : c'est un
+  // diaporama qui n'affiche qu'UNE page à la fois (choisie une fois pour
+  // toutes au montage), pas une page longue et défilable comme Présentation
+  // -- ici, window.location.hash (celui de la Salle de Négociation) ne
+  // correspond jamais à une page du Socle, donc sans ce relais explicite il
+  // affichait toujours la première page quel que soit le clic (retour du
+  // 17/09/2026). Sans effet pour les autres vues, qui ignorent ce 2e argument.
+  if (typeof vue.mount === 'function') vue.mount(containerEl, ancreId ? { ancre: ancreId } : undefined);
   if (ancreId) {
     const cible = containerEl.querySelector('#' + CSS.escape(ancreId));
     if (cible) cible.scrollIntoView({ behavior: 'auto', block: 'start' });
@@ -5130,10 +5140,12 @@ function rafraichirGrandApercu(d, estDirectionReelle) {
 
 function apercuComposant(outilId, comp) {
   if (outilId === 'captures' || outilId === 'licences') return `<div class="g-vignette-mini g-mock-mini-captures"><img src="${escapeHtml(comp.url)}" alt=""></div>`;
-  // Le numéro de page (extrait de l'id "pN"), jamais le titre réel entier --
-  // retour du 17/09/2026 : les libellés sont désormais les vrais titres du
-  // document, trop longs pour ce petit badge numéroté.
-  if (outilId === 'socle') return `<div class="g-vignette-mini g-mock-mini-page"><span>${escapeHtml(comp.id.replace('p', ''))}</span></div>`;
+  // Le numéro de page (position réelle dans COMPOSANTS.socle), jamais le
+  // titre réel entier -- retour du 17/09/2026 : les libellés sont désormais
+  // les vrais titres du document, trop longs pour ce petit badge numéroté.
+  // Calculé depuis la position, pas depuis l'id : p1/p4/p7 utilisent
+  // désormais les vraies ancres du document ("licence-...", jamais "pN").
+  if (outilId === 'socle') return `<div class="g-vignette-mini g-mock-mini-page"><span>${COMPOSANTS.socle.findIndex(c => c.id === comp.id) + 1}</span></div>`;
   const symboles = { accroche: '✦', modules: '▦', pourquoi: '◈', cta: '➜' };
   return `<div class="g-vignette-mini g-mock-mini-bloc"><span>${symboles[comp.id] || '•'}</span></div>`;
 }

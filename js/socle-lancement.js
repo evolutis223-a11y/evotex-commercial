@@ -31,7 +31,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="02" style="background:#0e1b30;display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden">
+`<section class="page" id="p2" data-screen-label="02" style="background:#0e1b30;display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden">
   <div style="position:absolute;inset:0;background:radial-gradient(1100px 700px at 100% -15%, rgba(63,127,196,0.4), transparent)"></div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;z-index:1">
@@ -125,7 +125,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="03" style="background:#0e1b30;display:flex;flex-direction:column;box-sizing:border-box;padding:4% 6%;position:relative;overflow:hidden">
+`<section class="page" id="p3" data-screen-label="03" style="background:#0e1b30;display:flex;flex-direction:column;box-sizing:border-box;padding:4% 6%;position:relative;overflow:hidden">
   <div style="position:absolute;inset:0;background:radial-gradient(1100px 700px at 100% -15%, rgba(63,127,196,0.4), transparent)"></div>
   <div class="bx-b" style="position:absolute;bottom:20px;right:28px;font-size:17px;font-weight:700;color:rgba(255,255,255,0.45);letter-spacing:1px;z-index:2">03 / 12</div>
 
@@ -339,7 +339,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="05" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
+`<section class="page" id="p5" data-screen-label="05" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="display:flex;align-items:center;gap:14px;min-width:0">
@@ -429,7 +429,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="06" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
+`<section class="page" id="p6" data-screen-label="06" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="display:flex;align-items:center;gap:14px;min-width:0">
@@ -640,7 +640,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="08" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
+`<section class="page" id="p8" data-screen-label="08" style="background:#fff;display:flex;flex-direction:column;box-sizing:border-box;padding:3.5% 5%;position:relative;overflow:hidden">
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="display:flex;align-items:center;gap:14px;min-width:0">
@@ -722,7 +722,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="09" style="background:#0f172a;display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden;page-break-before:always">
+`<section class="page" id="p9" data-screen-label="09" style="background:#0f172a;display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden;page-break-before:always">
   <div style="position:absolute;inset:0;background:radial-gradient(1200px 800px at 50% -10%, rgba(59,130,246,0.16), transparent)"></div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;z-index:1">
@@ -841,7 +841,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="10" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden;page-break-before:always">
+`<section class="page" id="p10" data-screen-label="10" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:3.2% 5%;position:relative;overflow:hidden;page-break-before:always">
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;z-index:1">
     <div style="display:flex;align-items:center;gap:14px;min-width:0">
@@ -938,7 +938,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="11" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:3% 5%;position:relative;overflow:hidden;page-break-before:always">
+`<section class="page" id="p11" data-screen-label="11" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:3% 5%;position:relative;overflow:hidden;page-break-before:always">
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
     <div style="display:flex;align-items:center;gap:14px;min-width:0">
@@ -1055,7 +1055,7 @@ window.Views = window.Views || {};
   </div>
 </section>`,
 
-`<section class="page" data-screen-label="12" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:4% 6%;position:relative;overflow:hidden;page-break-before:always">
+`<section class="page" id="p12" data-screen-label="12" style="background:linear-gradient(180deg,#ffffff 0%,#f3f9ff 55%,#eef6ff 100%);display:flex;flex-direction:column;box-sizing:border-box;padding:4% 6%;position:relative;overflow:hidden;page-break-before:always">
   <div class="bx-b" style="position:absolute;bottom:20px;right:28px;font-size:17px;font-weight:700;color:#93a1b3;letter-spacing:1px;z-index:2">12 / 12</div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
@@ -1179,17 +1179,24 @@ window.Views = window.Views || {};
       `;
     },
 
-    mount(root) {
+    mount(root, opts) {
       root.querySelectorAll("[data-nav]").forEach((el) => {
         el.addEventListener("click", () => { window.location.hash = el.getAttribute("data-nav"); });
       });
 
-      // Saut direct vers une page ancree (liens "En savoir plus" depuis les
-      // Licences), format de hash : #/socle-lancement/<ancre>
-      const hash = window.location.hash;
+      // Saut direct vers une page ancree -- soit une ancre fournie
+      // explicitement par l'appelant (integration Espace Gestion, retour du
+      // 17/09/2026 : "les numeros coincident avec les pages", la Salle de
+      // Negociation monte cette vue dans un cadre ou window.location.hash
+      // ne correspond a rien ici -- passer opts.ancre le court-circuite),
+      // soit lue depuis le hash reel (comportement d'origine, liens "En
+      // savoir plus" depuis les Licences publiques, format
+      // #/socle-lancement/<ancre>) quand aucune ancre n'est fournie.
       let startIndex = 0;
-      const parts = hash.split("/");
-      const anchor = parts.length > 2 ? parts[2] : null;
+      const anchor = (opts && opts.ancre) || (function () {
+        const parts = window.location.hash.split("/");
+        return parts.length > 2 ? parts[2] : null;
+      })();
       if (anchor) {
         const idx = findPageIndexById(anchor);
         if (idx >= 0) startIndex = idx;
