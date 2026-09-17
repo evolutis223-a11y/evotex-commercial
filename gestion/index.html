@@ -1563,11 +1563,23 @@ function cleVueDepuisHash(hash) {
   return 'hub';
 }
 
-function montrerVueReelle(containerEl, cleVue) {
+// ancreId (17/09/2026, "decoupage chirurgical" de la Presentation Executive
+// en 4 sous-outils reels) : apres montage, saute directement a l'element
+// portant cet id dans la page reelle -- accroche/modules/pourquoi/cta y
+// existent desormais (js/presentation.js). Sans effet si l'id n'existe pas
+// dans la page (ex. Socle, dont seules 3 pages sur 12 ont une vraie ancre --
+// cf. rapport du 17/09/2026 -- ou un outil qui n'a pas de sous-decoupage) :
+// aucun risque a passer ancreId partout, un querySelector qui ne trouve
+// rien ne fait simplement rien.
+function montrerVueReelle(containerEl, cleVue, ancreId) {
   const vue = window.Views && window.Views[cleVue];
   if (!vue) { containerEl.innerHTML = '<div class="g-hint">Contenu introuvable.</div>'; return; }
   containerEl.innerHTML = vue.render();
   if (typeof vue.mount === 'function') vue.mount(containerEl);
+  if (ancreId) {
+    const cible = containerEl.querySelector('#' + CSS.escape(ancreId));
+    if (cible) cible.scrollIntoView({ behavior: 'auto', block: 'start' });
+  }
 }
 
 // Un seul écouteur global (posé une fois au chargement du script) : les vues
@@ -5048,7 +5060,7 @@ function rafraichirGrandApercu(d, estDirectionReelle) {
     const composant = focus.composantId ? (composants || []).find(c => c.id === focus.composantId) : null;
     imageZone.innerHTML = `<img src="${escapeHtml(composant ? composant.url : outil.url)}" alt="">`;
   } else {
-    montrerVueReelle(imageZone, CLE_VUE_PAR_OUTIL[outil.id]);
+    montrerVueReelle(imageZone, CLE_VUE_PAR_OUTIL[outil.id], focus.composantId);
   }
 }
 

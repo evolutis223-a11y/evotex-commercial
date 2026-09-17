@@ -34,7 +34,7 @@ Views.presentation = {
       <div class="pres">
         <div class="pres-topbar"><button class="evx-retour" data-nav="#/">&#8592; Retour au hub</button></div>
 
-        <div class="pres-hero">
+        <div class="pres-hero" id="accroche">
           <div class="pres-kicker">EVOTEX 1.0 — PRÉSENTATION EXÉCUTIVE</div>
           <h1 class="pres-h1">La plateforme ERP taillée pour <em>l'industrie textile</em></h1>
           <p class="pres-sub">EVOTEX 1.0 relie tous les métiers de l'usine — du dessin du motif à l'encaissement en caisse — sur un socle unique, organisé en 8 Blocs Fonctionnels, avec une vue dédiée pour chaque rôle.</p>
@@ -44,7 +44,7 @@ Views.presentation = {
           </div>
         </div>
 
-        <div class="pres-section">
+        <div class="pres-section" id="modules">
           <div class="pres-section-head">
             <div class="pres-section-kicker">Fonctionnalités clés</div>
             <h2 class="pres-section-title">Un socle, 8 Blocs Fonctionnels</h2>
@@ -78,7 +78,7 @@ Views.presentation = {
           </div>
         </div>
 
-        <div class="pres-section">
+        <div class="pres-section" id="pourquoi">
           <div class="pres-section-head">
             <div class="pres-section-kicker">Pourquoi EVOTEX</div>
             <h2 class="pres-section-title">Une plateforme construite sur le terrain</h2>
@@ -93,7 +93,7 @@ Views.presentation = {
           </div>
         </div>
 
-        <div class="pres-cta-band">
+        <div class="pres-cta-band" id="cta">
           <div class="pres-cta-band-inner">
             <div class="pres-cta-band-title">Prêt à cadrer votre projet ?</div>
             <p class="pres-cta-band-sub">Décrivez vos besoins en quelques minutes — nous revenons vers vous avec une proposition adaptée.</p>
