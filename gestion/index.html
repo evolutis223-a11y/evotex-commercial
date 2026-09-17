@@ -2267,9 +2267,23 @@ function rendreGuide() {
   const clientSeul = estClient() || (!!etat.voirCommeId && etat.detail?.role === 'client');
   if (!etat.guideOnglet) etat.guideOnglet = estDir ? 'direction' : (clientSeul ? 'client' : 'negociateur');
 
-  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Guide d'utilisation</div>
+  // Un vrai client (jamais un "voir comme") n'a pas de sidebar pour revenir
+  // en arrière (retirée le 17/09/2026) -- son seul chemin de retour est ce
+  // bouton, symétrique à l'icône Guide posée dans l'en-tête de sa négociation.
+  const vraiClient = estClient();
+  const boutonRetourClient = vraiClient
+    ? `<button class="evx-retour" id="btn-retour-guide-client" title="Retour" style="color:inherit;font-size:15px;font-weight:900;margin-right:9px;vertical-align:middle">‹</button>`
+    : htmlBoutonRetour();
+
+  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${boutonRetourClient}Guide d'utilisation</div>
     <div class="g-hero-sous">${estDir ? "Comment fonctionne chaque écran — ce que vous pouvez faire, et où." : clientSeul ? 'Comment utiliser votre espace.' : 'Ce que vous pouvez faire dans la Salle de Négociation.'}</div></div>`;
   attacherBoutonRetour();
+  const btnRetourGuideClient = document.getElementById('btn-retour-guide-client');
+  if (btnRetourGuideClient) btnRetourGuideClient.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    etat.panneau = 'negociation';
+    await rendrePanneau();
+  });
 
   const onglets = [
     { id: 'direction', label: 'Direction' },
@@ -4367,6 +4381,10 @@ function rendreNegociation() {
   // comme") -- l'accès au tchat, lui, vit uniquement dans la barre fixe en
   // pied de page (.g-colonne-laterale), jamais ici (retour du 14/09/2026).
   if (d.role === 'client' && !d.voirComme) {
+    // Icône Guide (retour du 17/09/2026) -- seul point d'accès du client au
+    // Guide, sans sidebar (retirée le 17/09/2026, décision explicite).
+    // Juste à côté de Déconnexion, dans le même en-tête.
+    hero += `<button class="g-icone-bouton" id="btn-guide-client" title="Guide">${iconeMenu('guide')}</button>`;
     hero += `<button class="g-btn-mini-vue" id="btn-deconnexion-client" title="Déconnexion">Déconnexion</button>`;
   }
   hero += '</div>'; // .g-hero-droite
@@ -5652,6 +5670,13 @@ function attacherEvenementsNegociation(d) {
     e.stopPropagation();
     await api('/api/gestion/logout', { method: 'POST' });
     location.href = '/gestion/login';
+  });
+
+  const btnGuideClient = document.getElementById('btn-guide-client');
+  if (btnGuideClient) btnGuideClient.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    etat.panneau = 'guide';
+    await rendrePanneau();
   });
 
   document.querySelectorAll('[data-lien-invitation]').forEach(btn => {
