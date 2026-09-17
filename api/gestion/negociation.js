@@ -432,9 +432,12 @@ async function gerer_post(req, res, session) {
       res.status(400).json({ ok: false, erreur: "Titre requis pour le rôle \"Autre\"." });
       return;
     }
-    // Direction ajoute n'importe quel rôle ; le Négociateur ne peut créer que
-    // le compte Client (§4 du CDC -- création du compte client à la volée).
-    const autorise = monAppartenance.role === "direction" || (monAppartenance.role === "negociateur" && role === "client");
+    // Réservé à la Direction, sans exception (retour du 17/09/2026 -- "il
+    // n'y a que l'admin qui ajoute un membre... pour que je reste le seul
+    // modérateur"). Le Négociateur ne crée plus le compte Client lui-même
+    // (§4 du CDC, périmé depuis ce retour) : il demande à la Direction de
+    // l'ajouter.
+    const autorise = monAppartenance.role === "direction";
     if (!autorise) {
       res.status(403).json({ ok: false, erreur: "Droits insuffisants pour ce rôle." });
       return;
