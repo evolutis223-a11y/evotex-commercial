@@ -295,10 +295,20 @@ Views.tourApplication = {
           <div class="tour-footer">
             <div class="tour-footer-line"></div>
             <div class="tour-compare">
-              <p><b>Sans EVOTEX</b> : rapports papier, réunions sans fin, une grande équipe pour compiler ce qu'un écran affiche déjà. <b>Avec EVOTEX</b> : chaque geste tracé, chaque retard visible le jour même, moins besoin de profils hyper-spécialisés pour surveiller ce que l'outil surveille déjà.</p>
+              <div class="tour-compare-col -sans">
+                <div class="tour-compare-label">Sans EVOTEX</div>
+                <p>Rapports papier, réunions sans fin, une grande équipe pour compiler ce qu'un écran affiche déjà.</p>
+              </div>
+              <div class="tour-compare-col -avec">
+                <div class="tour-compare-label">Avec EVOTEX</div>
+                <p>Chaque geste tracé, chaque retard visible le jour même, moins besoin de profils hyper-spécialisés pour surveiller ce que l'outil surveille déjà.</p>
+              </div>
             </div>
             <p>Transparence totale : chaque écart connu ou donnée non encore disponible est signalé directement à l'écran par un badge dédié, jamais masqué ni présenté comme acquis à tort.</p>
-            <p class="tour-negociable">Le Socle 1 ci-dessus est notre base de lancement. Si certains modules Phase 2 vous intéressent dès le démarrage, nous en discutons ensemble — délai et moyens s'ajustent selon vos priorités.</p>
+            <div class="tour-negociable">
+              <div class="tour-negociable-eyebrow">À discuter ensemble</div>
+              <p>Le <b>Socle 1</b> ci-dessus est notre base de lancement. Si certains modules <b>Phase 2</b> vous intéressent dès le démarrage, nous en discutons ensemble — délai et moyens s'ajustent selon vos priorités.</p>
+            </div>
             <div class="tour-cta-row">
               <button class="pres-cta -primary" data-nav="#/expression-besoins">Exprimer mon besoin</button>
               <button class="pres-cta -ghost" data-nav="#/licences" style="border-color:#c3d6ee;color:#1c6fd9">Voir les licences</button>
