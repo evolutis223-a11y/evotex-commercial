@@ -43,6 +43,19 @@ alter table utilisateurs add column if not exists identifiant text unique;
 -- commencer, colonne pensée pour accueillir d'autres détails de profil plus tard.
 alter table utilisateurs add column if not exists photo_url text;
 
+-- Email désormais facultatif (retour du 17/09/2026 -- "l'application n'envoie
+-- pas d'email... même le nom peut servir") : seul un moyen de connexion
+-- (email, identifiant, ou un identifiant dérivé du nom en dernier recours)
+-- reste indispensable, jamais l'email en tant que tel. UNIQUE reste en place
+-- sans souci -- Postgres autorise plusieurs NULL dans une colonne unique.
+alter table utilisateurs alter column email drop not null;
+
+-- Contact téléphonique (retour du 17/09/2026) : "avoir au moins le contact
+-- téléphonique des personnes" -- facultatif, jamais utilisé pour se
+-- connecter, jamais soumis à unicité (plusieurs comptes peuvent partager un
+-- même numéro, ex. un même bureau).
+alter table utilisateurs add column if not exists telephone text;
+
 create table if not exists negociations (
   id            bigint generated always as identity primary key,
   nom           text not null,

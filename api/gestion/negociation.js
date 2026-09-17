@@ -80,6 +80,18 @@ const MOTS_INTERDITS = [
 function normaliserTexte(texte) {
   return texte.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
+// Même normalisation que slugifierIdentifiant côté client (bouton
+// "Suggérer") -- utilisée ici en dernier recours quand un membre est ajouté
+// sans email ni identifiant (retour du 17/09/2026 : "même le nom peut
+// servir"). Renvoie plusieurs essais (nom, nom-2, nom-3...) : identifiant
+// étant unique en base, un homonyme ne doit jamais bloquer silencieusement
+// l'ajout.
+function identifiantsGeneresDepuisNom(nom) {
+  const base = String(nom || "").trim().toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, ".").replace(/^\.+|\.+$/g, "") || "membre";
+  return [base, ...Array.from({ length: 8 }, (_, i) => `${base}-${i + 2}`)];
+}
 function contientLangageInterdit(texte) {
   const normalise = normaliserTexte(texte);
   return MOTS_INTERDITS.some((mot) => new RegExp(`(^|[^a-z0-9])${mot}([^a-z0-9]|$)`, "i").test(normalise));
@@ -447,8 +459,8 @@ async function gerer_post(req, res, session) {
   }
 
   if (action === "ajouter_membre") {
-    const { nom, email, role, motDePasse, titreAutre, photoUrl, identifiant } = req.body || {};
-    if (!nom || !email || !role || !motDePasse) {
+    const { nom, email, telephone, role, motDePasse, titreAutre, photoUrl, identifiant } = req.body || {};
+    if (!nom || !role || !motDePasse) {
       res.status(400).json({ ok: false, erreur: "Champs manquants." });
       return;
     }
@@ -466,25 +478,44 @@ async function gerer_post(req, res, session) {
       res.status(403).json({ ok: false, erreur: "Droits insuffisants pour ce rôle." });
       return;
     }
-    const emailNormalise = String(email).trim().toLowerCase();
+    // Email et téléphone facultatifs (retour du 17/09/2026 -- "l'application
+    // n'envoie pas d'email... même le nom peut servir") : seul un moyen de se
+    // connecter reste indispensable. Si ni email ni identifiant ne sont
+    // fournis, un identifiant est dérivé du nom (même normalisation que
+    // slugifierIdentifiant côté client, "Suggérer") -- avec repli numéroté en
+    // cas de collision, jamais un blocage silencieux sur un nom déjà pris.
+    const emailNormalise = email ? String(email).trim().toLowerCase() : null;
+    const telephoneNormalise = telephone ? String(telephone).trim() : null;
     const identifiantNormalise = identifiant ? String(identifiant).trim().toLowerCase() : null;
     const hash = await hacherMotDePasse(motDePasse);
-    const existants = await sql()`select id from utilisateurs where email = ${emailNormalise} limit 1`;
+    const existants = emailNormalise ? await sql()`select id from utilisateurs where email = ${emailNormalise} limit 1` : [];
     let utilisateurId;
     if (existants[0]) {
       utilisateurId = existants[0].id;
       if (photoUrl) await sql()`update utilisateurs set photo_url = ${photoUrl} where id = ${utilisateurId}`;
+      if (telephoneNormalise) await sql()`update utilisateurs set telephone = ${telephoneNormalise} where id = ${utilisateurId}`;
       if (identifiantNormalise) {
         const ok = await definirIdentifiant(utilisateurId, identifiantNormalise);
         if (!ok) { res.status(409).json({ ok: false, erreur: "Cet identifiant est déjà pris." }); return; }
       }
     } else {
-      let inseres;
-      try {
-        inseres = await sql()`insert into utilisateurs (nom, email, mot_de_passe_hash, photo_url, identifiant) values (${nom}, ${emailNormalise}, ${hash}, ${photoUrl || null}, ${identifiantNormalise}) returning id`;
-      } catch (err) {
-        if (err?.code === "23505") { res.status(409).json({ ok: false, erreur: "Cet identifiant ou cet email est déjà pris." }); return; }
-        throw err;
+      const identifiantsAEssayer = identifiantNormalise
+        ? [identifiantNormalise]
+        : (emailNormalise ? [null] : identifiantsGeneresDepuisNom(nom));
+      let inseres = null, dernierEchec = null;
+      for (const essai of identifiantsAEssayer) {
+        try {
+          inseres = await sql()`insert into utilisateurs (nom, email, mot_de_passe_hash, photo_url, identifiant, telephone) values (${nom}, ${emailNormalise}, ${hash}, ${photoUrl || null}, ${essai}, ${telephoneNormalise}) returning id`;
+          break;
+        } catch (err) {
+          if (err?.code === "23505") { dernierEchec = err; continue; }
+          throw err;
+        }
+      }
+      if (!inseres) {
+        const cible = identifiantNormalise ? "Cet identifiant ou cet email est déjà pris." : "Cet email est déjà pris.";
+        res.status(409).json({ ok: false, erreur: dernierEchec ? cible : "Échec de la création du compte." });
+        return;
       }
       utilisateurId = inseres[0].id;
     }

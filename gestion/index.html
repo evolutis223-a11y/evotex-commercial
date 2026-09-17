@@ -5664,6 +5664,7 @@ function rendreMenuMembre(m, peutAgir) {
   return `<div class="g-membre-menu">
     <div class="g-membre-menu-nom">${escapeHtml(m.nom)} · ${escapeHtml(libelleRole(m.role, m.titre_autre))}</div>
     <div class="g-hint" style="padding:0 8px 6px">${m.identifiant ? `Identifiant : ${escapeHtml(m.identifiant)}` : 'Pas encore d’identifiant (connexion par email uniquement)'}</div>
+    ${m.telephone ? `<div class="g-hint" style="padding:0 8px 6px">Téléphone : ${escapeHtml(m.telephone)}</div>` : ''}
     ${peutAgir ? `<button data-voircomme="${m.utilisateur_id}">Voir comme</button>` : ''}
     ${peutAgir && m.role !== 'direction' ? `<button data-lien-invitation="${m.utilisateur_id}">Lien d'accès</button>` : ''}
     ${peutAgir ? `<button data-definir-identifiant="${m.utilisateur_id}" data-definir-identifiant-nom="${escapeHtml(m.nom)}" data-definir-identifiant-actuel="${escapeHtml(m.identifiant || '')}">${m.identifiant ? 'Modifier' : 'Définir'} l'identifiant</button>` : ''}
@@ -5997,7 +5998,8 @@ function rendreModalAjoutMembre() {
         <h3>Ajouter un membre</h3>
         <div class="g-form-row">
           <input id="nm-nom" type="text" placeholder="Nom">
-          <input id="nm-email" type="email" placeholder="Email">
+          <input id="nm-email" type="email" placeholder="Email (facultatif)">
+          <input id="nm-telephone" type="tel" placeholder="Téléphone (facultatif)">
           <div style="display:flex;gap:8px;align-items:center">
             <input id="nm-identifiant" type="text" placeholder="Identifiant de connexion (facultatif, plus rapide que l'email)" style="flex:1">
             <button type="button" id="btn-suggerer-identifiant" class="cc-lien-facture" style="padding:9px 10px">Suggérer</button>
@@ -6015,7 +6017,7 @@ function rendreModalAjoutMembre() {
             <button type="button" id="btn-regenerer-mdp" class="cc-lien-facture" style="padding:9px 10px">↻ Régénérer</button>
           </div>
         </div>
-        <div class="g-hint">Mot de passe simple généré automatiquement -- communiqué à la personne par vos soins (pas d'email automatique pour l'instant).</div>
+        <div class="g-hint">Email et téléphone facultatifs -- au moins le nom sert à identifier la personne. Mot de passe simple généré automatiquement -- communiqué à la personne par vos soins (pas d'email automatique pour l'instant).</div>
         <div class="g-modal-actions">
           <button class="-annuler" id="btn-annuler-ajout">Annuler</button>
           <button id="btn-confirmer-ajout" style="background:linear-gradient(135deg,#3f96ea,#1c6fd9);border:none;color:#fff;font-weight:800;font-size:12.5px;padding:9px 16px;border-radius:999px;cursor:pointer;font-family:var(--font-body)">Ajouter</button>
@@ -6036,15 +6038,16 @@ function rendreModalAjoutMembre() {
   document.getElementById('btn-confirmer-ajout').addEventListener('click', async () => {
     const nom = document.getElementById('nm-nom').value.trim();
     const email = document.getElementById('nm-email').value.trim();
+    const telephone = document.getElementById('nm-telephone').value.trim();
     const identifiant = document.getElementById('nm-identifiant').value.trim();
     const role = document.getElementById('nm-role').value;
     const titreAutre = document.getElementById('nm-titre-autre').value.trim();
     const photoUrl = document.getElementById('nm-photo').value.trim();
     const motDePasse = document.getElementById('nm-mdp').value;
-    if (!nom || !email || !motDePasse) { alert('Nom, email et mot de passe requis.'); return; }
+    if (!nom || !motDePasse) { alert('Nom et mot de passe requis.'); return; }
     if (role === 'autre' && !titreAutre) { alert('Précisez un titre pour ce rôle.'); return; }
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ negociationId: etat.negociationId, action: 'ajouter_membre', nom, email, identifiant, role, motDePasse, titreAutre, photoUrl }) });
+      body: JSON.stringify({ negociationId: etat.negociationId, action: 'ajouter_membre', nom, email, telephone, identifiant, role, motDePasse, titreAutre, photoUrl }) });
     if (!rep.ok) { alert(rep.erreur || 'Échec.'); return; }
     etat.modalAjoutOuvert = false;
     await chargerNegociation();
