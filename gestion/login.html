@@ -21,6 +21,11 @@
   .login-field input { background: #f5f9ff; border: 1px solid #c3d6ee; border-radius: 7px;
     padding: 10px 11px; font-size: 14px; color: #101828; font-family: var(--font-body); box-sizing: border-box; }
   .login-field input:focus { outline: none; border-color: var(--evx-blue); background: #fff; }
+  .login-field-mdp-wrap { position: relative; }
+  .login-field-mdp-wrap input { width: 100%; padding-right: 40px; }
+  .login-toggle-mdp { position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; padding: 6px; cursor: pointer; color: #7d92ad; display: flex; }
+  .login-toggle-mdp:hover { color: var(--evx-blue); }
   .login-submit { margin-top: 8px; width: 100%; background: linear-gradient(135deg,#3f96ea,#1c6fd9);
     border: none; color: #fff; font-weight: 800; font-size: 14px; padding: 12px 20px;
     border-radius: 999px; cursor: pointer; font-family: var(--font-body); }
@@ -34,7 +39,17 @@
   <h1 class="login-title">Connexion</h1>
   <form id="form-connexion">
     <div class="login-field"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
-    <div class="login-field"><label for="mdp">Mot de passe</label><input id="mdp" type="password" autocomplete="current-password" required></div>
+    <div class="login-field"><label for="mdp">Mot de passe</label>
+      <div class="login-field-mdp-wrap">
+        <input id="mdp" type="password" autocomplete="current-password" required>
+        <button type="button" class="login-toggle-mdp" id="btn-toggle-mdp" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">
+          <svg id="icone-toggle-mdp" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z"/>
+            <circle cx="10" cy="10" r="2.4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
     <button class="login-submit" type="submit">Se connecter</button>
     <div class="login-erreur" id="erreur"></div>
   </form>
@@ -42,6 +57,21 @@
 <script>
   const form = document.getElementById('form-connexion');
   const erreurEl = document.getElementById('erreur');
+
+  // Afficher/masquer le mot de passe (retour du 17/09/2026 -- "pour que je
+  // vois aussi si je ne suis pas en train de faire une erreur").
+  const champMdp = document.getElementById('mdp');
+  const btnToggleMdp = document.getElementById('btn-toggle-mdp');
+  const iconeToggleMdp = document.getElementById('icone-toggle-mdp');
+  const iconeOeil = iconeToggleMdp.innerHTML;
+  const iconeOeilBarre = '<path d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z"/><circle cx="10" cy="10" r="2.4"/><path d="M2.5 2.5l15 15"/>';
+  btnToggleMdp.addEventListener('click', () => {
+    const visible = champMdp.type === 'text';
+    champMdp.type = visible ? 'password' : 'text';
+    iconeToggleMdp.innerHTML = visible ? iconeOeil : iconeOeilBarre;
+    btnToggleMdp.title = visible ? 'Afficher le mot de passe' : 'Masquer le mot de passe';
+    btnToggleMdp.setAttribute('aria-label', btnToggleMdp.title);
+  });
   // Retombée d'un lien d'accès invalide/expiré (/api/gestion/rejoindre) --
   // retour du 16/09/2026, voir schema.sql pour le détail de ce lien.
   const erreurUrl = new URLSearchParams(location.search).get('erreur');
