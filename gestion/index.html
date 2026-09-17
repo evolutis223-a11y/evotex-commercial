@@ -1459,7 +1459,23 @@ async function demarrer() {
       etat.panneau = 'hub';
     }
   }
-  await chargerNegociation();
+  // Retour du 17/09/2026 -- deuxième diagnostic de lenteur au démarrage,
+  // plus lourd que le premier (voir le commentaire un peu plus bas) :
+  // demarrer() appelait chargerNegociation() SANS CONDITION, même pour la
+  // Direction (atterrit sur Tableau de Bord) ou le négociateur (atterrit
+  // sur l'Espace Commercial, "hub", qui n'a même besoin d'aucune donnée
+  // serveur) -- un aller-retour réseau entier vers /api/gestion/negociation
+  // chargé puis jeté avant que rendrePanneau() ne parte de toute façon
+  // chercher les VRAIES données du panneau réellement affiché. Seul un
+  // atterrissage direct sur "negociation" (lien d'accès, ou négociateur/
+  // client sans autre panneau) a réellement besoin de ce chargement ici ;
+  // les autres panneaux se chargent eux-mêmes, une seule fois.
+  if (etat.panneau === 'negociation') {
+    await chargerNegociation();
+  } else {
+    rendreSidebar();
+    await rendrePanneau();
+  }
   if (estDirection()) {
     // Si on atterrit directement sur le Tableau de Bord (cas par défaut de
     // la Direction), son propre chargement vient déjà de rafraîchir
