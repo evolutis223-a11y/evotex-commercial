@@ -5744,6 +5744,19 @@ function rendreColonneLaterale(d) {
   const brouillonNotes = document.getElementById('mes-notes')?.value;
   const brouillonChat = document.getElementById('chat-colonne-texte')?.value;
   const brouillonMsg = document.getElementById('msg-texte')?.value;
+  // Retour du 17/09/2026 -- nouveau signalement : "la case de saisie se
+  // comporte comme si elle plantait, le curseur disparaît... il faut
+  // resélectionner". La valeur du brouillon était bien restaurée (ci-dessus)
+  // mais pas le FOCUS : colonne.innerHTML recrée un tout nouveau noeud
+  // <textarea> à chaque rafraîchissement (sondage silencieux, envoi...) --
+  // même avec le bon texte dedans, ce nouveau noeud n'a jamais le focus,
+  // donc plus de curseur visible ni de frappe possible tant qu'on ne
+  // reclique pas dedans. On retrouve ici l'id ET la position du curseur
+  // AVANT le rendu, pour les reposer sur le nouveau noeud après.
+  const actif = document.activeElement;
+  const focusAvantId = (actif && ['chat-colonne-texte', 'msg-texte', 'mes-notes'].includes(actif.id)) ? actif.id : null;
+  const curseurDebut = focusAvantId ? actif.selectionStart : null;
+  const curseurFin = focusAvantId ? actif.selectionEnd : null;
   const corpsAvant = colonne.querySelector('.g-colonne-corps');
   const corpsEnBas = corpsAvant ? (corpsAvant.scrollTop + corpsAvant.clientHeight >= corpsAvant.scrollHeight - 12) : true;
   const corpsScrollTop = corpsAvant ? corpsAvant.scrollTop : 0;
@@ -5943,6 +5956,15 @@ function rendreColonneLaterale(d) {
   if (chatEl && brouillonChat !== undefined) chatEl.value = brouillonChat;
   const msgEl = document.getElementById('msg-texte');
   if (msgEl && brouillonMsg !== undefined) msgEl.value = brouillonMsg;
+  // Repose le focus et la position du curseur sur le nouveau noeud, si on
+  // était justement en train d'écrire dedans (voir la capture plus haut).
+  if (focusAvantId) {
+    const champActif = document.getElementById(focusAvantId);
+    if (champActif) {
+      champActif.focus();
+      if (curseurDebut !== null) champActif.setSelectionRange(curseurDebut, curseurFin);
+    }
+  }
   const corpsApres = colonne.querySelector('.g-colonne-corps');
   if (corpsApres) corpsApres.scrollTop = corpsEnBas ? corpsApres.scrollHeight : corpsScrollTop;
   initialiserLecteursVocaux(colonne);
