@@ -1196,13 +1196,41 @@ const etat = { moi: null, appartenances: [], negociationId: null, detail: null, 
   itemFocus: null,           // { outilId, composantId } affiché en grand dans la scène
   panneauPrecedent: null, panneauActuelAffiche: undefined };  // pour le bouton "‹ Retour" générique
 
+// Session fermée en cours d'usage (retour du 17/09/2026 -- "au lieu
+// d'erreur serveur, des messages plus professionnels") : quand la session
+// tombe APRÈS un premier chargement réussi (déconnexion forcée, session
+// remplacée ailleurs, expiration), tous les appels API le détectent au même
+// endroit et affichent un message clair plutôt que le texte brut ("Non
+// connecté.") en alert() ou en encart rouge selon l'écran qui l'a reçu.
+// etat.moi non défini = tout premier chargement, pas encore connecté :
+// cas normal, laissé à demarrer() qui renvoie déjà proprement vers /login.
+let sessionFermeeAffichee = false;
 async function api(url, options) {
   try {
     const r = await fetch(url, options);
-    return await r.json();
+    const donnees = await r.json();
+    if (r.status === 401 && etat.moi && !sessionFermeeAffichee) {
+      sessionFermeeAffichee = true;
+      afficherSessionFermee();
+    }
+    return donnees;
   } catch {
-    return { ok: false, erreur: "Erreur réseau." };
+    return { ok: false, erreur: "Erreur réseau -- vérifiez votre connexion et réessayez." };
   }
+}
+
+function afficherSessionFermee() {
+  document.getElementById('modal-zone').innerHTML = `
+    <div class="g-modal-fond" id="modal-fond-session-fermee">
+      <div class="g-modal">
+        <h3>Session fermée</h3>
+        <p style="font-size:13px;color:#475467;line-height:1.6;margin:0">Votre session a été fermée -- depuis un autre appareil, par la Direction, ou après un moment d'inactivité. Reconnectez-vous pour continuer.</p>
+        <div class="g-modal-actions">
+          <button id="btn-session-fermee-reconnecter" style="background:linear-gradient(135deg,#3f96ea,#1c6fd9);border:none;color:#fff;font-weight:800;font-size:12.5px;padding:9px 16px;border-radius:999px;cursor:pointer;font-family:var(--font-body)">Se reconnecter</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('btn-session-fermee-reconnecter').addEventListener('click', () => { location.href = '/gestion/login'; });
 }
 
 async function demarrer() {
