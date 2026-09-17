@@ -4493,14 +4493,21 @@ function rendreNegociation() {
     hero += `<button class="g-icone-bouton -bascule-vue" id="btn-revenir-ma-vue" title="Revenir à ma vue">${iconeBasculerVue()}</button>`;
   }
   // "Déconnexion" reste dans l'en-tête pour un vrai client (jamais un "voir
-  // comme") -- l'accès au tchat, lui, vit uniquement dans la barre fixe en
-  // pied de page (.g-colonne-laterale), jamais ici (retour du 14/09/2026).
-  if (d.role === 'client' && !d.voirComme) {
+  // comme", ça n'aurait pas de sens de "déconnecter" une simple prévisualisation)
+  // -- l'accès au tchat, lui, vit uniquement dans la barre fixe en pied de
+  // page (.g-colonne-laterale), jamais ici (retour du 14/09/2026).
+  if (d.role === 'client') {
     // Icône Guide (retour du 17/09/2026) -- seul point d'accès du client au
-    // Guide, sans sidebar (retirée le 17/09/2026, décision explicite).
-    // Juste à côté de Déconnexion, dans le même en-tête.
+    // Guide, sans sidebar (retirée le 17/09/2026, décision explicite). Posée
+    // aussi pendant un "voir comme" (corrigé le 17/09/2026 -- "il n'y a
+    // aucun [bouton] à gauche du bouton de déconnexion" : la Direction
+    // vérifiant l'écran du client via "voir comme" ne la voyait pas, alors
+    // que "voir comme" promet "exactement ce qu'il voit"). Toujours juste à
+    // côté de Déconnexion (ou seule, si Déconnexion ne s'affiche pas ici).
     hero += `<button class="g-icone-bouton" id="btn-guide-client" title="Guide">${iconeMenu('guide')}</button>`;
-    hero += `<button class="g-btn-mini-vue -deconnexion" id="btn-deconnexion-client" title="Déconnexion"><span class="g-icone-power">${iconePower()}</span><span class="g-btn-label-texte">Déconnexion</span></button>`;
+    if (!d.voirComme) {
+      hero += `<button class="g-btn-mini-vue -deconnexion" id="btn-deconnexion-client" title="Déconnexion"><span class="g-icone-power">${iconePower()}</span><span class="g-btn-label-texte">Déconnexion</span></button>`;
+    }
   }
   hero += '</div>'; // .g-hero-droite
   hero += '</div>'; // .g-hero-top
