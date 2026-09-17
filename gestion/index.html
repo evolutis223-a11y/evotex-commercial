@@ -179,8 +179,12 @@
   /* Petit bouton "Vue Client" / "Revenir à ma vue" -- retour du 16/09/2026 :
      "un petit bouton presque invisible, pas de gros bouton". */
   .g-btn-mini-vue { font-size: 10.5px; font-weight: 700; color: var(--evx-onDark-secondary); background: none;
-    border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 10px; cursor: pointer; font-family: var(--font-body); white-space: nowrap; flex-shrink: 0; }
+    border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px 10px; cursor: pointer; font-family: var(--font-body); white-space: nowrap; flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 5px; }
   .g-btn-mini-vue:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+  /* Icône seule (mobile, voir @media 768px) -- masquée par défaut, "Déconnexion"
+     s'écrit en toutes lettres tant qu'il y a la place (bureau). */
+  .g-icone-power { display: none; }
 
   /* Pastille Ticket / chrono -- retour de l'utilisateur du 14/09/2026 : sur
      la même ligne que la rangée des membres, juste derrière, avec un texte
@@ -941,6 +945,25 @@
 
     .g-hero-top { flex-direction: column; }
     .g-hero-droite { width: 100%; justify-content: space-between; }
+
+    /* En-tête client (17/09/2026) : "réduire l'espace de l'entête... pour
+       que l'écran ait suffisamment de place pour travailler" -- titre et
+       boutons (Guide/Déconnexion) restent sur UNE seule ligne, contrairement
+       à la règle générale ci-dessus (colonne), réservée à cette vue plus
+       simple (2 boutons seulement, jamais l'équipe/le ticket/la frise
+       complète de l'en-tête Direction/Négociateur). */
+    .g-hero-top.-vue-client { flex-direction: row; align-items: flex-start; flex-wrap: nowrap; gap: 8px; }
+    .g-hero-top.-vue-client > div:first-child { min-width: 0; flex: 1; }
+    .g-hero-top.-vue-client .g-nego-nom-texte { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; max-width: 65vw; vertical-align: bottom; }
+    .g-hero-top.-vue-client .g-hero-droite { width: auto; flex-shrink: 0; }
+    /* "Déconnexion" perd son texte, ne garde que l'icône -- ronde, rouge,
+       plus universellement lisible qu'un mot qui n'a plus la place de
+       s'écrire en entier (retour du 17/09/2026 : "le cercle et le trait à
+       l'intérieur... vert ou rouge pour faciliter la compréhension"). */
+    .g-btn-mini-vue.-deconnexion { width: 30px; height: 30px; padding: 0; justify-content: center;
+      background: #dc2626; border-color: #dc2626; }
+    .g-btn-mini-vue.-deconnexion .g-btn-label-texte { display: none; }
+    .g-btn-mini-vue.-deconnexion .g-icone-power { display: flex; color: #fff; }
     .g-corps-zone { flex-direction: column; }
 
     /* Pied de page FIXE (Tchat Client / Notes / Échanges) -- retour de
@@ -1140,6 +1163,16 @@ function iconeDeconnexion() {
   return `<svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
     <path d="M8 3.5H4.8c-.7 0-1.3.6-1.3 1.3v10.4c0 .7.6 1.3 1.3 1.3H8"/>
     <path d="M12.3 6.3 16 10l-3.7 3.7"/><path d="M16 10H7.3"/>
+  </svg>`;
+}
+
+// Icône "power" classique (cercle + trait) -- retour du 17/09/2026 : sur
+// mobile, "Déconnexion" en toutes lettres coûte trop de place dans
+// l'en-tête du client ; remplacée par cette icône seule, rouge, plus
+// universellement reconnaissable qu'un mot tronqué.
+function iconePower() {
+  return `<svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 3v6.2"/><path d="M6.1 4.9a6 6 0 1 0 7.8 0"/>
   </svg>`;
 }
 
@@ -4264,7 +4297,11 @@ function rendreNegociation() {
   const libellesVisibles = !!d.negociation.etape_libelles_visibles_client;
 
   // ---- Hero : identité + étapes + équipe + ticket + icônes de panneaux ----
-  let hero = '<div class="g-hero-top"><div>';
+  // Classe -vue-client (17/09/2026) : en-tête compressée sur mobile, pour
+  // que titre et boutons (Guide/Déconnexion) tiennent sur une seule ligne
+  // -- réservée à cette vue précise (2 boutons seulement), jamais imposée
+  // à l'en-tête Direction/Négociateur, bien plus chargée.
+  let hero = `<div class="g-hero-top${d.role === 'client' ? ' -vue-client' : ''}"><div>`;
   if (internes.length > 1) {
     hero += '<div class="g-select-nego"><select id="select-nego">' +
       internes.map(a => `<option value="${a.negociation_id}" ${a.negociation_id === etat.negociationId ? 'selected' : ''}>${escapeHtml(a.nom)}</option>`).join('') +
@@ -4385,7 +4422,7 @@ function rendreNegociation() {
     // Guide, sans sidebar (retirée le 17/09/2026, décision explicite).
     // Juste à côté de Déconnexion, dans le même en-tête.
     hero += `<button class="g-icone-bouton" id="btn-guide-client" title="Guide">${iconeMenu('guide')}</button>`;
-    hero += `<button class="g-btn-mini-vue" id="btn-deconnexion-client" title="Déconnexion">Déconnexion</button>`;
+    hero += `<button class="g-btn-mini-vue -deconnexion" id="btn-deconnexion-client" title="Déconnexion"><span class="g-icone-power">${iconePower()}</span><span class="g-btn-label-texte">Déconnexion</span></button>`;
   }
   hero += '</div>'; // .g-hero-droite
   hero += '</div>'; // .g-hero-top
