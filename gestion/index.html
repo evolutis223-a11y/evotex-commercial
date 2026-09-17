@@ -854,6 +854,12 @@
     border: 1.5px solid var(--evx-blue-light); color: var(--evx-blue); display: flex; align-items: center; justify-content: center;
     cursor: pointer; padding: 0; }
   .g-btn-icone-tchat:hover { background: #e0ecfb; }
+  /* Bouton micro seul (pas la trombone) -- retour du 17/09/2026 : "même
+     dans une autre couleur" -- fond plein au lieu du fond pâle, pour que le
+     bouton se voie tout de suite comme un vrai bouton "parler", pas un
+     simple contour discret. */
+  .g-btn-icone-tchat.-micro { background: var(--evx-blue); border-color: var(--evx-blue); color: #fff; }
+  .g-btn-icone-tchat.-micro:hover { background: #1758a0; border-color: #1758a0; }
   /* --niveau-vocal (0 à 1) vient du niveau réel capté par le micro
      (AnalyserNode) -- l'anneau respire avec la voix, pas une animation
      jouée au hasard (retour du 14/09/2026 : "être sûr que le micro est en
@@ -1160,13 +1166,16 @@ function iconeOnglet(id) {
 // quel type de micro c'est", même souci que la cloche à l'origine
 // d'iconeOnglet -- une vraie icône SVG plutôt qu'un émoji ambigu/minuscule.
 function iconeMicro() {
-  // Retour du 14/09/2026 : "le micro est trop petit... ce n'est pas un
-  // micro" -- agrandi, trait plus épais, capsule plus large pour se lire
-  // sans ambiguïté même à 22px.
-  return `<svg viewBox="0 0 20 20" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="6.8" y="1.8" width="6.4" height="10" rx="3.2"/>
-    <path d="M4.2 9.6a5.8 5.8 0 0 0 11.6 0"/>
-    <path d="M10 15.9v2.4M7 18.3h6"/>
+  // Retour du 17/09/2026 : "ce n'est pas reconnaissable... pour des
+  // personnes qui ne sont pas habituées au monde high-tech" -- le contour
+  // fin à 22px se lisait comme un simple point, pas comme un micro. Passage
+  // à un pictogramme plein (rempli, plus de "carré coupé" que la pilule
+  // d'avant), le glyphe micro le plus répandu (Material Design, permissions
+  // navigateur) donc déjà connu même hors du numérique. Couleur du bouton
+  // revue à part (voir .-micro dans le CSS) pour se détacher davantage.
+  return `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+    <path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z"/>
+    <path d="M17.3 12a5.3 5.3 0 0 1-10.6 0H4.7c0 3.4 2.5 6.2 5.8 6.72V21.5h3v-2.78c3.3-.52 5.8-3.32 5.8-6.72h-2z"/>
   </svg>`;
 }
 function iconeTrombone() {
@@ -5608,7 +5617,7 @@ function rendreColonneLaterale(d) {
     const nomAffiche = (m) => String(m.auteur_id) === String(etat.moi.id) ? null : (d.role === 'client' ? 'EVOTEX' : m.auteur_nom);
     corps = `<div class="g-msg-liste" id="chat-colonne-liste">${messages.length ? rendreFilMessages(messages, d, 'client', nomAffiche)
       : '<div class="g-hint">Aucun échange avec le client pour l\'instant.</div>'}</div>`;
-    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="chat-colonne-texte" rows="2" placeholder="${d.role === 'client' ? 'Écrire à EVOTEX…' : 'Écrire au client…'}"></textarea>${rendreZoneEnregistrement('chat')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat" id="btn-vocal-chat" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-chat" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-chat" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-chat-colonne">Envoyer</button></div>`
+    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="chat-colonne-texte" rows="2" placeholder="${d.role === 'client' ? 'Écrire à EVOTEX…' : 'Écrire au client…'}"></textarea>${rendreZoneEnregistrement('chat')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-chat" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-chat" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-chat" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-chat-colonne">Envoyer</button></div>`
       : (verrouille && d.role !== 'direction' ? '<div class="g-hint">Verrouillé — ticket expiré.</div>' : '');
   } else if (etat.colonneOnglet === 'notes') {
     const autres = (d.notesEquipe || []).filter(n => String(n.auteur_id) !== String(etat.moi.id) && n.texte && n.texte.trim());
@@ -5623,7 +5632,7 @@ function rendreColonneLaterale(d) {
     const peutEcrire = d.role !== 'client' && d.role !== 'apporteur' && d.role !== 'autre' && !d.voirComme;
     corps = `<div class="g-msg-liste">${messages.length ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
       : '<div class="g-hint">Aucun message pour l\'instant.</div>'}</div>`;
-    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
+    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
   }
 
   colonne.innerHTML = `
