@@ -100,16 +100,17 @@
 .tour-screen-imgwrap { position: relative; }
 .tour-overlay-row {
   position: absolute;
-  left: 14%;
-  top: 72.5%;
-  width: 35%;
+  left: 13.5%;
+  top: 72%;
+  width: 36%;
   height: 16%;
-  display: flex;
-  gap: 6%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1% 5%;
   pointer-events: none;
 }
 .tour-overlay-item {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -119,14 +120,14 @@
   font-family: var(--font-script);
   font-weight: 700;
   color: var(--evx-blue);
-  font-size: clamp(9px, 1.35vw, 15px);
-  line-height: 1.1;
-  margin: 0 0 2px;
+  font-size: clamp(7.5px, 1vw, 10.5px);
+  line-height: 1.05;
+  margin: 0 0 1px;
 }
 .tour-overlay-comment {
-  font-size: clamp(6.5px, 0.72vw, 9px);
+  font-size: clamp(5.5px, 0.56vw, 7.5px);
   color: #3d4a5c;
-  line-height: 1.2;
+  line-height: 1.15;
   margin: 0;
 }
 

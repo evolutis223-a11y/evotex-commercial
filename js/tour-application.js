@@ -44,8 +44,12 @@ Views.tourApplication = {
         script: "Vous validez chaque document depuis votre écran, avec tout l'historique sous les yeux.",
         limite: "Le connecteur vers un logiciel comptable externe (SYSCOHADA/SAGE) rejoint la feuille de route Phase 2.",
         overlay: [
-          { titre: 'La facture, sans paperasse.', comment: 'Signature, suivi, historique — tout depuis l\'écran.' },
-          { titre: 'Chaque écart, visible à temps.', comment: 'Acomptes, dérogations — rien n\'attend la clôture.' },
+          { titre: 'La dérogation, tranchée à temps.', comment: 'Tarifs et clôtures financières, jamais en attente.' },
+          { titre: 'La proforma, validée en un clic.', comment: 'Avant facture, la Comptabilité tranche.' },
+          { titre: 'La facture, sans paperasse.', comment: 'Signature Direction, suivie jusqu\'au bout.' },
+          { titre: 'Le reste à payer, jamais oublié.', comment: 'Chaque acompte non atteint, identifié dossier par dossier.' },
+          { titre: 'La commission, calculée sans oubli.', comment: 'Chaque rôle commercial, son taux, à jour.' },
+          { titre: 'Chaque gramme, compté juste.', comment: '1er choix, 2e choix, chiffons — tout est tracé.' },
         ],
         extra: {
           kicker: 'Rapport Financier de l\'Usine',
