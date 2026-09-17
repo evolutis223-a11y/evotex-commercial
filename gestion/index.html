@@ -1247,6 +1247,7 @@ async function demarrer() {
   }
   await chargerNegociation();
   if (estDirection()) { await rafraichirMurRoles(); setInterval(rafraichirMurRoles, 45000); }
+  verifierPremiereConnexionGuide();
 
   setInterval(() => { api('/api/gestion/ping', { method: 'POST' }); }, 45000);
   setInterval(actualiserChrono, 1000);
@@ -2250,6 +2251,67 @@ function rendreGuide() {
   document.getElementById('corps').innerHTML = tabsHtml + corpsHtml;
   document.querySelectorAll('[data-guide-onglet]').forEach((btn) => {
     btn.addEventListener('click', () => { etat.guideOnglet = btn.dataset.guideOnglet; rendreGuide(); });
+  });
+}
+
+// ---- Accueil pas-à-pas, première connexion (17/09/2026, demande
+// explicite) -- une seule fois par compte (localStorage, jamais bloquant :
+// si vidé ou navigateur différent, l'accueil se recontente de se
+// réafficher, aucune conséquence). Direction préfère le guide écrit à un
+// tour anime ("j'ai des repères, ça me facilite") -- une seule carte de
+// bienvenue qui pointe vers le Guide, pas un pas-à-pas complet comme pour
+// les deux autres rôles.
+function cleOnboardingVue(utilisateurId) { return 'evx_onboarding_vu_' + utilisateurId; }
+
+const ONBOARDING_DIRECTION = [
+  { titre: 'Bienvenue dans l\'Espace de Travail', texte: 'Vous avez accès à tout : négociations, équipe, RH, comptabilité, documents. Le <b>Guide</b>, dans le menu à gauche, détaille chaque écran avec des exemples concrets — vous pouvez le rouvrir à tout moment.' },
+];
+const ONBOARDING_NEGOCIATEUR = [
+  { titre: 'Bienvenue', texte: 'Vous représentez EVOTEX auprès de votre client, dans le cadre de cette négociation.' },
+  { titre: 'Vos deux pages', texte: 'L\'<b>Espace Commercial</b> (le site public) et votre <b>Salle de Négociation</b> — le reste ne vous concerne pas.' },
+  { titre: 'Deux fils de discussion, jamais à confondre', texte: 'Le tchat d\'<b>ÉQUIPE</b> (jamais vu du client) et le tchat <b>DIRECT</b> avec le client, dans le même écran.' },
+  { titre: 'Besoin d\'aide ?', texte: 'Le <b>Guide</b>, dans le menu à gauche, répond aux questions courantes — à tout moment.' },
+];
+const ONBOARDING_CLIENT = [
+  { titre: 'Bienvenue', texte: 'Vous suivez ici l\'avancement de votre projet avec EVOTEX, et échangez avec votre Commercial.' },
+  { titre: 'Votre frise d\'étapes', texte: 'En haut de l\'écran, elle montre où en est votre dossier.' },
+  { titre: 'Mes Documents et discussion', texte: 'Retrouvez vos fichiers et discutez avec votre Commercial à tout moment. Le <b>Guide</b>, dans le menu, répond aux questions courantes.' },
+];
+
+function verifierPremiereConnexionGuide() {
+  if (!etat.moi) return;
+  try {
+    if (localStorage.getItem(cleOnboardingVue(etat.moi.id))) return;
+  } catch { return; }
+  const clientSeul = estClient();
+  const etapes = estDirection() ? ONBOARDING_DIRECTION : (clientSeul ? ONBOARDING_CLIENT : ONBOARDING_NEGOCIATEUR);
+  ouvrirOnboarding(etapes, 0);
+}
+
+function ouvrirOnboarding(etapes, index) {
+  const marquerVuEtFermer = () => {
+    try { localStorage.setItem(cleOnboardingVue(etat.moi.id), '1'); } catch {}
+    document.getElementById('modal-zone').innerHTML = '';
+  };
+  const e = etapes[index];
+  const dernier = index === etapes.length - 1;
+  const dots = etapes.length > 1 ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:16px">${etapes.map((_, i) => `<span style="width:6px;height:6px;border-radius:999px;background:${i === index ? 'var(--evx-blue)' : '#d7e4f5'}"></span>`).join('')}</div>` : '';
+  document.getElementById('modal-zone').innerHTML = `
+    <div class="g-modal-fond" id="modal-fond-onboarding">
+      <div class="g-modal">
+        <h3>${escapeHtml(e.titre)}</h3>
+        <p style="font-size:13px;color:#475467;line-height:1.6;margin:0">${e.texte}</p>
+        ${dots}
+        <div class="g-modal-actions">
+          ${etapes.length > 1 ? `<button class="-annuler" id="btn-onboarding-passer">Passer</button>` : ''}
+          <button id="btn-onboarding-suivant" style="background:linear-gradient(135deg,#3f96ea,#1c6fd9);border:none;color:#fff;font-weight:800;font-size:12.5px;padding:9px 16px;border-radius:999px;cursor:pointer;font-family:var(--font-body)">${dernier ? 'Compris' : 'Suivant'}</button>
+        </div>
+      </div>
+    </div>`;
+  const passer = document.getElementById('btn-onboarding-passer');
+  if (passer) passer.addEventListener('click', marquerVuEtFermer);
+  document.getElementById('btn-onboarding-suivant').addEventListener('click', () => {
+    if (dernier) marquerVuEtFermer(); else ouvrirOnboarding(etapes, index + 1);
   });
 }
 
