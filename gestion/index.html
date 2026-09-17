@@ -531,6 +531,11 @@
   .g-envoi-recent b { color: #475467; }
 
   .g-hint { font-size: 11.5px; color: #7f93ac; margin-top: 8px; }
+  /* Erreur du tchat (envoi, pièce jointe, suppression) -- retour du
+     17/09/2026 : un alert() bloquait TOUTE la page, facile à rater ("plus
+     rien n'est possible quand on clique") -- jamais un alert() ici, un
+     texte discret dans le pied du tchat, qui s'efface tout seul. */
+  .g-hint-erreur { color: #dc2626; font-weight: 700; margin-top: -2px; }
   .g-erreur { color: #b91c1c; font-size: 12.5px; font-weight: 700; padding: 40px 20px; text-align: center; }
   .g-chargement { text-align: center; padding: 80px 20px; color: #64748b; font-size: 13px; }
 
@@ -921,6 +926,12 @@
      bug derrière "trop petit" et "on dirait un point" avant), juste
      beaucoup plus visible avec une icône pleine qu'avec un simple contour. */
   .g-form-row button.g-btn-icone-tchat { padding: 0; }
+  /* Même bug, même cause, retour du 17/09/2026 -- le lecteur de relecture
+     (avant envoi d'un vocal) vit lui aussi dans .g-form-row (superposé à
+     la case de saisie) : son bouton Play héritait du même padding
+     9px/16px, écrasé au point de ne plus rien montrer ("une boule bleue,
+     rien dedans"). */
+  .g-form-row button.g-lecteur-play { padding: 0; }
 
   .g-notes-mine { width: 100%; box-sizing: border-box; font-size: 13px; padding: 10px; border-radius: 8px; border: 1px solid #c3d6ee;
     font-family: var(--font-body); resize: vertical; background: #fff; box-shadow: 0 2px 8px rgba(26,58,99,0.07); }
@@ -1230,14 +1241,30 @@ function htmlContenuEnregistrementActif() {
   return `<div class="g-vocal-barres"><span></span><span></span><span></span><span></span><span></span></div>
     <span class="g-vocal-minuteur">0:00</span>`;
 }
+// Erreur d'envoi/suppression dans le tchat -- jamais un alert() (retour du
+// 17/09/2026, voir le CSS .g-hint-erreur) : un texte discret dans le pied
+// du tchat concerné, qui s'efface tout seul après quelques secondes.
+let minuterieErreurTchat = {};
+function signalerErreurTchat(canal, texte) {
+  const el = document.getElementById('erreur-tchat-' + canal);
+  if (!el) return;
+  el.textContent = texte;
+  el.hidden = false;
+  clearTimeout(minuterieErreurTchat[canal]);
+  minuterieErreurTchat[canal] = setTimeout(() => { el.hidden = true; }, 4000);
+}
 function iconeCoche() {
   return `<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.4 8.1 14 15.5 6.3"/></svg>`;
 }
+// Retour du 17/09/2026 : "le bouton pause n'est pas visible... on voit
+// juste une boule bleue" -- même leçon que le micro, un pictogramme trop
+// petit se lit comme rien du tout. Agrandi (13 -> 17px) dans le même
+// bouton rond de 30px.
 function iconePlay() {
-  return `<svg viewBox="0 0 20 20" width="13" height="13" fill="currentColor"><path d="M6.2 4.3v11.4c0 .78.86 1.26 1.53.85l9-5.7a1 1 0 0 0 0-1.7l-9-5.7c-.67-.4-1.53.07-1.53.85Z"/></svg>`;
+  return `<svg viewBox="0 0 20 20" width="17" height="17" fill="currentColor"><path d="M6.2 4.3v11.4c0 .78.86 1.26 1.53.85l9-5.7a1 1 0 0 0 0-1.7l-9-5.7c-.67-.4-1.53.07-1.53.85Z"/></svg>`;
 }
 function iconePause() {
-  return `<svg viewBox="0 0 20 20" width="13" height="13" fill="currentColor"><rect x="5" y="4" width="3.6" height="12" rx="1.2"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.2"/></svg>`;
+  return `<svg viewBox="0 0 20 20" width="17" height="17" fill="currentColor"><rect x="5" y="4" width="3.6" height="12" rx="1.2"/><rect x="11.4" y="4" width="3.6" height="12" rx="1.2"/></svg>`;
 }
 
 // Icônes maison du menu latéral principal -- même style que iconeOnglet
@@ -5679,20 +5706,30 @@ function rendreColonneLaterale(d) {
   // rien ne doit effacer ce choix en attente non plus.
   if (enregistrementVocal || vocalEnAttente) return;
   // Préserve les brouillons de saisie (tchat client, tchat équipe, notes)
-  // et la position de défilement des deux tchats à travers un re-rendu
-  // déclenché par le sondage silencieux ou un envoi -- retour du 17/09/2026 :
-  // avant, seul le tchat client en bénéficiait (et seulement via le rendu
-  // complet de rendreNegociation) ; le tchat équipe n'avait aucune mémoire
-  // de défilement, d'où "le vocal descend, on voit les anciens messages".
+  // et la position de défilement à travers un re-rendu déclenché par le
+  // sondage silencieux ou un envoi -- retour du 17/09/2026 : avant, seul le
+  // tchat client en bénéficiait (et seulement via le rendu complet de
+  // rendreNegociation) ; le tchat équipe n'avait aucune mémoire de
+  // défilement, d'où "le dernier message descend, on voit les anciens".
+  //
+  // Correction du même jour, après un second essai réel resté cassé :
+  // .g-msg-liste (#chat-colonne-liste / #chat-interne-liste) ne défile
+  // JAMAIS elle-même -- c'est .g-colonne-corps, son conteneur direct, qui
+  // porte overflow-y:auto (voir le CSS). Lire/poser scrollTop sur la liste
+  // ne faisait donc rien de réel : le vrai scroll de .g-colonne-corps,
+  // recréé de toutes pièces à chaque rendu (colonne.innerHTML), repartait
+  // systématiquement à 0 -- d'où "on dirait qu'une ancre force la date du
+  // haut à rester visible", et le dernier message hors vue par défaut.
+  // corpsScrollTop (position exacte, pas seulement "en bas ou pas") : sinon
+  // relire un ancien message pendant que le sondage tourne le ramenait tout
+  // en haut à chaque rafraîchissement (le nouveau .g-colonne-corps repart
+  // toujours à 0) -- perturbant même quand on n'était pas au fond.
   const brouillonNotes = document.getElementById('mes-notes')?.value;
   const brouillonChat = document.getElementById('chat-colonne-texte')?.value;
   const brouillonMsg = document.getElementById('msg-texte')?.value;
-  const enBasDe = (id) => {
-    const el = document.getElementById(id);
-    return el ? (el.scrollTop + el.clientHeight >= el.scrollHeight - 12) : true;
-  };
-  const chatEnBas = enBasDe('chat-colonne-liste');
-  const interneEnBas = enBasDe('chat-interne-liste');
+  const corpsAvant = colonne.querySelector('.g-colonne-corps');
+  const corpsEnBas = corpsAvant ? (corpsAvant.scrollTop + corpsAvant.clientHeight >= corpsAvant.scrollHeight - 12) : true;
+  const corpsScrollTop = corpsAvant ? corpsAvant.scrollTop : 0;
   // Retour du 16/09/2026, tranché : le client garde cette même colonne
   // partagée -- mais UNIQUEMENT l'onglet Tchat (Notes/Échanges sont des
   // consignes internes, jamais pour lui). Forcé ici, pas juste caché --
@@ -5748,7 +5785,7 @@ function rendreColonneLaterale(d) {
     const nomAffiche = (m) => String(m.auteur_id) === String(etat.moi.id) ? null : (d.role === 'client' ? 'EVOTEX' : m.auteur_nom);
     corps = `<div class="g-msg-liste" id="chat-colonne-liste">${messages.some(m => !m.supprime) ? rendreFilMessages(messages, d, 'client', nomAffiche)
       : '<div class="g-hint">Aucun échange avec le client pour l\'instant.</div>'}</div>`;
-    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="chat-colonne-texte" rows="2" placeholder="${d.role === 'client' ? 'Écrire à EVOTEX…' : 'Écrire au client…'}"></textarea>${rendreZoneEnregistrement('chat')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-chat" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-chat" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-chat" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-chat-colonne">Envoyer</button></div>`
+    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="chat-colonne-texte" rows="2" placeholder="${d.role === 'client' ? 'Écrire à EVOTEX…' : 'Écrire au client…'}"></textarea>${rendreZoneEnregistrement('chat')}</div><div class="g-hint g-hint-erreur" id="erreur-tchat-client" hidden></div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-chat" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-chat" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-chat" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-chat-colonne">Envoyer</button></div>`
       : (verrouille && d.role !== 'direction' ? '<div class="g-hint">Verrouillé — ticket expiré.</div>' : '');
   } else if (etat.colonneOnglet === 'notes') {
     const autres = (d.notesEquipe || []).filter(n => String(n.auteur_id) !== String(etat.moi.id) && n.texte && n.texte.trim());
@@ -5763,7 +5800,7 @@ function rendreColonneLaterale(d) {
     const peutEcrire = d.role !== 'client' && d.role !== 'apporteur' && d.role !== 'autre' && !d.voirComme;
     corps = `<div class="g-msg-liste" id="chat-interne-liste">${messages.some(m => !m.supprime) ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
       : '<div class="g-hint">Aucun message pour l\'instant.</div>'}</div>`;
-    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
+    pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-hint g-hint-erreur" id="erreur-tchat-interne" hidden></div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
   }
 
   colonne.innerHTML = `
@@ -5795,7 +5832,7 @@ function rendreColonneLaterale(d) {
     champ.value = '';
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message_client', texte }) });
-    if (!rep.ok) { alert(rep.erreur || 'Échec.'); champ.value = texte; return; }
+    if (!rep.ok) { signalerErreurTchat('client', rep.erreur || 'Échec de l\'envoi.'); champ.value = texte; return; }
     await rafraichirMessagerie();
   });
 
@@ -5824,7 +5861,7 @@ function rendreColonneLaterale(d) {
     champ.value = '';
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message', texte }) });
-    if (!rep.ok) { alert(rep.erreur || 'Échec.'); champ.value = texte; return; }
+    if (!rep.ok) { signalerErreurTchat('interne', rep.erreur || 'Échec de l\'envoi.'); champ.value = texte; return; }
     await rafraichirMessagerie();
   });
 
@@ -5849,12 +5886,18 @@ function rendreColonneLaterale(d) {
   colonne.querySelectorAll('[data-supprimer-message]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
+      // Retour du 17/09/2026 : un double-clic renvoyait une fausse alerte
+      // d'échec (le message était pourtant bien supprimé dès le premier
+      // clic) -- le bouton se coupe le temps de la requête, jamais deux
+      // suppressions du même message en vol en même temps.
+      if (btn.disabled) return;
+      btn.disabled = true;
       const id = Number(btn.dataset.supprimerMessage);
       const canal = btn.dataset.canal;
       const action = canal === 'client' ? 'supprimer_message_client' : 'supprimer_message';
       const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ negociationId: etat.negociationId, action, id }) });
-      if (!rep.ok) { alert(rep.erreur || 'Échec.'); return; }
+      if (!rep.ok) { signalerErreurTchat(canal, rep.erreur || 'Échec de la suppression.'); btn.disabled = false; return; }
       await rafraichirMessagerie();
     });
   });
@@ -5883,10 +5926,8 @@ function rendreColonneLaterale(d) {
   if (chatEl && brouillonChat !== undefined) chatEl.value = brouillonChat;
   const msgEl = document.getElementById('msg-texte');
   if (msgEl && brouillonMsg !== undefined) msgEl.value = brouillonMsg;
-  const listeClient = document.getElementById('chat-colonne-liste');
-  if (listeClient && chatEnBas) listeClient.scrollTop = listeClient.scrollHeight;
-  const listeInterne = document.getElementById('chat-interne-liste');
-  if (listeInterne && interneEnBas) listeInterne.scrollTop = listeInterne.scrollHeight;
+  const corpsApres = colonne.querySelector('.g-colonne-corps');
+  if (corpsApres) corpsApres.scrollTop = corpsEnBas ? corpsApres.scrollHeight : corpsScrollTop;
   initialiserLecteursVocaux(colonne);
 }
 
