@@ -1419,11 +1419,15 @@ function rendreSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.innerHTML = html;
   sidebar.classList.toggle('-repliee', etat.sidebarRepliee);
-  // Le client n'agit pas vraiment à travers ce panneau (un seul écran, déjà
-  // celui par défaut) -- retiré pour lui donner plus d'espace réel, surtout
-  // utile sur mobile (retour du 14/09/2026). "Déconnexion" le rejoint alors
-  // dans l'en-tête de la salle de négociation (rendreNegociation).
-  sidebar.classList.toggle('-masquee', clientSeul);
+  // Jusqu'au 17/09/2026, le client n'avait qu'un seul écran (rien à
+  // naviguer) -- la sidebar entière était masquée pour lui rendre l'espace
+  // (retour du 14/09/2026), "Déconnexion" rejoignant l'en-tête de la salle
+  // de négociation à la place (rendreNegociation). Depuis l'ajout du Guide,
+  // le client a deux destinations réelles -- la masquer le laisserait sans
+  // aucun moyen d'atteindre son Guide (bug constaté le 17/09/2026 : l'item
+  // de menu existait dans le HTML mais restait strictement inatteignable,
+  // display:none, ni sidebar ni hamburger). Ne plus jamais la masquer.
+  sidebar.classList.remove('-masquee');
 
   document.getElementById('btn-toggle-sidebar').addEventListener('click', () => {
     etat.sidebarRepliee = !etat.sidebarRepliee;
@@ -4352,12 +4356,11 @@ function rendreNegociation() {
   if (d.voirComme && d.role !== 'client') {
     hero += `<button class="g-icone-bouton -bascule-vue" id="btn-revenir-ma-vue" title="Revenir à ma vue">${iconeBasculerVue()}</button>`;
   }
-  // "Déconnexion" reste dans l'en-tête pour un vrai client (jamais un "voir
-  // comme") -- l'accès au tchat, lui, vit uniquement dans la barre fixe en
-  // pied de page (.g-colonne-laterale), jamais ici (retour du 14/09/2026).
-  if (d.role === 'client' && !d.voirComme) {
-    hero += `<button class="g-btn-mini-vue" id="btn-deconnexion-client" title="Déconnexion">Déconnexion</button>`;
-  }
+  // Jusqu'au 17/09/2026, "Déconnexion" vivait ici pour un vrai client (jamais
+  // un "voir comme") car la sidebar lui était entièrement masquée (retour du
+  // 14/09/2026). Depuis que la sidebar reste visible pour lui (ajout du
+  // Guide), son propre bouton "Déconnexion" en pied de sidebar suffit --
+  // superflu ici, aurait doublonné le même bouton deux fois à l'écran.
   hero += '</div>'; // .g-hero-droite
   hero += '</div>'; // .g-hero-top
 
