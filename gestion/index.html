@@ -911,6 +911,21 @@
   .g-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
   .g-modal-actions button.-annuler { background: none; border: 1px solid #c3d6ee; color: #475467; border-radius: 999px; padding: 9px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
 
+  /* Modale "info" -- plus large et défilante que la modale de formulaire
+     ci-dessus, pour un texte explicatif long (retour du 17/09/2026 :
+     l'ampoule d'Espace Commercial). */
+  .g-modal.-info { max-width: 560px; max-height: 82vh; overflow-y: auto; }
+  .g-modal.-info h4 { font-family: var(--font-display); font-size: 12.5px; font-weight: 800; color: var(--evx-blue); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px; }
+  .g-modal.-info h4:first-of-type { margin-top: 0; }
+  .g-modal.-info p { font-size: 13.5px; line-height: 1.55; color: #344054; margin: 0 0 10px; }
+  .g-modal.-info .g-info-outil { display: grid; grid-template-columns: 130px 1fr; gap: 4px 12px; padding: 7px 0; border-bottom: 1px solid #eef1f6; }
+  .g-modal.-info .g-info-outil b { font-size: 13px; color: #101828; }
+  .g-modal.-info .g-info-outil span { font-size: 13px; color: #475467; line-height: 1.45; }
+  /* .g-icone-bouton est display:flex (bloc) -- reste inline pour vivre dans
+     le fil d'un titre texte (comme .evx-retour), sans quoi il retombe seul
+     sur sa propre ligne, sous "Espace Commercial" au lieu d'à côté. */
+  .g-icone-bouton.-mini-titre { display: inline-flex; font-size: 15px; margin-left: 8px; vertical-align: middle; }
+
   @media (max-width: 768px) {
     /* Déclencheur ancré DANS le bandeau d'en-tête (.g-hero), au même niveau
        que le titre -- retour explicite de l'utilisateur du 14/09/2026 : "le
@@ -1651,12 +1666,55 @@ function rendreHub() {
   document.getElementById('verrou-bandeau').innerHTML = '';
   // Même en-tête fixe que Comptabilité/Conventions/Boîte noire -- jamais
   // d'exception à cette règle, même sur une page qui a déjà son propre titre.
-  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Espace Commercial</div>
-    <div class="g-hero-sous">Le vrai hub public EVOTEX -- vos 4 outils de négociation, à consulter ou à envoyer tels quels au client.</div></div>`;
+  // Ampoule (retour du 17/09/2026) : "explique comment ces outils
+  // fonctionnent et pourquoi ils y sont" -- même icône que le "Conseil pour
+  // cette étape" de la Salle de Négociation, mais ouvre une vraie modale
+  // (le texte est trop long pour un petit popover ancré).
+  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Espace Commercial<button class="g-icone-bouton -mini -mini-titre" id="btn-info-espace-commercial" title="Comment ça marche, et pourquoi">💡</button></div>
+    <div class="g-hero-sous">Le vrai hub public EVOTEX -- vos 5 outils de négociation, à consulter ou à envoyer tels quels au client.</div></div>`;
   attacherBoutonRetour();
+  const btnInfo = document.getElementById('btn-info-espace-commercial');
+  if (btnInfo) btnInfo.addEventListener('click', (e) => { e.stopPropagation(); rendreModalInfoEspaceCommercial(); });
   document.getElementById('corps').className = 'g-scene -pleine-largeur';
   document.getElementById('corps').innerHTML = '<div id="hub-zone"></div>';
   montrerVueReelle(document.getElementById('hub-zone'), cleVueDepuisHash(location.hash));
+}
+
+// Modale d'explication d'Espace Commercial (retour du 17/09/2026, demande
+// explicite : "prenant chaque plaque par son nom", "expliquer que ce sont
+// ces mêmes outils qui sont de l'autre côté"). Contenu vérifié contre
+// js/hub.js (les 5 cartes réelles) et le mécanisme d'envoi de la Salle de
+// Négociation -- jamais une paraphrase approximative.
+function rendreModalInfoEspaceCommercial() {
+  const html = `<div class="g-modal-fond" id="modal-fond-info-hub">
+    <div class="g-modal -info">
+      <h3>Comment fonctionne l'Espace Commercial</h3>
+
+      <h4>Le vrai site, en direct</h4>
+      <p>Cette page n'est pas une maquette ni une copie : c'est le site public EVOTEX réel, affiché ici avec son vrai code. Ce que vous voyez en cliquant sur une carte est exactement ce que verrait un visiteur du site, ou votre client si vous la lui envoyez.</p>
+
+      <h4>Les 5 outils, un par un</h4>
+      <div class="g-info-outil"><b>Présentation Exécutive</b><span>La vitrine produit -- les 8 Blocs Fonctionnels de la plateforme, en un coup d'œil. À montrer en tout premier, à un prospect qui découvre EVOTEX.</span></div>
+      <div class="g-info-outil"><b>Tour de l'Application</b><span>De vraies captures d'écran de BATEXCI ERP, bloc par bloc -- ce qui existe déjà réellement, avec ses limites actuelles assumées.</span></div>
+      <div class="g-info-outil"><b>Socle de Lancement</b><span>Le dossier de déploiement complet, 12 pages -- vision, feuille de route sur 6 mois, catalogue des 3 licences, gouvernance et pilotage technique.</span></div>
+      <div class="g-info-outil"><b>Grille de Licences</b><span>Les 3 formules tarifaires (Déploiement à Vie, Vente Totale, SaaS + Modules), avec un formulaire de demande de devis intégré.</span></div>
+      <div class="g-info-outil"><b>Cahier des Charges Client</b><span>Un formulaire interactif : le prospect y décrit lui-même son besoin (utilisateurs, sites, modules, budget), reçu directement par email.</span></div>
+
+      <h4>Deux façons de les transmettre</h4>
+      <p><b>« Partager »</b>, sur chaque carte ici : copie un lien libre d'accès, verrouillé sur cette seule page (ou tout le site avec « Partager toute l'application », en bas). N'importe qui reçoit ce lien peut l'ouvrir, sans compte -- utile pour un premier contact ou un prospect pas encore inscrit.</p>
+      <p><b>« Envoyer au client »</b>, depuis la Salle de Négociation (jamais ici) : ajoute l'outil -- entier, ou une seule page/section précise -- à « Mes Documents » d'UN client déjà membre d'une négociation. Il le retrouve dans son propre espace, après connexion, à tout moment.</p>
+
+      <h4>Le même contenu, des deux côtés</h4>
+      <p>Il n'existe pas de version "client" séparée : la page que vous consultez ici, celle qu'un lien "Partager" ouvre, et celle qu'un client retrouve dans "Mes Documents" après un envoi depuis la Salle de Négociation sont rigoureusement la même -- même texte, mêmes images, même mise en page.</p>
+
+      <div class="g-modal-actions"><button class="-annuler" id="btn-fermer-info-hub">Fermer</button></div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+  const fond = document.getElementById('modal-fond-info-hub');
+  const fermer = () => fond.remove();
+  document.getElementById('btn-fermer-info-hub').addEventListener('click', fermer);
+  fond.addEventListener('click', (e) => { if (e.target === fond) fermer(); });
 }
 
 // ---- RH & Personnel -- retour du 16/09/2026, trois onglets bien distincts
