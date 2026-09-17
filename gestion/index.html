@@ -916,6 +916,15 @@
      si clic à côté elle se ferme naturellement") -- jamais un .g-modal-fond
      plein écran : une carte ancrée sous l'ampoule, comme .g-conseil-panel
      mais plus grande, sans overlay, sans bloquer le reste de la page. */
+  /* Bug signalé le 17/09/2026 : le bouton "Partager" d'une carte du hub
+     passait AU-DESSUS du popover. Cause : ".g-hero > * { z-index: 1 }"
+     (règle partagée, ligne ~141) plafonne .g-hero-titre-simple à 1, alors
+     que .hub-card-share est à z-index:2 -- le z-index:40 du popover ne
+     compte que DANS son propre parent, jamais contre ce plafond externe.
+     Corrigé sans toucher la règle partagée (utilisée sur tous les autres
+     écrans) : :has() cible uniquement le titre QUAND il contient ce
+     popover précis. */
+  .g-hero-titre-simple:has(.g-info-popover) { z-index: 46; }
   .g-info-popover { position: absolute; top: 36px; left: 0; z-index: 40; width: min(420px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto;
     background: #fff; border-radius: 14px; border: 1px solid #d7e4f5; box-shadow: 0 20px 48px rgba(18,42,86,0.22); padding: 18px 20px; }
   .g-info-popover h3 { font-family: var(--font-display); font-size: 15px; margin: 0 0 14px; color: #101828; }
