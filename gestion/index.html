@@ -1706,8 +1706,8 @@ function basculerPopoverInfoHub(ancre) {
   const html = `<div class="g-info-popover" id="popover-info-hub">
     <h3>Comment fonctionne l'Espace Commercial</h3>
 
-    <h4>Le vrai site, en direct</h4>
-    <p>Cette page n'est pas une maquette ni une copie : c'est le site public EVOTEX réel, affiché ici avec son vrai code. Ce que vous voyez en cliquant sur une carte est exactement ce que verrait un visiteur du site, ou votre client si vous la lui envoyez.</p>
+    <h4>Pourquoi cet espace existe</h4>
+    <p>BATEXCI ERP est votre outil de travail pour gérer vos négociations : chaque client, chaque échange, chaque document reste au même endroit sécurisé, pour que vous puissiez vous concentrer sur l'essentiel -- convaincre et vendre. L'Espace Commercial réunit les 5 supports que vous utilisez pour ça ; ce sont ces mêmes outils que vous retrouverez dans votre Salle de Négociation pour les montrer ou les envoyer à un client précis.</p>
 
     <h4>Les 5 outils, un par un</h4>
     <div class="g-info-outil"><b>Présentation Exécutive</b><span>La vitrine produit -- les 8 Blocs Fonctionnels de la plateforme, en un coup d'œil. À montrer en tout premier, à un prospect qui découvre EVOTEX.</span></div>
@@ -1720,8 +1720,8 @@ function basculerPopoverInfoHub(ancre) {
     <p><b>« Partager »</b>, sur chaque carte ici : copie un lien libre d'accès, verrouillé sur cette seule page (ou tout le site avec « Partager toute l'application », en bas). N'importe qui reçoit ce lien peut l'ouvrir, sans compte -- utile pour un premier contact ou un prospect pas encore inscrit.</p>
     <p><b>« Envoyer au client »</b>, depuis la Salle de Négociation (jamais ici) : ajoute l'outil -- entier, ou une seule page/section précise -- à « Mes Documents » d'UN client déjà membre d'une négociation. Il le retrouve dans son propre espace, après connexion, à tout moment.</p>
 
-    <h4>Le même contenu, des deux côtés</h4>
-    <p>Il n'existe pas de version "client" séparée : la page que vous consultez ici, celle qu'un lien "Partager" ouvre, et celle qu'un client retrouve dans "Mes Documents" après un envoi depuis la Salle de Négociation sont rigoureusement la même -- même texte, mêmes images, même mise en page.</p>
+    <h4>Ce que vous voyez, votre client le voit</h4>
+    <p>Ce que vous consultez ici est exactement ce que reçoit votre client -- par un lien partagé, ou dans son propre espace après un envoi depuis la Salle de Négociation. Vous pouvez vous y fier sans surprise le jour du rendez-vous : ce que vous montrez, c'est ce qu'il verra.</p>
   </div>`;
   ancre.insertAdjacentHTML('beforeend', html);
   // Se ferme sur un clic n'importe où ailleurs sur la page -- jamais sur un
@@ -2386,7 +2386,7 @@ const GUIDE_NEGOCIATEUR = [
     ['Notes privées', 'Pour vous seul et la Direction, jamais visibles du client.'],
   ]},
   { titre: 'Les outils de négociation', blocs: [
-    ['Les 5 outils', 'Présentation Exécutive, Cahier des Charges, Grille de Licences, Socle de Lancement, Tour de l\'Application — le vrai contenu du site public, affiché directement ici, jamais une maquette à part. Ce sont ces 5 mêmes outils que vous retrouvez dans Espace Commercial (voir plus bas) : la page que vous ouvrez ici est rigoureusement identique à celle que le client reçoit.'],
+    ['Les 5 outils', 'Présentation Exécutive, Cahier des Charges, Grille de Licences, Socle de Lancement, Tour de l\'Application — vos 5 supports de vente, prêts à montrer en rendez-vous ou à transmettre au client. Ce sont ces mêmes outils que vous retrouvez dans Espace Commercial (voir plus bas) : ce que vous ouvrez ici est exactement ce que votre client reçoit.'],
     ['« Recommandé à cette étape »', 'Un petit repère signale l\'outil que l\'étape en cours suggère d\'utiliser — jamais une obligation : vous restez libre de montrer ce que vous jugez utile, au moment où vous le jugez utile.'],
     ['Deux niveaux : l\'outil, puis ses pages', 'Cliquer une fois sur une carte d\'outil : si elle n\'a pas de sous-pages (Cahier des Charges, Tour de l\'Application), tout s\'affiche directement en grand en dessous. Si elle en a (Présentation, Socle, Licences), une deuxième bande s\'ouvre juste en dessous de la première, avec une vignette par page/section et un bouton « Tout envoyer » -- la première bande (les 5 outils) ne disparaît pas, les deux restent visibles l\'une sous l\'autre.'],
     ['Cliquer VS envoyer -- deux boutons différents', 'Cliquer sur le nom ou l\'image d\'une vignette l\'affiche en grand plus bas, exactement ce que le client verrait -- ça n\'envoie rien. Seule la flèche ➜ à droite de la vignette envoie réellement. Une fois envoyée, la flèche devient un ✓ vert : c\'est ce ✓ qui sert aussi à annuler (voir Exemple 4).'],
@@ -2410,7 +2410,7 @@ const GUIDE_NEGOCIATEUR = [
     ['Naviguer sans revenir à l\'en-tête', 'Une fois une page ou section ouverte en grand, deux flèches rondes (précédent/suivant) restent affichées à l\'écran, même en défilant -- elles avancent dans les mêmes pages/sections que les vignettes, désactivées au premier et au dernier élément.'],
   ]},
   { titre: 'Espace Commercial et partage', blocs: [
-    ['À quoi sert cette page', 'Le même site public, dans son intégralité, affiché ici pour le consulter ou vous en inspirer avant un rendez-vous -- pas un catalogue à part, la petite ampoule 💡 en haut de cette page détaille chacun des 5 outils.'],
+    ['À quoi sert cette page', 'Vos 5 supports de vente réunis, à consulter avant un rendez-vous ou pour vous rafraîchir la mémoire sur un outil -- la petite ampoule 💡 en haut de cette page les détaille chacun.'],
     ['Bouton « Partager » sur chaque carte', 'Copie un lien verrouillé sur CETTE page précise. Le destinataire ne peut atteindre aucune autre page du site, même en modifiant l\'adresse à la main -- jamais le même mécanisme qu\'« Envoyer au client » (Exemples ci-dessus) : ce lien fonctionne pour n\'importe qui le reçoit, sans compte, alors qu\'« Envoyer au client » dépose le document dans « Mes Documents » d\'un membre déjà identifié.',
       'Un prospect pas encore intégré à une négociation demande à voir le Tour de l\'Application : ouvrez Espace Commercial, cliquez « Partager » sur sa carte, collez le lien où vous voulez (WhatsApp, email...).'],
     ['« Partager toute l\'application »', 'Un lien qui donne accès à tout le site, en navigation libre -- utile si une session en direct dans la Salle de Négociation n\'est pas possible.'],
