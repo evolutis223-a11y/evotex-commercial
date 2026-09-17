@@ -1355,7 +1355,7 @@ function rendreSidebar() {
       html += item('rh', 'RH & Personnel');
       html += item('boite-noire', 'Boîte noire');
       html += item('calculateur', 'Comptabilité');
-      html += item('conventions', 'Conventions');
+      html += item('conventions', 'Documents');
     }
   }
   html += `<div class="g-sidebar-bas"><div class="g-sidebar-user">${escapeHtml(etat.moi.nom)}</div><button id="btn-deconnexion" title="Déconnexion"><span class="g-nav-icone">${iconeDeconnexion()}</span><span class="g-btn-label">Déconnexion</span></button></div>`;
@@ -1695,7 +1695,7 @@ function rafraichirTableauBord() {
       </button>
       <button class="tb-outil-carte" data-panneau="conventions">
         <div class="tb-outil-icone" style="background:linear-gradient(135deg,#7f77dd,#3c3489)"></div>
-        <div class="tb-outil-nom">Conventions</div>
+        <div class="tb-outil-nom">Documents</div>
         <div class="tb-outil-desc">${s(CONVENTIONS.length, 'document')}</div>
       </button>
     </div>
@@ -2035,7 +2035,7 @@ async function verifierSurveillanceTickets() {
 
 function rendreConventions() {
   document.getElementById('verrou-bandeau').innerHTML = '';
-  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Conventions & Modèles</div>
+  document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Documents</div>
     <div class="g-hero-sous">Documents contractuels réels de l'équipe — jamais montrés au client.</div></div>`;
   attacherBoutonRetour();
   document.getElementById('corps').innerHTML = `<div class="g-card"><h2>Documents</h2><div class="g-liste">` +
