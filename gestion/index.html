@@ -4774,7 +4774,7 @@ function apercuOutil(id) {
   if (id === 'licences') return `<div class="g-vignette-mock g-mock-licences"><img src="/assets/img/licence-vue-ensemble.png" alt=""></div>`;
   if (id === 'socle') return `<div class="g-vignette-mock g-mock-socle">
     <div class="mock-feuillet" style="--i:2"></div><div class="mock-feuillet" style="--i:1"></div><div class="mock-feuillet" style="--i:0"></div></div>`;
-  if (id === 'captures') return `<div class="g-vignette-mock g-mock-captures"><img src="/assets/img/tour-de-controle.png" alt=""></div>`;
+  if (id === 'tour-application') return `<div class="g-vignette-mock g-mock-captures"><img src="/assets/img/tour-tableau-de-bord.png" alt=""></div>`;
   return '<div class="g-vignette-mock"></div>';
 }
 
@@ -4790,7 +4790,7 @@ function apercuOutil(id) {
 // en haut dès l'ouverture de l'outil, et les 4 captures dans la bande de
 // composants juste en dessous restent, elles, des images statiques -- cf.
 // OUTILS_EN_IMAGE_SI_COMPOSANT plus bas.
-const CLE_VUE_PAR_OUTIL = { presentation: 'presentation', cdc: 'besoins', licences: 'licences', socle: 'socle' };
+const CLE_VUE_PAR_OUTIL = { presentation: 'presentation', cdc: 'besoins', licences: 'licences', socle: 'socle', 'tour-application': 'tourApplication' };
 
 // Légende du dossier d'échange -- distincte du reste : pas de "Envoyer au
 // client" à sens unique, mais dépôt bidirectionnel + retrait + promotion
