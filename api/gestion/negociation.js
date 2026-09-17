@@ -60,6 +60,11 @@ const TYPES_AUDIO_AUTORISES = ["audio/webm", "audio/ogg", "audio/mp4", "audio/mp
 const TAILLE_MAX_VOCAL_OCTETS = 4 * 1024 * 1024;
 const DUREE_MAX_VOCAL_SECONDES = 10 * 60;
 
+// Messages de bienvenue automatiques (retour du 17/09/2026), postés une
+// seule fois, à la toute première arrivée d'un membre dans une négociation.
+const MESSAGE_BIENVENUE_CLIENT = "Bonjour et bienvenue ! Je suis votre interlocuteur EVOTEX pour ce projet. Vous retrouverez ici l'avancement de votre dossier, les documents que nous vous transmettons, et vous pouvez m'écrire directement à tout moment. Le Guide (icône en haut) répond aux questions les plus courantes sur votre espace.";
+const MESSAGE_BIENVENUE_EQUIPE = "Bienvenue dans l'équipe de négociation ! Ce fil est réservé en interne, jamais visible du client -- utilisez-le pour échanger sur le dossier. Le Guide, dans le menu, détaille votre rôle et ce que vous pouvez faire.";
+
 // Filtre de langage (retour du 14/09/2026) -- "qu'un message lui dise
 // clairement que ces mots ne sont pas acceptés sur cette plateforme".
 // Uniquement les messages texte (rien à filtrer sur un vocal). Comparaison
@@ -474,11 +479,26 @@ async function gerer_post(req, res, session) {
       }
       utilisateurId = inseres[0].id;
     }
+    // Message de bienvenue automatique (retour du 17/09/2026 -- "un premier
+    // message de support leur souhaitant la bienvenue... pour les mettre
+    // dans le bain") -- uniquement à la toute première arrivée dans CETTE
+    // négociation, jamais rejoué si on modifie ensuite le rôle d'un membre
+    // déjà présent (on conflict ci-dessous mettrait sinon le même message à
+    // chaque édition).
+    const dejaMembre = await sql()`select 1 from membres_negociation where negociation_id = ${negociationId} and utilisateur_id = ${utilisateurId} limit 1`;
+    const premiereArrivee = dejaMembre.length === 0;
     await sql()`
       insert into membres_negociation (negociation_id, utilisateur_id, role, titre_autre)
       values (${negociationId}, ${utilisateurId}, ${role}, ${role === "autre" ? titreAutre : null})
       on conflict (negociation_id, utilisateur_id) do update set role = excluded.role, actif = true, titre_autre = excluded.titre_autre
     `;
+    if (premiereArrivee) {
+      if (role === "client") {
+        await sql()`insert into messages_client (negociation_id, auteur_id, texte) values (${negociationId}, ${session.utilisateurId}, ${MESSAGE_BIENVENUE_CLIENT})`;
+      } else {
+        await sql()`insert into messages (negociation_id, auteur_id, texte) values (${negociationId}, ${session.utilisateurId}, ${MESSAGE_BIENVENUE_EQUIPE})`;
+      }
+    }
     res.status(200).json({ ok: true });
     return;
   }
