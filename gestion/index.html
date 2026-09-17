@@ -1597,28 +1597,27 @@ function cleVueDepuisHash(hash) {
   return 'hub';
 }
 
-// ancreId (17/09/2026, "decoupage chirurgical" de la Presentation Executive
-// en 4 sous-outils reels) : apres montage, saute directement a l'element
-// portant cet id dans la page reelle -- accroche/modules/pourquoi/cta y
-// existent desormais (js/presentation.js). Sans effet si l'id n'existe pas
-// dans la page (ex. Socle, dont seules 3 pages sur 12 ont une vraie ancre --
-// cf. rapport du 17/09/2026 -- ou un outil qui n'a pas de sous-decoupage) :
-// aucun risque a passer ancreId partout, un querySelector qui ne trouve
-// rien ne fait simplement rien.
+// ancreId : deux mecanismes bien distincts selon la vue, jamais les deux a
+// la fois sur la meme vue -- retour du 17/09/2026.
+// - Presentation ("decoupage chirurgical" en 4 sous-outils) est une page
+//   longue et defilable, sans notion de page courante : mount() l'ignore,
+//   c'est le scrollIntoView ci-dessous qui saute a l'element accroche/
+//   modules/pourquoi/cta (js/presentation.js).
+// - Socle est un diaporama qui n'affiche qu'UNE page a la fois : mount()
+//   consomme l'ancre lui-meme (voir plus bas) pour choisir la bonne page
+//   des le montage. scrollIntoView y serait non seulement inutile mais
+//   nuisible : la cible vit dans une scene mise a l'echelle
+//   (transform:scale) au sein d'une section min-height:100vh, et le calcul
+//   de scrollIntoView s'appuie sur les dimensions NON mises a l'echelle --
+//   il fait alors defiler bien plus que necessaire et pousse "Retour au
+//   hub" hors ecran (bug rapporte le 17/09/2026 : un client se retrouvait
+//   bloque au milieu de la page, sans aucun moyen visible d'en sortir).
 function montrerVueReelle(containerEl, cleVue, ancreId) {
   const vue = window.Views && window.Views[cleVue];
   if (!vue) { containerEl.innerHTML = '<div class="g-hint">Contenu introuvable.</div>'; return; }
   containerEl.innerHTML = vue.render();
-  // L'ancre est aussi transmise à mount() (pas seulement au scrollIntoView
-  // ci-dessous) -- indispensable pour le Socle de Lancement : c'est un
-  // diaporama qui n'affiche qu'UNE page à la fois (choisie une fois pour
-  // toutes au montage), pas une page longue et défilable comme Présentation
-  // -- ici, window.location.hash (celui de la Salle de Négociation) ne
-  // correspond jamais à une page du Socle, donc sans ce relais explicite il
-  // affichait toujours la première page quel que soit le clic (retour du
-  // 17/09/2026). Sans effet pour les autres vues, qui ignorent ce 2e argument.
   if (typeof vue.mount === 'function') vue.mount(containerEl, ancreId ? { ancre: ancreId } : undefined);
-  if (ancreId) {
+  if (ancreId && cleVue !== 'socle') {
     const cible = containerEl.querySelector('#' + CSS.escape(ancreId));
     if (cible) cible.scrollIntoView({ behavior: 'auto', block: 'start' });
   }
