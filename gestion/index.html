@@ -448,6 +448,18 @@
   .g-grand-apercu { flex: 1; display: flex; flex-direction: column; background: #fff; border: 1.5px solid var(--evx-blue-light); border-radius: 16px;
     overflow: hidden; box-shadow: 0 14px 34px rgba(26,58,99,0.08); }
   .g-grand-image { flex: 1; min-height: 200px; position: relative; overflow: auto; }
+  /* Les vues reelles (Presentation, Socle...) embarquent chacune leurs propres
+     liens "Retour au hub"/"Retour aux licences" (.evx-retour, plus le lien
+     "Retour aux licences" propre a 2 pages du Socle) -- utiles sur le vrai
+     site public, mais morts ici : dans la Salle de Negociation, ils changent
+     juste window.location.hash sans que rien n'y reagisse (etat.panneau
+     n'est jamais "hub"). Masques plutot que cables, car ce n'est pas une
+     vraie sortie de la Salle -- retour du 17/09/2026, un client confus par
+     des liens qui ne menaient nulle part. */
+  /* !important requis pour a[href="#/licences"] : ce lien porte un style
+     inline (display:inline-flex, pose directement dans le HTML genere par
+     socle-lancement.js) qui l'emporterait sinon sur cette regle externe. */
+  #grand-image .evx-retour, #grand-image a[href="#/licences"] { display: none !important; }
   /* Navigation precedent/suivant entre sous-elements d'un meme outil (retour
      du 17/09/2026) -- "pour que l'utilisateur puisse avancer sans revenir
      jusqu'a l'entete ou rechoisir un autre numero". position:fixed (jamais
@@ -2281,11 +2293,12 @@ const GUIDE_DIRECTION = [
 
 const GUIDE_NEGOCIATEUR = [
   { titre: 'Votre rôle', blocs: [
-    ['Ce que vous représentez', 'Vous portez EVOTEX auprès du client, dans le cadre d\'une négociation précise. Vous ne voyez que ce qui concerne votre ou vos négociations.'],
+    ['Ce que vous représentez', 'Vous portez EVOTEX auprès du client, dans le cadre d\'une négociation précise. Vous ne voyez que ce qui concerne votre ou vos négociations — si on vous en confie plusieurs, chacune a sa propre Salle, ses propres documents et son propre tchat, jamais mélangés.'],
+    ['Le mur de rôle', 'En haut de la Salle de Négociation, l\'avatar de chaque membre (équipe et client), avec un point vert s\'il est en ligne. Cliquer dessus affiche simplement son nom et son rôle — vous ne pouvez agir sur aucun compte, ce menu est réservé à la Direction.'],
   ]},
   { titre: 'Ce que vous pouvez faire', blocs: [
     ['Vos deux pages', 'L\'Espace Commercial (le site public, pour vous y référer ou vous en inspirer) et votre Salle de Négociation — le reste ne vous concerne pas.'],
-    ['Faire avancer le dossier', 'Les 6 étapes de la négociation, cliquables au fil de l\'avancement réel.'],
+    ['Faire avancer le dossier', 'Les 6 étapes de la négociation, cliquables dans n\'importe quel ordre — ce ne sont pas des cases à cocher dans un ordre imposé, seulement un repère de l\'avancement réel. Chaque étape affiche un petit conseil suggérant l\'outil le plus utile à ce moment-là.'],
     ['Discuter', 'Deux fils séparés — le tchat d\'ÉQUIPE (avec la Direction, jamais vu du client) et le tchat DIRECT avec le client. Ne confondez jamais les deux — dans les deux, vous pouvez écrire un message, joindre un fichier, ou envoyer un vocal, à tout moment.'],
     ['Le dossier d\'échange', 'Déposer ou recevoir des fichiers avec le client, dans les deux sens.'],
     ['Notes privées', 'Pour vous seul et la Direction, jamais visibles du client.'],
@@ -2300,14 +2313,13 @@ const GUIDE_NEGOCIATEUR = [
     ['Sous-vignettes de Présentation et Socle', 'Ces deux outils affichent en dessous de petites vignettes numérotées (les 4 sections de la Présentation, les 12 pages du Socle) : cliquer sur l\'une d\'elles ouvre directement la bonne section ou la bonne page en grand, avec des flèches précédent/suivant pour avancer sans revenir à l\'en-tête. Vous pouvez envoyer l\'outil entier, ou une seule page/section précise si c\'est elle qui répond à la question du client.'],
   ]},
   { titre: 'Ce que vous ne pouvez pas faire', blocs: [
-    ['Hors de votre portée', 'RH & Personnel, Comptabilité, Boîte noire et Documents internes restent réservés à la Direction — ils n\'apparaissent même pas dans votre menu.'],
-    ['Membres', 'Vous ne pouvez ajouter personne vous-même — ni le client, ni un autre Négociateur, ni un Apporteur d\'affaires, ni un observateur « Autre ». Seule la Direction ajoute des membres, pour rester seule à décider qui rejoint une négociation.',
-      'Le client veut suivre son dossier en ligne : demandez à la Direction de lui créer son compte, avec son nom et son email.'],
+    ['Membres', 'Vous ne pouvez ajouter personne vous-même — ni le client, ni un autre Négociateur, ni un Apporteur d\'affaires, ni un observateur « Autre ».',
+      'Le client veut suivre son dossier en ligne : demandez au support de lui créer son compte, avec son nom et son email.'],
     ['Comptes', 'Vous ne pouvez pas réinitialiser un mot de passe ni forcer une déconnexion.'],
   ]},
   { titre: 'En cas de problème', blocs: [
-    ['Mot de passe oublié, ou compte bloqué « déjà connecté »', 'Contactez la Direction : elle peut réinitialiser votre mot de passe ou forcer votre déconnexion depuis votre menu.'],
-    ['Bandeau rouge « Ticket expiré »', 'Le lien d\'accès de l\'équipe a expiré — la négociation reste visible mais verrouillée (étapes et tchat client bloqués) jusqu\'à ce que la Direction le réactive.'],
+    ['Mot de passe oublié, ou compte bloqué « déjà connecté »', 'Contactez le support.'],
+    ['Bandeau rouge « Ticket expiré »', 'La négociation reste visible mais verrouillée (étapes et tchat client bloqués) jusqu\'à réactivation par le support.'],
   ]},
 ];
 
