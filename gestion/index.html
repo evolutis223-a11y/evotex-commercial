@@ -844,6 +844,17 @@
   .g-vocal-barres span:nth-child(4) { height: 14px; animation-delay: 0.45s; }
   .g-vocal-barres span:nth-child(5) { height: 10px; animation-delay: 0.6s; }
   @keyframes g-barre-vocale { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+  /* Étape de relecture -- retour du 17/09/2026 : "on a la possibilité
+     d'envoyer ou de supprimer, si possible même de le relire... un bouton
+     Play peut s'afficher... avec une petite croix". Réutilise exactement
+     le lecteur maison déjà utilisé pour écouter un vocal reçu (.g-lecteur-
+     vocal, voir plus haut) -- même composant, même geste, jamais un
+     second système -- juste posé dans la même bulle que l'enregistrement,
+     en neutre plutôt qu'en rouge (rien n'est plus "en cours"). */
+  .g-bulle-enregistrement.-relecture { background: #eef4fc; border-color: var(--evx-blue-light); color: var(--evx-blue); box-shadow: none; gap: 10px; padding: 0 12px; }
+  .g-vocal-annuler { width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%; border: none; background: rgba(220,38,38,0.1);
+    color: #dc2626; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+  .g-vocal-annuler:hover { background: rgba(220,38,38,0.18); }
 
   /* Icônes du pied de tchat (micro/trombone) -- retour du 14/09/2026 :
      "un gros bouton envoyer, un gros bouton avec un minuscule micro
@@ -860,18 +871,21 @@
      simple contour discret. */
   .g-btn-icone-tchat.-micro { background: var(--evx-blue); border-color: var(--evx-blue); color: #fff; }
   .g-btn-icone-tchat.-micro:hover { background: #1758a0; border-color: #1758a0; }
-  /* --niveau-vocal (0 à 1) vient du niveau réel capté par le micro
-     (AnalyserNode) -- l'anneau respire avec la voix, pas une animation
-     jouée au hasard (retour du 14/09/2026 : "être sûr que le micro est en
-     plein enregistrement"). Le silence prolongé arrête et envoie tout seul
-     -- voir SILENCE_LIMITE_MS dans le JS. */
-  .g-btn-icone-tchat.-enregistrement { --niveau-vocal: 0.3; background: #fdeaea; border-color: #dc2626; color: #dc2626; width: auto; padding: 0 12px;
-    font-size: 11px; font-weight: 800; gap: 5px; animation: g-pulse-vocal 1s ease-in-out infinite;
-    box-shadow: 0 0 0 calc(3px + 5px * var(--niveau-vocal)) rgba(220,38,38,calc(0.28 * var(--niveau-vocal) + 0.06)); }
-  .g-vocal-duree-enreg { font-variant-numeric: tabular-nums; }
-  @keyframes g-pulse-vocal { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-  /* Coché de confirmation, bref, à la fin de l'enregistrement -- retour du
-     14/09/2026 : "une animation... à la fin aussi de l'enregistrement". */
+  /* Retour du 17/09/2026 : "il y a déjà l'animation dans la barre de
+     saisie [.g-bulle-enregistrement, ci-dessous]... ça ne sert à rien de
+     faire une double animation sur l'icône elle-même" -- l'icône micro se
+     contente maintenant de changer de couleur (bleu -> rouge), plus de
+     pulsation ni de remplacement par un chronomètre : une seule source de
+     vérité pour "en train d'enregistrer", la bulle. */
+  .g-btn-icone-tchat.-enregistrement { background: #dc2626; border-color: #dc2626; color: #fff; }
+  /* Micro désactivé pendant qu'un vocal est en attente de relecture/envoi
+     (retour du 17/09/2026) -- on ne peut pas démarrer un nouvel
+     enregistrement tant que le précédent n'est pas envoyé ou supprimé. */
+  .g-btn-icone-tchat.-desactive { opacity: 0.4; pointer-events: none; }
+  /* Coché de confirmation, bref, au moment réel de l'envoi -- retour du
+     14/09/2026 : "une animation... à la fin aussi de l'enregistrement",
+     déplacé du "stop" (17/09/2026) vers l'envoi réel, maintenant que
+     l'arrêt et l'envoi sont deux étapes distinctes. */
   .g-btn-icone-tchat.-envoye { background: #e7f7ec; border-color: #16a34a; color: #16a34a; animation: g-envoye-pop 0.35s ease; }
   @keyframes g-envoye-pop { 0% { transform: scale(0.6); opacity: 0.4; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
 
@@ -1208,10 +1222,15 @@ function iconeBasculerVue() {
 // pendant qu'on parle"). Cachée par défaut ; basculerEnregistrementVocal()
 // la révèle/anime/cache.
 function rendreZoneEnregistrement(canal) {
-  return `<div class="g-bulle-enregistrement" id="zone-enreg-${canal}" hidden>
-    <div class="g-vocal-barres"><span></span><span></span><span></span><span></span><span></span></div>
-    <span class="g-vocal-minuteur">0:00</span>
-  </div>`;
+  // Coquille vide -- basculerEnregistrementVocal() pose le contenu "en
+  // cours d'enregistrement" (barres + chronomètre) et envoyerVocalEnAttente
+  // / la fin de l'enregistrement posent le contenu "relecture" (lecteur +
+  // croix) selon l'étape en cours (retour du 17/09/2026).
+  return `<div class="g-bulle-enregistrement" id="zone-enreg-${canal}" hidden></div>`;
+}
+function htmlContenuEnregistrementActif() {
+  return `<div class="g-vocal-barres"><span></span><span></span><span></span><span></span><span></span></div>
+    <span class="g-vocal-minuteur">0:00</span>`;
 }
 function iconeCoche() {
   return `<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.4 8.1 14 15.5 6.3"/></svg>`;
@@ -1445,6 +1464,24 @@ async function chargerNegociation() {
   etat.detail = detail;
   rendreSidebar();
   rendrePanneau();
+}
+
+// Rafraîchissement léger après une action qui ne touche QUE la messagerie
+// (poster/supprimer un message, un vocal, une pièce jointe) -- retour du
+// 17/09/2026 : "l'écran prend un coup" à chaque envoi, tout le poste de
+// travail (en-tête, bande d'outils) repassait par chargerNegociation() ->
+// rendrePanneau() -> un rendu complet pour un simple message. Seule la
+// colonne latérale affiche des messages ; rien d'autre à l'écran n'en
+// dépend. Utilisé aussi par le sondage silencieux des 12s (voir
+// sondageMessagesClient) -- fini le "coup" périodique sur tout l'écran.
+async function rafraichirMessagerie() {
+  const params = new URLSearchParams({ id: etat.negociationId });
+  if (etat.voirCommeId) params.set('voirComme', etat.voirCommeId);
+  const detail = await api('/api/gestion/negociation?' + params.toString());
+  if (!detail.ok) return;
+  etat.detail = detail;
+  rendreSidebar();
+  rendreColonneLaterale(detail);
 }
 
 function estDirection() {
@@ -4450,24 +4487,23 @@ async function sondageMessagesClient() {
     marquerChatVu();
   }
   // La colonne latérale reste visible quel que soit le panneau de la barre
-  // latérale gauche actif ; seule la scène "Négociation" a besoin d'un
-  // re-rendu complet.
-  if (etat.panneau === 'negociation') rendreNegociation();
-  else rendreColonneLaterale(detail);
+  // latérale gauche actif -- retour du 17/09/2026 : passer par le
+  // rendu complet de la scène Négociation ici (comme avant) donnait "un
+  // coup" à tout l'écran (en-tête, bande d'outils) toutes les 12s pour un
+  // simple message ; seule la colonne latérale a besoin d'être mise à jour.
+  rendreColonneLaterale(detail);
 }
 
 
 // ---- Salle de Négociation ----
 function rendreNegociation() {
   const d = etat.detail;
-  // Préserve les brouillons en cours de saisie et la position de défilement
-  // du tchat à travers un re-rendu déclenché par le sondage silencieux des
-  // nouveaux messages (retour du 14/09/2026 -- ne jamais effacer ce que la
-  // personne est en train d'écrire).
-  const brouillonNotes = document.getElementById('mes-notes')?.value;
-  const brouillonChat = document.getElementById('chat-colonne-texte')?.value;
-  const chatListeAvant = document.getElementById('chat-colonne-liste');
-  const chatEnBas = chatListeAvant ? (chatListeAvant.scrollTop + chatListeAvant.clientHeight >= chatListeAvant.scrollHeight - 12) : true;
+  // La préservation des brouillons et de la position de défilement de la
+  // colonne latérale (tchat/notes) vit désormais dans rendreColonneLaterale
+  // elle-même (retour du 17/09/2026) -- avant, elle n'était appliquée
+  // qu'ici, donc uniquement quand ce rendu complet passait ; le tchat
+  // équipe (jamais couvert) et le rafraîchissement léger du sondage/envoi
+  // en avaient toujours été privés.
 
   // Retour du 16/09/2026 : "je vois exactement comme il voit... s'il
   // apparaît dans plusieurs négociations, je verrai comme il voit son
@@ -4698,13 +4734,6 @@ function rendreNegociation() {
 
   rendreColonneLaterale(d);
   attacherEvenementsNegociation(d);
-
-  const notesEl = document.getElementById('mes-notes');
-  if (notesEl && brouillonNotes !== undefined) notesEl.value = brouillonNotes;
-  const chatEl = document.getElementById('chat-colonne-texte');
-  if (chatEl && brouillonChat !== undefined) chatEl.value = brouillonChat;
-  const chatListeApres = document.getElementById('chat-colonne-liste');
-  if (chatListeApres && chatEnBas) chatListeApres.scrollTop = chatListeApres.scrollHeight;
 }
 
 function iconeDossier(aDesFichiers) {
@@ -4918,13 +4947,22 @@ function initialiserLecteursVocaux(racine) {
 // que le micro est en plein enregistrement" -- un AnalyserNode lit le
 // niveau réel du micro (pas une animation jouée au hasard) et pilote
 // l'intensité de l'anneau pulsé ; le silence prolongé (3,5s sans niveau
-// perceptible) arrête et envoie automatiquement, comme une note vocale de
-// messagerie classique -- pas besoin de rester appuyé.
+// perceptible) arrête, comme une note vocale de messagerie classique --
+// pas besoin de rester appuyé.
+//
+// Retour du 17/09/2026, tranché après un premier essai réel raté ("aucun
+// contrôle... rien ne marche, tout est bloqué") : l'arrêt (clic ou
+// silence) n'envoie plus jamais tout seul -- il bascule vers une étape de
+// relecture (vocalEnAttente) où on choisit explicitement d'écouter,
+// d'envoyer ou de supprimer sans rien envoyer. Un seul vocal en attente à
+// la fois, comme l'enregistrement lui-même.
 const SILENCE_LIMITE_MS = 3500;
 let enregistrementVocal = null;
+let vocalEnAttente = null;
 async function basculerEnregistrementVocal(canal) {
   const boutonId = canal === 'client' ? 'btn-vocal-chat' : 'btn-vocal-interne';
   const zoneId = 'zone-enreg-' + canal;
+  if (vocalEnAttente) return;
   if (enregistrementVocal) {
     if (enregistrementVocal.canal === canal) enregistrementVocal.recorder.stop();
     return;
@@ -4954,45 +4992,24 @@ async function basculerEnregistrementVocal(canal) {
   const debut = Date.now();
   let dernierSon = debut;
   recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
-  recorder.onstop = async () => {
+  recorder.onstop = () => {
     if (contexteAudio) contexteAudio.close();
     flux.getTracks().forEach(t => t.stop());
     clearInterval(enregistrementVocal.minuterieId);
     enregistrementVocal = null;
-    const zone = document.getElementById(zoneId);
-    if (zone) { zone.hidden = true; zone.style.removeProperty('--niveau-vocal'); }
     const btn = document.getElementById(boutonId);
-    if (btn) {
-      // Confirmation visuelle nette de fin d'enregistrement (retour du
-      // 14/09/2026) -- un coché vert bref, avant de revenir au micro.
-      btn.classList.remove('-enregistrement');
-      btn.style.removeProperty('--niveau-vocal');
-      btn.classList.add('-envoye');
-      btn.innerHTML = iconeCoche();
-      setTimeout(() => {
-        const btnActuel = document.getElementById(boutonId);
-        if (btnActuel && btnActuel.classList.contains('-envoye')) { btnActuel.classList.remove('-envoye'); btnActuel.innerHTML = iconeMicro(); }
-      }, 1100);
-    }
+    if (btn) btn.classList.remove('-enregistrement');
     const dureeSecondes = Math.round((Date.now() - debut) / 1000);
-    if (dureeSecondes < 1 || !chunks.length) return;
+    const zone = document.getElementById(zoneId);
+    if (dureeSecondes < 1 || !chunks.length) { if (zone) { zone.hidden = true; zone.className = 'g-bulle-enregistrement'; zone.innerHTML = ''; } return; }
     const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
-    const contenuBase64 = await new Promise((resolve, reject) => {
-      const lecteur = new FileReader();
-      lecteur.onload = () => resolve(lecteur.result.split(',')[1] || '');
-      lecteur.onerror = reject;
-      lecteur.readAsDataURL(blob);
-    });
-    const action = canal === 'client' ? 'poster_message_client_vocal' : 'poster_message_vocal';
-    const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ negociationId: etat.negociationId, action, audioBase64: contenuBase64, typeMime: blob.type, dureeSecondes }) });
-    if (!rep.ok) alert(rep.erreur || "Échec de l'envoi du vocal.");
-    await chargerNegociation();
+    vocalEnAttente = { canal, blob, dureeSecondes, url: URL.createObjectURL(blob) };
+    rendreZoneRelecture(canal);
   };
   enregistrementVocal = { recorder, canal, minuterieId: null };
   recorder.start();
   const zoneDebut = document.getElementById(zoneId);
-  if (zoneDebut) zoneDebut.hidden = false;
+  if (zoneDebut) { zoneDebut.className = 'g-bulle-enregistrement'; zoneDebut.innerHTML = htmlContenuEnregistrementActif(); zoneDebut.hidden = false; }
   enregistrementVocal.minuterieId = setInterval(() => {
     if (Date.now() - debut > 10 * 60 * 1000) { recorder.stop(); return; }
     let niveau = 0;
@@ -5003,12 +5020,10 @@ async function basculerEnregistrementVocal(canal) {
       else if (Date.now() - dernierSon > SILENCE_LIMITE_MS) { recorder.stop(); return; }
     }
     const intensite = Math.min(1, niveau / 50).toFixed(2);
+    // Une seule couleur suffit sur le bouton (retour du 17/09/2026) -- plus
+    // de chronomètre ni de halo dessus, voir .-enregistrement dans le CSS.
     const btn = document.getElementById(boutonId);
-    if (btn) {
-      btn.classList.add('-enregistrement');
-      btn.style.setProperty('--niveau-vocal', intensite);
-      btn.innerHTML = `<span class="g-vocal-duree-enreg">${formaterDuree((Date.now() - debut) / 1000)}</span>`;
-    }
+    if (btn) btn.classList.add('-enregistrement');
     // La bande sonore vit DANS la case de saisie, pas sur le bouton (retour
     // du 14/09/2026 : "pas le micro, mais LA BULLE... qu'il y ait un
     // mouvement... pendant tout le temps où on s'exprime") -- retrouvée par
@@ -5021,6 +5036,90 @@ async function basculerEnregistrementVocal(canal) {
       if (minuteur) minuteur.textContent = formaterDuree((Date.now() - debut) / 1000);
     }
   }, 150);
+}
+
+// Étape de relecture, après l'arrêt d'un enregistrement (retour du
+// 17/09/2026, voir plus haut) -- réutilise le lecteur maison des vocaux déjà
+// reçus (.g-lecteur-vocal / initialiserLecteursVocaux), juste posé dans la
+// bulle plutôt que dans un message, en attendant une décision explicite.
+function rendreZoneRelecture(canal) {
+  const zoneId = 'zone-enreg-' + canal;
+  const boutonId = canal === 'client' ? 'btn-vocal-chat' : 'btn-vocal-interne';
+  const zone = document.getElementById(zoneId);
+  if (!zone || !vocalEnAttente) return;
+  zone.className = 'g-bulle-enregistrement -relecture';
+  zone.hidden = false;
+  zone.style.removeProperty('--niveau-vocal');
+  zone.innerHTML = `<div class="g-lecteur-vocal" data-src="${vocalEnAttente.url}">
+      <button type="button" class="g-lecteur-play" title="Écouter">${iconePlay()}</button>
+      <div class="g-lecteur-corps">
+        <div class="g-lecteur-barre"><div class="g-lecteur-progression"></div></div>
+        <span class="g-lecteur-duree">${formaterDuree(vocalEnAttente.dureeSecondes)}</span>
+      </div>
+      <audio preload="none" hidden></audio>
+    </div>
+    <button type="button" class="g-vocal-annuler" title="Supprimer, ne pas envoyer">✕</button>`;
+  initialiserLecteursVocaux(zone);
+  zone.querySelector('.g-vocal-annuler').addEventListener('click', () => annulerVocalEnAttente(canal));
+  const btn = document.getElementById(boutonId);
+  if (btn) btn.classList.add('-desactive');
+}
+
+function annulerVocalEnAttente(canal) {
+  if (!vocalEnAttente || vocalEnAttente.canal !== canal) return;
+  URL.revokeObjectURL(vocalEnAttente.url);
+  vocalEnAttente = null;
+  const zoneId = 'zone-enreg-' + canal;
+  const zone = document.getElementById(zoneId);
+  if (zone) { zone.hidden = true; zone.className = 'g-bulle-enregistrement'; zone.innerHTML = ''; }
+  const boutonId = canal === 'client' ? 'btn-vocal-chat' : 'btn-vocal-interne';
+  const btn = document.getElementById(boutonId);
+  if (btn) btn.classList.remove('-desactive');
+}
+
+async function envoyerVocalEnAttente(canal) {
+  if (!vocalEnAttente || vocalEnAttente.canal !== canal) return;
+  const { blob, dureeSecondes, url } = vocalEnAttente;
+  const boutonId = canal === 'client' ? 'btn-vocal-chat' : 'btn-vocal-interne';
+  const contenuBase64 = await new Promise((resolve, reject) => {
+    const lecteur = new FileReader();
+    lecteur.onload = () => resolve(lecteur.result.split(',')[1] || '');
+    lecteur.onerror = reject;
+    lecteur.readAsDataURL(blob);
+  });
+  const action = canal === 'client' ? 'poster_message_client_vocal' : 'poster_message_vocal';
+  const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ negociationId: etat.negociationId, action, audioBase64: contenuBase64, typeMime: blob.type, dureeSecondes }) });
+  if (!rep.ok) {
+    // Jamais alert() ici -- retour du 17/09/2026 : une alerte bloquante,
+    // au tout premier essai raté, avait donné l'impression que "tout est
+    // bloqué" sur toute la page. On garde la relecture en place (rien de
+    // perdu) et on prévient juste dans la bulle, sans rien geler.
+    const zone = document.getElementById('zone-enreg-' + canal);
+    if (zone) {
+      let hint = zone.querySelector('.g-hint-erreur-vocal');
+      if (!hint) { hint = document.createElement('div'); hint.className = 'g-hint-erreur-vocal'; hint.style.cssText = 'width:100%;color:#dc2626;font-size:11px;font-weight:700;text-align:center'; zone.appendChild(hint); }
+      hint.textContent = rep.erreur || "Échec de l'envoi -- réessayez.";
+    }
+    return;
+  }
+  URL.revokeObjectURL(url);
+  vocalEnAttente = null;
+  const zone = document.getElementById('zone-enreg-' + canal);
+  if (zone) { zone.hidden = true; zone.className = 'g-bulle-enregistrement'; zone.innerHTML = ''; }
+  const btn = document.getElementById(boutonId);
+  if (btn) {
+    btn.classList.remove('-desactive');
+    // Confirmation visuelle nette d'envoi (retour du 14/09/2026) -- un
+    // coché vert bref, avant de revenir au micro.
+    btn.classList.add('-envoye');
+    btn.innerHTML = iconeCoche();
+    setTimeout(() => {
+      const btnActuel = document.getElementById(boutonId);
+      if (btnActuel && btnActuel.classList.contains('-envoye')) { btnActuel.classList.remove('-envoye'); btnActuel.innerHTML = iconeMicro(); }
+    }, 1100);
+  }
+  await rafraichirMessagerie();
 }
 
 function apercuOutil(id) {
@@ -5570,8 +5669,25 @@ function rendreColonneLaterale(d) {
   // texte) toutes les 12s, coupant l'enregistrement en plein vol -- plus
   // de bouton pour l'arrêter, plus de bulle pour l'envoyer (retour du
   // 17/09/2026 : "les secondes comptaient, il n'y a pas moyen d'arrêter...
-  // pas moyen d'envoyer non plus le vocal").
-  if (enregistrementVocal) return;
+  // pas moyen d'envoyer non plus le vocal"). Même garde pour un vocal en
+  // attente de relecture/envoi -- vocalEnAttente (retour du 17/09/2026) :
+  // rien ne doit effacer ce choix en attente non plus.
+  if (enregistrementVocal || vocalEnAttente) return;
+  // Préserve les brouillons de saisie (tchat client, tchat équipe, notes)
+  // et la position de défilement des deux tchats à travers un re-rendu
+  // déclenché par le sondage silencieux ou un envoi -- retour du 17/09/2026 :
+  // avant, seul le tchat client en bénéficiait (et seulement via le rendu
+  // complet de rendreNegociation) ; le tchat équipe n'avait aucune mémoire
+  // de défilement, d'où "le vocal descend, on voit les anciens messages".
+  const brouillonNotes = document.getElementById('mes-notes')?.value;
+  const brouillonChat = document.getElementById('chat-colonne-texte')?.value;
+  const brouillonMsg = document.getElementById('msg-texte')?.value;
+  const enBasDe = (id) => {
+    const el = document.getElementById(id);
+    return el ? (el.scrollTop + el.clientHeight >= el.scrollHeight - 12) : true;
+  };
+  const chatEnBas = enBasDe('chat-colonne-liste');
+  const interneEnBas = enBasDe('chat-interne-liste');
   // Retour du 16/09/2026, tranché : le client garde cette même colonne
   // partagée -- mais UNIQUEMENT l'onglet Tchat (Notes/Échanges sont des
   // consignes internes, jamais pour lui). Forcé ici, pas juste caché --
@@ -5640,7 +5756,7 @@ function rendreColonneLaterale(d) {
   } else {
     const messages = d.messages || [];
     const peutEcrire = d.role !== 'client' && d.role !== 'apporteur' && d.role !== 'autre' && !d.voirComme;
-    corps = `<div class="g-msg-liste">${messages.length ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
+    corps = `<div class="g-msg-liste" id="chat-interne-liste">${messages.length ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
       : '<div class="g-hint">Aucun message pour l\'instant.</div>'}</div>`;
     pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
   }
@@ -5661,6 +5777,10 @@ function rendreColonneLaterale(d) {
 
   const btnEnvoyerChat = document.getElementById('btn-envoyer-chat-colonne');
   if (btnEnvoyerChat) btnEnvoyerChat.addEventListener('click', async () => {
+    // Retour du 17/09/2026 : le même bouton Envoyer sert aussi à confirmer
+    // un vocal en attente de relecture -- priorité au vocal, la case de
+    // saisie étant de toute façon masquée sous la bulle tant qu'il attend.
+    if (vocalEnAttente && vocalEnAttente.canal === 'client') { await envoyerVocalEnAttente('client'); return; }
     const champ = document.getElementById('chat-colonne-texte');
     const texte = champ.value.trim();
     if (!texte) return;
@@ -5671,7 +5791,7 @@ function rendreColonneLaterale(d) {
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message_client', texte }) });
     if (!rep.ok) { alert(rep.erreur || 'Échec.'); champ.value = texte; return; }
-    await chargerNegociation();
+    await rafraichirMessagerie();
   });
 
   // Pièce jointe du tchat client -- dépose dans le même dossier d'échange
@@ -5687,11 +5807,12 @@ function rendreColonneLaterale(d) {
     if (!depot) return;
     await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message_client', texte: '📎 Fichier partagé : ' + depot.nom + ' (voir Échange de Fichiers)' }) });
-    await chargerNegociation();
+    await rafraichirMessagerie();
   });
 
   const btnEnvoyerMsg = document.getElementById('btn-envoyer-message');
   if (btnEnvoyerMsg) btnEnvoyerMsg.addEventListener('click', async () => {
+    if (vocalEnAttente && vocalEnAttente.canal === 'interne') { await envoyerVocalEnAttente('interne'); return; }
     const champ = document.getElementById('msg-texte');
     const texte = champ.value.trim();
     if (!texte) return;
@@ -5699,7 +5820,7 @@ function rendreColonneLaterale(d) {
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message', texte }) });
     if (!rep.ok) { alert(rep.erreur || 'Échec.'); champ.value = texte; return; }
-    await chargerNegociation();
+    await rafraichirMessagerie();
   });
 
   const inputPieceJointeInterne = document.getElementById('input-piece-jointe-interne');
@@ -5711,7 +5832,7 @@ function rendreColonneLaterale(d) {
     if (!depot) return;
     await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ negociationId: etat.negociationId, action: 'poster_message', texte: '📎 Fichier partagé : ' + depot.nom + ' (voir Échange de Fichiers)' }) });
-    await chargerNegociation();
+    await rafraichirMessagerie();
   });
 
   const btnVocalChat = document.getElementById('btn-vocal-chat');
@@ -5729,7 +5850,7 @@ function rendreColonneLaterale(d) {
       const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ negociationId: etat.negociationId, action, id }) });
       if (!rep.ok) { alert(rep.erreur || 'Échec.'); return; }
-      await chargerNegociation();
+      await rafraichirMessagerie();
     });
   });
 
@@ -5749,8 +5870,18 @@ function rendreColonneLaterale(d) {
     });
   }
 
-  const listeEl = document.getElementById('chat-colonne-liste');
-  if (listeEl) listeEl.scrollTop = listeEl.scrollHeight;
+  // Restaure les brouillons et ne redescend en bas que si on y était déjà
+  // avant ce rendu (retour du 17/09/2026 -- jamais un défilement forcé qui
+  // arracherait quelqu'un en train de relire un ancien message).
+  if (notesEl && brouillonNotes !== undefined) notesEl.value = brouillonNotes;
+  const chatEl = document.getElementById('chat-colonne-texte');
+  if (chatEl && brouillonChat !== undefined) chatEl.value = brouillonChat;
+  const msgEl = document.getElementById('msg-texte');
+  if (msgEl && brouillonMsg !== undefined) msgEl.value = brouillonMsg;
+  const listeClient = document.getElementById('chat-colonne-liste');
+  if (listeClient && chatEnBas) listeClient.scrollTop = listeClient.scrollHeight;
+  const listeInterne = document.getElementById('chat-interne-liste');
+  if (listeInterne && interneEnBas) listeInterne.scrollTop = listeInterne.scrollHeight;
   initialiserLecteursVocaux(colonne);
 }
 
