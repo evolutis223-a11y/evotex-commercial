@@ -43,14 +43,17 @@ Views.tourApplication = {
         desc: "Proformas à valider, factures en attente de signature Direction, acomptes non atteints — la Comptabilité voit chaque dossier, jamais un chiffre agrégé sans détail derrière.",
         script: "Vous validez chaque document depuis votre écran, avec tout l'historique sous les yeux.",
         limite: "Le connecteur vers un logiciel comptable externe (SYSCOHADA/SAGE) rejoint la feuille de route Phase 2.",
-        overlay: [
-          { titre: 'La dérogation, tranchée à temps.', comment: 'Tarifs et clôtures financières, jamais en attente.' },
-          { titre: 'La proforma, validée en un clic.', comment: 'Avant facture, la Comptabilité tranche.' },
-          { titre: 'La facture, sans paperasse.', comment: 'Signature Direction, suivie jusqu\'au bout.' },
-          { titre: 'Le reste à payer, jamais oublié.', comment: 'Chaque acompte non atteint, identifié dossier par dossier.' },
-          { titre: 'La commission, calculée sans oubli.', comment: 'Chaque rôle commercial, son taux, à jour.' },
-          { titre: 'Chaque gramme, compté juste.', comment: '1er choix, 2e choix, chiffons — tout est tracé.' },
-        ],
+        overlay: {
+          box: { left: '13.5%', top: '71%', width: '36%', height: '18%' },
+          items: [
+            { titre: 'La dérogation, tranchée à temps.', comment: 'Tarifs et clôtures financières, jamais en attente.' },
+            { titre: 'La proforma, validée en un clic.', comment: 'Avant facture, la Comptabilité tranche.' },
+            { titre: 'La facture, sans paperasse.', comment: 'Signature Direction, suivie jusqu\'au bout.' },
+            { titre: 'Le reste à payer, jamais oublié.', comment: 'Chaque acompte non atteint, dossier par dossier.' },
+            { titre: 'La commission, calculée sans oubli.', comment: 'Chaque rôle commercial, son taux, à jour.' },
+            { titre: 'Chaque gramme, compté juste.', comment: '1er choix, 2e choix, chiffons — tout est tracé.' },
+          ],
+        },
         extra: {
           kicker: 'Rapport Financier de l\'Usine',
           img: '/assets/img/tour-rapport-financier.png',
@@ -112,6 +115,17 @@ Views.tourApplication = {
         desc: "Relances en attente, budget des commandes, accès rapide à ses outils — chaque commercial retrouve son activité réelle dès la connexion.",
         script: "Vous arrivez, tout est déjà là.",
         limite: '',
+        overlay: {
+          box: { left: '6%', top: '80.5%', width: '53%', height: '19.5%' },
+          items: [
+            { titre: 'Une seule entrée, la commande part.', comment: "Depuis l'écran, sans ressaisie ailleurs." },
+            { titre: 'Le suivi, sans avoir à demander.', comment: "L'avancement réel, à tout moment." },
+            { titre: 'La facture, sans paperasse.', comment: 'Facturation automatisée, à chaque dossier.' },
+            { titre: "Partout, sur n'importe quel écran.", comment: 'Smartphone, tablette ou bureau.' },
+            { titre: 'Des chiffres qui se calculent seuls.', comment: 'Objectifs, bilan, commissions à jour.' },
+            { titre: 'Une équipe comparable, en un coup d\'œil.', comment: 'Chaque commercial, côte à côte.' },
+          ],
+        },
         avantages: [
           { titre: 'Une seule entrée, la commande part', desc: "Prise de commande directe depuis l'écran, sans ressaisie ailleurs — le point de départ de tout le circuit." },
           { titre: 'Le suivi, sans avoir à demander', desc: "Chaque commercial voit l'avancement réel de ses dossiers, à tout moment, sans appeler la production." },
@@ -154,8 +168,8 @@ Views.tourApplication = {
             : `<div class="tour-screen-imgwrap">
                 <img src="${img}" alt="${b.nom} — capture d'écran réelle BATEXCI ERP" loading="lazy">
                 ${overlay ? `
-                  <div class="tour-overlay-row">
-                    ${overlay.map((o) => `
+                  <div class="tour-overlay-row" style="left:${overlay.box.left};top:${overlay.box.top};width:${overlay.box.width};height:${overlay.box.height}">
+                    ${overlay.items.map((o) => `
                       <div class="tour-overlay-item">
                         <p class="tour-overlay-title">${o.titre}</p>
                         <p class="tour-overlay-comment">${o.comment}</p>

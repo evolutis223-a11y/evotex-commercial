@@ -100,35 +100,33 @@
 .tour-screen-imgwrap { position: relative; }
 .tour-overlay-row {
   position: absolute;
-  left: 13.5%;
-  top: 72%;
-  width: 36%;
-  height: 16%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 1% 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   pointer-events: none;
 }
 .tour-overlay-item {
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 .tour-overlay-title {
   font-family: var(--font-script);
   font-weight: 700;
   color: var(--evx-blue);
-  font-size: clamp(7.5px, 1vw, 10.5px);
+  font-size: clamp(9px, 1.25vw, 14px);
   line-height: 1.05;
   margin: 0 0 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tour-overlay-comment {
-  font-size: clamp(5.5px, 0.56vw, 7.5px);
+  font-size: clamp(6.5px, 0.62vw, 8.5px);
   color: #3d4a5c;
   line-height: 1.15;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tour-screen-info {
