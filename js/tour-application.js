@@ -141,6 +141,13 @@ Views.tourApplication = {
           desc: "Vente comptoir d'articles déjà en stock — client, mode de retrait, articles, total — sans circuit de production ni signature à attendre. Un bonus déjà livré en Phase 1, au-delà du socle prévu.",
           script: "La vente au comptoir, en quelques clics.",
         },
+        bonusExtra: {
+          kicker: 'Outil bonus — Estimateur Commercial',
+          img: '/assets/img/tour-estimateur.png',
+          titre: 'Un estimateur, toujours à portée de main',
+          desc: "Accessible en un clic depuis n'importe quel écran de l'application — un calcul de prix instantané par type de produit, quantité, couleurs et régime (local ou export), pour répondre à un client au téléphone sans attendre. Purement indicatif : il ne crée ni ne modifie aucune commande réelle.",
+          script: "La réponse au client, avant qu'il ne raccroche.",
+        },
       },
       {
         n: 8, color: '#64748b', nom: 'Administration & Sécurité du Système', tag: 'System Administration',
@@ -226,6 +233,12 @@ Views.tourApplication = {
               ${b.extra ? `
                 <div style="margin-top:20px">
                   ${screenBlock(b, b.extra.titre, b.extra.desc, b.extra.img, null, b.extra.kicker, b.extra.script, b.extra.crop)}
+                </div>
+              ` : ''}
+
+              ${b.bonusExtra ? `
+                <div style="margin-top:20px">
+                  ${screenBlock(b, b.bonusExtra.titre, b.bonusExtra.desc, b.bonusExtra.img, null, b.bonusExtra.kicker, b.bonusExtra.script, b.bonusExtra.crop)}
                 </div>
               ` : ''}
             </div>
