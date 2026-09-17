@@ -5,8 +5,15 @@
 // ?partage=complet, cosmetique uniquement, aucune restriction de
 // navigation). Utilise par les boutons [data-partage] du hub (js/hub.js).
 window.EvxPartage = (function () {
+  // La racine du site public est toujours "/" (vercel.json, cleanUrls, un
+  // seul déploiement) -- jamais window.location.pathname : ce module est
+  // aussi chargé depuis /gestion/ (Espace Commercial y monte le vrai hub en
+  // direct), où pathname vaudrait "/gestion/" et produirait un lien pointant
+  // vers l'appli interne au lieu du site public (retour du 17/09/2026, bouton
+  // "Partager" muet -- et navigant par erreur dans la carte -- depuis Espace
+  // Commercial).
   function construireLien(cible) {
-    const base = window.location.origin + window.location.pathname;
+    const base = window.location.origin + "/";
     if (cible === "complet") return base + "?partage=complet";
     return base + "?partage=1" + cible;
   }
