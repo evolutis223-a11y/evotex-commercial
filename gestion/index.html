@@ -816,8 +816,6 @@
      date répétée sur chaque message, seulement l'heure en pied de bulle. */
   .g-date-separateur { text-align: center; margin: 14px 0 4px; }
   .g-date-separateur span { display: inline-block; background: #fff; color: #4a6d99; font-size: 10.5px; font-weight: 700; padding: 4px 14px; border-radius: 999px; box-shadow: 0 1px 4px rgba(26,58,99,0.12); }
-  .g-msg-supprime { color: #94a3b8; font-style: italic; font-size: 12.5px; }
-  .g-msg.-fonce .g-msg-supprime { color: rgba(255,255,255,0.75); }
   .g-msg-vocal { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .g-msg-vocal audio { height: 32px; max-width: 190px; vertical-align: middle; }
   .g-msg .g-hint { color: #7f93ac; }
@@ -4434,7 +4432,7 @@ function marquerChatVu() {
 }
 function nbMessagesClientNonLus(d) {
   const vu = chatDernierVu();
-  return (d.messagesClient || []).filter(m => String(m.auteur_id) !== String(etat.moi.id) && new Date(m.cree_le).getTime() > vu).length;
+  return (d.messagesClient || []).filter(m => !m.supprime && String(m.auteur_id) !== String(etat.moi.id) && new Date(m.cree_le).getTime() > vu).length;
 }
 function jouerSonNotification() {
   try {
@@ -4844,7 +4842,17 @@ function rendreFilMessages(messages, d, canal, resoudreNom) {
   const parRole = d.role !== 'client';
   let dernierJour = null;
   let html = '';
-  for (const m of messages) {
+  // Retour du 17/09/2026, tranché et explicite ("j'exige et j'ordonne") :
+  // un message supprimé par Support disparaît carrément du fil, pour tout
+  // le monde -- plus aucune trace "Message supprimé", contrairement au
+  // choix du 14/09/2026 qui gardait volontairement cette bulle grisée
+  // (logique de traçabilité façon Batexci ERP). Périmètre différent ici :
+  // une négociation commerciale avec un client, pas la gestion interne de
+  // l'entreprise -- Support tranche seul, sans obligation de justification
+  // visible. La ligne reste soft-supprimée en base (jamais un DELETE réel,
+  // toujours réversible côté serveur si un jour nécessaire), seulement
+  // filtrée ici, à l'affichage.
+  for (const m of messages.filter(m => !m.supprime)) {
     const dateMsg = new Date(m.cree_le);
     const jour = dateMsg.toDateString();
     if (jour !== dernierJour) {
@@ -4865,16 +4873,13 @@ function rendreFilMessages(messages, d, canal, resoudreNom) {
   return html;
 }
 
-// Contenu d'une bulle de tchat -- texte normal, message vocal (lecteur audio
-// + éventuel bouton télécharger réservé à Support), ou "Message supprimé"
-// si supprime_le est posé côté serveur (le vrai contenu n'est alors JAMAIS
-// renvoyé par l'API, même pas à Support -- illusion de suppression, retour
-// du 14/09/2026 : "quelqu'un veut supprimer... on peut lui donner cette
-// illusion... nous avons la possibilité de le retrouver plus loin, par
-// besoin" -- via la Boîte noire, pas ici). Chacun ne supprime que son propre
-// message.
+// Contenu d'une bulle de tchat -- texte normal, ou message vocal (lecteur
+// audio + éventuel bouton télécharger réservé à Support). Un message
+// supprimé n'atteint jamais cette fonction -- filtré en amont dans
+// rendreFilMessages (retour du 17/09/2026, plus aucune trace visible).
+// Support supprime aussi bien ses propres messages que ceux des autres
+// (modération) ; chacun d'autre ne supprime que le sien.
 function rendreContenuMessage(m, d, canal) {
-  if (m.supprime) return '<em class="g-msg-supprime">Message supprimé</em>';
   const estMoi = String(m.auteur_id) === String(etat.moi?.id);
   // Support supprime aussi en modérateur, même un message qui n'est pas le
   // sien -- "un message mal placé qui met tout le monde mal à l'aise"
@@ -5706,7 +5711,7 @@ function rendreColonneLaterale(d) {
   // boutons du chat"). Le client garde une seule icône (Tchat), les autres
   // onglets restant filtrés juste au-dessus.
   const nbNonLus = nbMessagesClientNonLus(d);
-  const nbMessagesInternes = (d.messages || []).length;
+  const nbMessagesInternes = (d.messages || []).filter(m => !m.supprime).length;
   const pastilleDe = (id) => id === 'chat' ? (nbNonLus ? `<span class="g-badge-compte">${nbNonLus}</span>` : '')
     : id === 'notif' ? (nbMessagesInternes ? '<span class="g-pastille-onglet"></span>' : '') : '';
 
@@ -5741,7 +5746,7 @@ function rendreColonneLaterale(d) {
     // saurait pas") -- seule LA VUE du client anonymise ; l'équipe interne,
     // en regardant cette même colonne, continue de voir les vrais noms.
     const nomAffiche = (m) => String(m.auteur_id) === String(etat.moi.id) ? null : (d.role === 'client' ? 'EVOTEX' : m.auteur_nom);
-    corps = `<div class="g-msg-liste" id="chat-colonne-liste">${messages.length ? rendreFilMessages(messages, d, 'client', nomAffiche)
+    corps = `<div class="g-msg-liste" id="chat-colonne-liste">${messages.some(m => !m.supprime) ? rendreFilMessages(messages, d, 'client', nomAffiche)
       : '<div class="g-hint">Aucun échange avec le client pour l\'instant.</div>'}</div>`;
     pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="chat-colonne-texte" rows="2" placeholder="${d.role === 'client' ? 'Écrire à EVOTEX…' : 'Écrire au client…'}"></textarea>${rendreZoneEnregistrement('chat')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-chat" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-chat" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-chat" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-chat-colonne">Envoyer</button></div>`
       : (verrouille && d.role !== 'direction' ? '<div class="g-hint">Verrouillé — ticket expiré.</div>' : '');
@@ -5756,7 +5761,7 @@ function rendreColonneLaterale(d) {
   } else {
     const messages = d.messages || [];
     const peutEcrire = d.role !== 'client' && d.role !== 'apporteur' && d.role !== 'autre' && !d.voirComme;
-    corps = `<div class="g-msg-liste" id="chat-interne-liste">${messages.length ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
+    corps = `<div class="g-msg-liste" id="chat-interne-liste">${messages.some(m => !m.supprime) ? rendreFilMessages(messages, d, 'interne', (m) => m.auteur_nom)
       : '<div class="g-hint">Aucun message pour l\'instant.</div>'}</div>`;
     pied = peutEcrire ? `<div class="g-form-row" style="position:relative"><textarea id="msg-texte" rows="2" placeholder="Écrire à l'équipe…"></textarea>${rendreZoneEnregistrement('interne')}</div><div class="g-form-row" style="justify-content:flex-end;gap:8px"><button class="g-btn-icone-tchat -micro" id="btn-vocal-interne" title="Message vocal">${iconeMicro()}</button><label class="g-btn-icone-tchat" for="input-piece-jointe-interne" title="Joindre un fichier">${iconeTrombone()}<input type="file" id="input-piece-jointe-interne" accept="${ACCEPT_FICHIER_PARTAGE}" hidden></label><button id="btn-envoyer-message">Envoyer</button></div>` : '';
   }
