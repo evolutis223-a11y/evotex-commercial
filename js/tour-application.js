@@ -92,6 +92,15 @@ Views.tourApplication = {
           desc: "Gravure, prétraitement, impression, vapo, lavage, rame, calandre, découpe, contrôle qualité : le Chef de Production suit chaque atelier depuis un seul espace, avec son rendement comparé à l'objectif et ses incidents machine tracés en direct. Rien n'entre en fabrication sans être passé par le circuit de signatures.",
           script: "Vous voyez, en un instant, où en est chaque commande — jusqu'au dernier geste d'atelier.",
         },
+        gallery: {
+          label: 'Chaque poste, son propre espace de travail',
+          items: [
+            { img: '/assets/img/tour-poste-echantillon.png', cap: 'Échantillon' },
+            { img: '/assets/img/tour-poste-gravure.png', cap: 'Gravure' },
+            { img: '/assets/img/tour-poste-impression.png', cap: 'Impression' },
+            { img: '/assets/img/tour-poste-vapo.png', cap: 'Vapo' },
+          ],
+        },
       },
       {
         n: 5, color: '#0891b2', nom: 'Supply Chain & Logistique', tag: 'Supply Chain Management',
@@ -200,7 +209,7 @@ Views.tourApplication = {
         <div class="tour-hero">
           <div class="tour-topbar"><button class="evx-retour" data-nav="#/" style="color:#fff">&#8592; Retour au hub</button></div>
           <div class="tour-kicker">CONÇU POUR BATEXCI — TOUR DE L'APPLICATION</div>
-          <h1 class="tour-title">Votre usine BATEXCI, <em>pilotée et automatisée</em> en 6 mois</h1>
+          <h1 class="tour-title">BATEXCI, <em>pilotée et automatisée</em> en 6 mois</h1>
           <p class="tour-sub">Dès le Mois 2, une première partie de votre usine déjà pilotée en direct depuis un seul écran. D'ici la fin des 6 mois, tout le circuit — de la gravure à la caisse — est numérisé, tracé, automatisé. Les écrans ci-dessous sont réels, pris directement dans l'application.</p>
           <p class="tour-sub" style="margin-top:14px;font-size:13px;opacity:.85">Pensée et construite sur mesure pour BATEXCI, brique par brique, par une jeune équipe malienne — pas un logiciel générique adapté après coup, une vision africaine de la gestion industrielle.</p>
         </div>
@@ -239,6 +248,18 @@ Views.tourApplication = {
               ${b.bonusExtra ? `
                 <div style="margin-top:20px">
                   ${screenBlock(b, b.bonusExtra.titre, b.bonusExtra.desc, b.bonusExtra.img, null, b.bonusExtra.kicker, b.bonusExtra.script, b.bonusExtra.crop)}
+                </div>
+              ` : ''}
+
+              ${b.gallery ? `
+                <div class="tour-mini-gallery-label">${b.gallery.label}</div>
+                <div class="tour-mini-gallery">
+                  ${b.gallery.items.map((g) => `
+                    <div class="tour-mini-card">
+                      <div class="frame"><img src="${g.img}" alt="${g.cap} — capture d'écran réelle BATEXCI ERP" loading="lazy"></div>
+                      <div class="cap">${g.cap}</div>
+                    </div>
+                  `).join('')}
                 </div>
               ` : ''}
             </div>
