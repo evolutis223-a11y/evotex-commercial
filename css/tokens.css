@@ -116,3 +116,15 @@ button { font-family: var(--font-body); }
   border: none;
   padding: 0;
 }
+
+/* Mode partage (17/09/2026) : lien envoye a un client, verrouille sur une
+   seule vue par router.js. Masque tout bouton qui menerait ailleurs dans
+   le site -- retour au hub, CTA Besoins/Licences, "En savoir plus" (Licences
+   -> Socle) -- pour qu'aucun lien mort ne s'affiche (le routeur bloquerait
+   la navigation de toute facon, ceci evite juste l'aller-retour visuel). */
+html.evx-partage .evx-retour,
+html.evx-partage .pres-cta-row,
+html.evx-partage .tour-cta-row,
+html.evx-partage .lic-more {
+  display: none !important;
+}
