@@ -35,6 +35,13 @@ Views.tourApplication = {
           desc: "Pilotage financier, santé de l'usine et alertes de gouvernance réunis sur un seul écran — chiffre d'affaires encaissé, TRS par poste, dossiers bloqués ou en attente de clôture. Chaque donnée non encore disponible est signalée directement à l'écran, jamais masquée.",
           script: "Le poste de pilotage que la Présidence attendait.",
         },
+        bonusExtra: {
+          kicker: 'Direction Technique',
+          img: '/assets/img/tour-direction-technique.png',
+          titre: 'La Direction Technique, un seul écran pour tout arbitrer',
+          desc: "Supervision technique et utilités, Registre Gravure, BAT en attente, TRS par poste, goulot d'étranglement en temps réel, incidents machine, fiches techniques en attente de signature — tout le pilotage technique de l'usine, réuni pour le Directeur Technique.",
+          script: "Vous arbitrez, sans changer d'écran.",
+        },
       },
       {
         n: 1, color: '#1e3a5f', nom: 'Finance & Comptabilité', tag: 'Financial Management',
@@ -92,13 +99,27 @@ Views.tourApplication = {
           desc: "Gravure, prétraitement, impression, vapo, lavage, rame, calandre, découpe, contrôle qualité : le Chef de Production suit chaque atelier depuis un seul espace, avec son rendement comparé à l'objectif et ses incidents machine tracés en direct. Rien n'entre en fabrication sans être passé par le circuit de signatures.",
           script: "Vous voyez, en un instant, où en est chaque commande — jusqu'au dernier geste d'atelier.",
         },
+        bonusExtra: {
+          kicker: 'Supervision Technique',
+          img: '/assets/img/tour-supervision-technique.png',
+          titre: 'Chaudières, énergie, machines — un seul écran',
+          desc: "Chaudière à bois, chaudière à fioul, compresseur, réseau vapeur — pression, température, consommation électrique, tout relevé et suivi poste par poste, aux côtés de la puissance nominale de chaque atelier.",
+          script: "Chaque machine, sous surveillance, à chaque instant.",
+        },
+        bonusExtra2: {
+          kicker: 'Gravure — poste de fabrication',
+          img: '/assets/img/tour-poste-gravure.png',
+          titre: "Un poste, ses propres champs à remplir",
+          desc: "Stock de cylindres (neuf ou reconditionné), dégravage, progression du cylindre en 3 étapes — traitement, bagues, four —, relevé de production, signalement d'arrêt ou d'incident : Gravure, comme chacun des postes ci-dessous, a son espace dédié, avec ses propres blocs à remplir.",
+          script: "Un écran pensé pour l'atelier, pas pour un développeur.",
+        },
         gallery: {
-          label: 'Chaque poste, son propre espace de travail',
+          label: "Le même principe, poste par poste — Échantillon, Impression, Vapo, Parc Machines",
           items: [
             { img: '/assets/img/tour-poste-echantillon.png', cap: 'Échantillon' },
-            { img: '/assets/img/tour-poste-gravure.png', cap: 'Gravure' },
             { img: '/assets/img/tour-poste-impression.png', cap: 'Impression' },
             { img: '/assets/img/tour-poste-vapo.png', cap: 'Vapo' },
+            { img: '/assets/img/tour-parc-machines.png', cap: 'Parc Machines' },
           ],
         },
       },
@@ -248,6 +269,12 @@ Views.tourApplication = {
               ${b.bonusExtra ? `
                 <div style="margin-top:20px">
                   ${screenBlock(b, b.bonusExtra.titre, b.bonusExtra.desc, b.bonusExtra.img, null, b.bonusExtra.kicker, b.bonusExtra.script, b.bonusExtra.crop)}
+                </div>
+              ` : ''}
+
+              ${b.bonusExtra2 ? `
+                <div style="margin-top:20px">
+                  ${screenBlock(b, b.bonusExtra2.titre, b.bonusExtra2.desc, b.bonusExtra2.img, null, b.bonusExtra2.kicker, b.bonusExtra2.script, b.bonusExtra2.crop)}
                 </div>
               ` : ''}
 
