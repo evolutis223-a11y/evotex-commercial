@@ -38,7 +38,7 @@
   <div class="login-kicker">EVOTEX 1.0 — ESPACE PROTÉGÉ</div>
   <h1 class="login-title">Connexion</h1>
   <form id="form-connexion">
-    <div class="login-field"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
+    <div class="login-field"><label for="email">Identifiant ou email</label><input id="email" type="text" autocomplete="username" required></div>
     <div class="login-field"><label for="mdp">Mot de passe</label>
       <div class="login-field-mdp-wrap">
         <input id="mdp" type="password" autocomplete="current-password" required>
@@ -89,7 +89,7 @@
       const reponse = await fetch('/api/gestion/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: document.getElementById('email').value, motDePasse: document.getElementById('mdp').value }),
+        body: JSON.stringify({ identifiantOuEmail: document.getElementById('email').value, motDePasse: document.getElementById('mdp').value }),
       });
       const donnees = await reponse.json();
       if (!donnees.ok) {

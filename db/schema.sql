@@ -30,6 +30,14 @@ alter table utilisateurs add column if not exists dernier_vu timestamptz;
 alter table utilisateurs add column if not exists session_jeton text;
 alter table utilisateurs add column if not exists session_expire_le timestamptz;
 
+-- Identifiant court, alternatif à l'email pour se connecter (retour du
+-- 17/09/2026 -- "l'email est parfois très compliqué à saisir... l'identifiant
+-- est bien plus rapide"). Facultatif (comptes existants sans identifiant
+-- tant qu'il ne leur en est pas attribué un), toujours normalisé en
+-- minuscules/sans espace comme l'email, pour une recherche insensible à la
+-- casse. Attribué par la Direction (ajout de membre, ou après coup).
+alter table utilisateurs add column if not exists identifiant text unique;
+
 -- Profil (retour du 14/09/2026) : chaque membre a son propre compte et son
 -- propre profil, pas juste une ligne technique -- photo optionnelle pour
 -- commencer, colonne pensée pour accueillir d'autres détails de profil plus tard.

@@ -36,6 +36,7 @@ import {
   engagementClientSurFichiers,
   enregistrerDocumentVu,
   fermerSessionUtilisateur,
+  definirIdentifiant,
 } from "../../lib/negociations.js";
 import { sql } from "../../lib/db.js";
 import { hacherMotDePasse } from "../../lib/auth.js";
@@ -432,7 +433,7 @@ async function gerer_post(req, res, session) {
   }
 
   if (action === "ajouter_membre") {
-    const { nom, email, role, motDePasse, titreAutre, photoUrl } = req.body || {};
+    const { nom, email, role, motDePasse, titreAutre, photoUrl, identifiant } = req.body || {};
     if (!nom || !email || !role || !motDePasse) {
       res.status(400).json({ ok: false, erreur: "Champs manquants." });
       return;
@@ -452,14 +453,25 @@ async function gerer_post(req, res, session) {
       return;
     }
     const emailNormalise = String(email).trim().toLowerCase();
+    const identifiantNormalise = identifiant ? String(identifiant).trim().toLowerCase() : null;
     const hash = await hacherMotDePasse(motDePasse);
     const existants = await sql()`select id from utilisateurs where email = ${emailNormalise} limit 1`;
     let utilisateurId;
     if (existants[0]) {
       utilisateurId = existants[0].id;
       if (photoUrl) await sql()`update utilisateurs set photo_url = ${photoUrl} where id = ${utilisateurId}`;
+      if (identifiantNormalise) {
+        const ok = await definirIdentifiant(utilisateurId, identifiantNormalise);
+        if (!ok) { res.status(409).json({ ok: false, erreur: "Cet identifiant est déjà pris." }); return; }
+      }
     } else {
-      const inseres = await sql()`insert into utilisateurs (nom, email, mot_de_passe_hash, photo_url) values (${nom}, ${emailNormalise}, ${hash}, ${photoUrl || null}) returning id`;
+      let inseres;
+      try {
+        inseres = await sql()`insert into utilisateurs (nom, email, mot_de_passe_hash, photo_url, identifiant) values (${nom}, ${emailNormalise}, ${hash}, ${photoUrl || null}, ${identifiantNormalise}) returning id`;
+      } catch (err) {
+        if (err?.code === "23505") { res.status(409).json({ ok: false, erreur: "Cet identifiant ou cet email est déjà pris." }); return; }
+        throw err;
+      }
       utilisateurId = inseres[0].id;
     }
     await sql()`
@@ -495,6 +507,35 @@ async function gerer_post(req, res, session) {
     const hash = await hacherMotDePasse(nouveauMotDePasse);
     await sql()`update utilisateurs set mot_de_passe_hash = ${hash} where id = ${utilisateurId}`;
     await fermerSessionUtilisateur(utilisateurId);
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  // Identifiant de connexion, alternatif à l'email (retour du 17/09/2026 --
+  // "l'email est parfois très compliqué à saisir"). Réservé à la Direction,
+  // même garde que reinitialiser_mot_de_passe. Vide efface l'identifiant
+  // (retour à email seul pour ce compte).
+  if (action === "definir_identifiant") {
+    if (monAppartenance.role !== "direction") {
+      res.status(403).json({ ok: false, erreur: "Réservé à la Direction." });
+      return;
+    }
+    const utilisateurId = Number(req.body.utilisateurId);
+    const identifiantBrut = (req.body.identifiant || "").toString().trim().toLowerCase();
+    if (!utilisateurId) {
+      res.status(400).json({ ok: false, erreur: "Membre manquant." });
+      return;
+    }
+    const cible = await membreDe(negociationId, utilisateurId);
+    if (!cible || !cible.actif) {
+      res.status(400).json({ ok: false, erreur: "Ce membre ne fait pas partie de la négociation." });
+      return;
+    }
+    const ok = await definirIdentifiant(utilisateurId, identifiantBrut || null);
+    if (!ok) {
+      res.status(409).json({ ok: false, erreur: "Cet identifiant est déjà pris par un autre compte." });
+      return;
+    }
     res.status(200).json({ ok: true });
     return;
   }

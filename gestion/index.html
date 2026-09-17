@@ -2158,6 +2158,7 @@ const GUIDE_DIRECTION = [
     ['Le rôle « Autre »', 'Une personne qui suit en lecture seule, avec un titre libre — jamais un rôle de négociation à part entière.',
       'Un développeur veut observer comment se déroule une négociation pour améliorer l\'outil : ajoutez-le en « Autre », titre « Développeur ». Il voit tout, ne peut rien écrire.'],
     ['Lien d\'accès', 'Connexion directe pour un membre, sans email ni mot de passe à retenir. Se coupe à tout moment depuis son menu (« Couper »), et se régénère sans changer d\'adresse.'],
+    ['Identifiant de connexion', 'Un identifiant court, facultatif, en plus de l\'email — plus rapide à taper. Se définit à l\'ajout du membre (bouton « Suggérer » depuis son nom) ou après coup, menu du membre → « Définir l\'identifiant ». La personne se connecte alors avec l\'un OU l\'autre, à son choix.'],
     ['Réinitialiser le mot de passe', 'Menu du membre → « Réinitialiser le mot de passe » → tapez le nouveau (6 caractères minimum). Coupe automatiquement toute session déjà ouverte avec l\'ancien mot de passe.'],
     ['Forcer la déconnexion', 'Débloque un compte resté marqué « connecté » après une fermeture de fenêtre sans déconnexion propre — sinon il resterait bloqué jusqu\'à 14 jours (voir « Sécurité des comptes » plus bas).'],
     ['Retirer un membre', 'Coupe son accès à la négociation dès sa prochaine action — immédiat, pas besoin qu\'il se déconnecte.'],
@@ -2227,7 +2228,7 @@ const GUIDE_CLIENT = [
     ['Retirer un envoi par erreur', 'Possible tant qu\'il s\'agit d\'un fichier que VOUS avez envoyé — il reste conservé de notre côté, simplement retiré de votre vue.'],
   ]},
   { titre: 'Comment vous connecter', blocs: [
-    ['Deux façons', 'Par email + mot de passe, ou par un lien direct envoyé par votre Commercial (aucun mot de passe à retenir dans ce cas).'],
+    ['Deux façons', 'Par identifiant ou email + mot de passe (l\'un ou l\'autre, selon ce qu\'on vous a donné), ou par un lien direct envoyé par votre Commercial (aucun mot de passe à retenir dans ce cas).'],
     ['Une seule connexion à la fois', 'Pour la sécurité de votre dossier, votre compte ne peut être connecté qu\'à un seul endroit en même temps. Une tentative de connexion ailleurs pendant que vous êtes déjà connecté sera refusée.'],
   ]},
   { titre: 'Ce que vous ne voyez pas', blocs: [
@@ -5214,8 +5215,10 @@ function rendreStageOutils(d, etapeActuelle, estDirectionReelle) {
 function rendreMenuMembre(m, peutAgir) {
   return `<div class="g-membre-menu">
     <div class="g-membre-menu-nom">${escapeHtml(m.nom)} · ${escapeHtml(libelleRole(m.role, m.titre_autre))}</div>
+    <div class="g-hint" style="padding:0 8px 6px">${m.identifiant ? `Identifiant : ${escapeHtml(m.identifiant)}` : 'Pas encore d’identifiant (connexion par email uniquement)'}</div>
     ${peutAgir ? `<button data-voircomme="${m.utilisateur_id}">Voir comme</button>` : ''}
     ${peutAgir && m.role !== 'direction' ? `<button data-lien-invitation="${m.utilisateur_id}">Lien d'accès</button>` : ''}
+    ${peutAgir ? `<button data-definir-identifiant="${m.utilisateur_id}" data-definir-identifiant-nom="${escapeHtml(m.nom)}" data-definir-identifiant-actuel="${escapeHtml(m.identifiant || '')}">${m.identifiant ? 'Modifier' : 'Définir'} l'identifiant</button>` : ''}
     ${peutAgir ? `<button data-reinitialiser="${m.utilisateur_id}" data-reinitialiser-nom="${escapeHtml(m.nom)}">Réinitialiser le mot de passe</button>` : ''}
     ${peutAgir ? `<button data-forcer-deconnexion="${m.utilisateur_id}">Forcer la déconnexion</button>` : ''}
     ${peutAgir && m.role !== 'direction' ? `<button class="-danger" data-retirer="${m.utilisateur_id}">Retirer de la négociation</button>` : ''}
@@ -5469,6 +5472,15 @@ function genererMotDePasseSimple() {
   return s;
 }
 
+// Identifiant de connexion suggéré depuis un nom -- minuscules, sans
+// accents ni espaces (retour du 17/09/2026 : "facile à taper").
+// "Awa Diarra" -> "awa.diarra".
+function slugifierIdentifiant(nom) {
+  return String(nom || '').trim().toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '.').replace(/^\.+|\.+$/g, '');
+}
+
 function rendreModalAjoutMembre() {
   document.getElementById('modal-zone').innerHTML = `
     <div class="g-modal-fond" id="modal-fond">
@@ -5477,6 +5489,10 @@ function rendreModalAjoutMembre() {
         <div class="g-form-row">
           <input id="nm-nom" type="text" placeholder="Nom">
           <input id="nm-email" type="email" placeholder="Email">
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="nm-identifiant" type="text" placeholder="Identifiant de connexion (facultatif, plus rapide que l'email)" style="flex:1">
+            <button type="button" id="btn-suggerer-identifiant" class="cc-lien-facture" style="padding:9px 10px">Suggérer</button>
+          </div>
           <select id="nm-role">
             <option value="negociateur">Négociateur</option>
             <option value="apporteur">Apporteur d'affaires</option>
@@ -5500,6 +5516,9 @@ function rendreModalAjoutMembre() {
   document.getElementById('nm-role').addEventListener('change', (e) => {
     document.getElementById('nm-titre-autre').style.display = e.target.value === 'autre' ? '' : 'none';
   });
+  document.getElementById('btn-suggerer-identifiant').addEventListener('click', () => {
+    document.getElementById('nm-identifiant').value = slugifierIdentifiant(document.getElementById('nm-nom').value);
+  });
   document.getElementById('btn-regenerer-mdp').addEventListener('click', () => {
     document.getElementById('nm-mdp').value = genererMotDePasseSimple();
   });
@@ -5508,6 +5527,7 @@ function rendreModalAjoutMembre() {
   document.getElementById('btn-confirmer-ajout').addEventListener('click', async () => {
     const nom = document.getElementById('nm-nom').value.trim();
     const email = document.getElementById('nm-email').value.trim();
+    const identifiant = document.getElementById('nm-identifiant').value.trim();
     const role = document.getElementById('nm-role').value;
     const titreAutre = document.getElementById('nm-titre-autre').value.trim();
     const photoUrl = document.getElementById('nm-photo').value.trim();
@@ -5515,7 +5535,7 @@ function rendreModalAjoutMembre() {
     if (!nom || !email || !motDePasse) { alert('Nom, email et mot de passe requis.'); return; }
     if (role === 'autre' && !titreAutre) { alert('Précisez un titre pour ce rôle.'); return; }
     const rep = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ negociationId: etat.negociationId, action: 'ajouter_membre', nom, email, role, motDePasse, titreAutre, photoUrl }) });
+      body: JSON.stringify({ negociationId: etat.negociationId, action: 'ajouter_membre', nom, email, identifiant, role, motDePasse, titreAutre, photoUrl }) });
     if (!rep.ok) { alert(rep.erreur || 'Échec.'); return; }
     etat.modalAjoutOuvert = false;
     await chargerNegociation();
@@ -5649,6 +5669,21 @@ function attacherEvenementsNegociation(d) {
       if (!confirm('Retirer ce membre de la négociation ?')) return;
       await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ negociationId: etat.negociationId, action: 'retirer_membre', utilisateurId: Number(btn.dataset.retirer) }) });
+      await chargerNegociation();
+    });
+  });
+
+  document.querySelectorAll('[data-definir-identifiant]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const nom = btn.dataset.definirIdentifiantNom || 'ce membre';
+      const actuel = btn.dataset.definirIdentifiantActuel || '';
+      const saisie = prompt(`Identifiant de connexion pour ${nom} (court, facile à taper -- laisser vide pour le retirer) :`, actuel);
+      if (saisie === null) return;
+      const reponse = await api('/api/gestion/negociation', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ negociationId: etat.negociationId, action: 'definir_identifiant', utilisateurId: Number(btn.dataset.definirIdentifiant), identifiant: saisie }) });
+      if (!reponse.ok) { alert(reponse.erreur || "Échec."); return; }
+      etat.menuMembreOuvert = null;
       await chargerNegociation();
     });
   });
