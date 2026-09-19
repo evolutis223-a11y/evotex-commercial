@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="../css/besoins.css">
 <link rel="stylesheet" href="../css/licences.css">
 <link rel="stylesheet" href="../css/tour-application.css">
+<link rel="stylesheet" href="../css/presentation-usine.css">
 <script src="../js/partage.js"></script>
 <script src="../js/hub.js"></script>
 <script src="../js/presentation.js"></script>
@@ -27,6 +28,7 @@
 <script src="../js/besoins.js"></script>
 <script src="../js/licences.js"></script>
 <script src="../js/tour-application.js"></script>
+<script src="../js/presentation-usine.js"></script>
 <!-- QR code des documents de facturation -- généré entièrement dans le
      navigateur, aucune donnée client n'est envoyée à un service externe.
      defer (17/09/2026, diagnostic de lenteur au démarrage) : cette
@@ -1739,6 +1741,8 @@ function cleVueDepuisHash(hash) {
   if (hash === '#/expression-besoins') return 'besoins';
   if (hash === '#/licences') return 'licences';
   if (hash === '#/tour-application') return 'tourApplication';
+  if (hash === '#/presentation-usine') return 'presentationUsine';
+  if (hash === '#/presentation-usine-pca') return 'presentationUsinePca';
   return 'hub';
 }
 
@@ -1791,7 +1795,7 @@ function rendreHub() {
   // popover ancré (.g-icone-wrap, position:relative) comme le Conseil,
   // juste plus grand.
   document.getElementById('hero').innerHTML = `<div class="g-hero"><div class="g-hero-titre-simple">${htmlBoutonRetour()}Espace Commercial<span class="g-icone-wrap -inline-titre"><button class="g-icone-bouton -mini -mini-titre" id="btn-info-espace-commercial" title="Comment ça marche, et pourquoi">💡</button></span></div>
-    <div class="g-hero-sous">Le vrai hub public EVOTEX -- vos 5 outils de négociation, à consulter ou à envoyer tels quels au client.</div></div>`;
+    <div class="g-hero-sous">Le vrai hub public EVOTEX -- vos supports de négociation et de présentation, à consulter ou à envoyer tels quels au client.</div></div>`;
   attacherBoutonRetour();
   const btnInfo = document.getElementById('btn-info-espace-commercial');
   if (btnInfo) btnInfo.addEventListener('click', (e) => { e.stopPropagation(); basculerPopoverInfoHub(btnInfo.parentElement); });
@@ -1803,7 +1807,7 @@ function rendreHub() {
 // Popover d'explication d'Espace Commercial (retour du 17/09/2026, demande
 // explicite : "prenant chaque plaque par son nom", "expliquer que ce sont
 // ces mêmes outils qui sont de l'autre côté"). Contenu vérifié contre
-// js/hub.js (les 5 cartes réelles) et le mécanisme d'envoi de la Salle de
+// js/hub.js (les 7 cartes réelles) et le mécanisme d'envoi de la Salle de
 // Négociation -- jamais une paraphrase approximative. Ancré sous l'ampoule
 // (jamais un .g-modal-fond plein écran) : ne bloque pas la page, se ferme
 // sur un clic ailleurs, exactement comme .g-conseil-panel.
@@ -1814,7 +1818,7 @@ function basculerPopoverInfoHub(ancre) {
     <h3>Comment fonctionne l'Espace Commercial</h3>
 
     <h4>Pourquoi cet espace existe</h4>
-    <p>BATEXCI ERP est votre outil de travail pour gérer vos négociations : chaque client, chaque échange, chaque document reste au même endroit sécurisé, pour que vous puissiez vous concentrer sur l'essentiel -- convaincre et vendre. L'Espace Commercial réunit les 5 supports que vous utilisez pour ça ; ce sont ces mêmes outils que vous retrouverez dans votre Salle de Négociation pour les montrer ou les envoyer à un client précis.</p>
+    <p>BATEXCI ERP est votre outil de travail pour gérer vos négociations : chaque client, chaque échange, chaque document reste au même endroit sécurisé, pour que vous puissiez vous concentrer sur l'essentiel -- convaincre et vendre. L'Espace Commercial réunit les supports que vous utilisez pour ça. Les 5 outils ci-dessous se retrouvent dans votre Salle de Négociation, pour les montrer ou les envoyer à un client précis ; les deux présentations « L'outil qui pilote toute l'usine » se partagent par lien, depuis cet espace.</p>
 
     <h4>Les 5 outils, un par un</h4>
     <div class="g-info-outil"><b>Présentation Exécutive</b><span>La vitrine produit -- les 8 Blocs Fonctionnels de la plateforme, en un coup d'œil. À montrer en tout premier, à un prospect qui découvre EVOTEX.</span></div>
@@ -1822,6 +1826,11 @@ function basculerPopoverInfoHub(ancre) {
     <div class="g-info-outil"><b>Socle de Lancement</b><span>Le dossier de déploiement complet, 12 pages -- vision, feuille de route sur 6 mois, catalogue des 3 licences, gouvernance et pilotage technique.</span></div>
     <div class="g-info-outil"><b>Grille de Licences</b><span>Les 3 formules tarifaires (Déploiement à Vie, Vente Totale, SaaS + Modules), avec un formulaire de demande de devis intégré.</span></div>
     <div class="g-info-outil"><b>Cahier des Charges Client</b><span>Un formulaire interactif : le prospect y décrit lui-même son besoin (utilisateurs, sites, modules, budget), reçu directement par email.</span></div>
+
+    <h4>Deux présentations en plus</h4>
+    <div class="g-info-outil"><b>L'outil qui pilote toute l'usine</b><span>Une page lisible sur téléphone : ce que BATEXCI ERP gère aujourd'hui, ce qu'il ne gère pas encore, et les versions avancées prévues de ses modules. À envoyer telle quelle.</span></div>
+    <div class="g-info-outil"><b>L'outil qui pilote toute l'usine, avec le regard du PCA</b><span>La même page, avec en plus la section sur le tableau de bord du Président du Conseil d'Administration. Elle n'apparaît pas dans le hub d'un client en « Partager toute l'application » : elle se transmet par son propre lien « Partager ».</span></div>
+    <p>Sous chaque carte, une mention « Version du … » indique à quelle période la présentation a été établie. Elle n'apparaît jamais dans le document lui-même, et vos liens « Partager » ne la montrent pas au destinataire. Ces deux présentations ne figurent pas, pour l'instant, dans « Envoyer au client » de la Salle de Négociation.</p>
 
     <h4>Deux façons de les transmettre</h4>
     <p><b>« Partager »</b>, sur chaque carte ici : copie un lien libre d'accès, verrouillé sur cette seule page (ou tout le site avec « Partager toute l'application », en bas). N'importe qui reçoit ce lien peut l'ouvrir, sans compte -- utile pour un premier contact ou un prospect pas encore inscrit.</p>
@@ -2517,7 +2526,8 @@ const GUIDE_NEGOCIATEUR = [
     ['Naviguer sans revenir à l\'en-tête', 'Une fois une page ou section ouverte en grand, deux flèches rondes (précédent/suivant) restent affichées à l\'écran, même en défilant -- elles avancent dans les mêmes pages/sections que les vignettes, désactivées au premier et au dernier élément.'],
   ]},
   { titre: 'Espace Commercial et partage', blocs: [
-    ['À quoi sert cette page', 'Vos 5 supports de vente réunis, à consulter avant un rendez-vous ou pour vous rafraîchir la mémoire sur un outil -- la petite ampoule 💡 en haut de cette page les détaille chacun.'],
+    ['À quoi sert cette page', 'Vos supports de vente réunis (les 5 outils de négociation, plus les présentations « L\'outil qui pilote toute l\'usine »), à consulter avant un rendez-vous ou pour vous rafraîchir la mémoire sur un outil -- la petite ampoule 💡 en haut de cette page les détaille chacun.'],
+    ['Mention « Version du … » sous les présentations', 'Sur la carte de chaque présentation « L\'outil qui pilote toute l\'usine », et sous le document quand vous l\'ouvrez, une mention indique la date de la version en cours. Elle n\'est jamais dans le document lui-même, et un lien « Partager » ne la montre pas au destinataire. Elle change à chaque mise à jour du document.'],
     ['Bouton « Partager » sur chaque carte', 'Copie un lien verrouillé sur CETTE page précise. Le destinataire ne peut atteindre aucune autre page du site, même en modifiant l\'adresse à la main -- jamais le même mécanisme qu\'« Envoyer au client » (Exemples ci-dessus) : ce lien fonctionne pour n\'importe qui le reçoit, sans compte, alors qu\'« Envoyer au client » dépose le document dans « Mes Documents » d\'un membre déjà identifié.',
       'Un prospect pas encore intégré à une négociation demande à voir le Tour de l\'Application : ouvrez Espace Commercial, cliquez « Partager » sur sa carte, collez le lien où vous voulez (WhatsApp, email...).'],
     ['« Partager toute l\'application »', 'Un lien qui donne accès à tout le site, en navigation libre -- utile si une session en direct dans la Salle de Négociation n\'est pas possible.'],

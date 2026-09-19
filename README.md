@@ -14,6 +14,16 @@ Aucune dépendance, aucun `package.json`, aucune étape de build. Le site peut s
 
 Le Calculateur de Coût interne (charges, marge, prix de vente suggéré) est **définitivement exclu de cet espace** — il n'existe plus dans ce dossier et doit vivre ailleurs, dans un espace strictement interne, jamais partagé avec un prospect.
 
+## Présentation « L'outil qui pilote toute l'usine » (19/09/2026)
+
+Deux versions d'une même page commerciale, pour deux cibles différentes : sans mention du PCA (`#/presentation-usine`) et avec la section « Le regard du PCA » (`#/presentation-usine-pca`). Chacune a sa carte dans le hub, avec son bouton « Partager ». Dans « Partager toute l'application » (`?partage=complet`), la version avec PCA n'est pas listée : elle se transmet par son propre lien.
+
+- `presentations/usine.html` et `presentations/usine-pca.html` : les documents, en HTML autonome. La version avec PCA reprend la version sans PCA, plus la mention « Sous le regard du PCA » sous le titre et la section « Le regard du PCA ». Toute modification de contenu se fait dans les deux fichiers.
+- `js/presentation-usine.js` : les deux vues (le document s'affiche dans un cadre, pour que ses styles restent isolés de ceux du site) et la constante `dateVersion`.
+- `css/presentation-usine.css` : le cadre autour du document et la mention de date.
+
+**Date de version.** La mention « Version du JJ/MM/AAAA » s'affiche en pied de carte dans le hub et sous le document, jamais dans le document lui-même. Elle sert au commercial, pour savoir à quelle période le document a été établi ; elle est masquée dans les liens de partage. À chaque mise à jour du document, changer la constante `dateVersion` dans `js/presentation-usine.js` (un seul endroit).
+
 ## Aperçu en local
 
 Depuis ce dossier :

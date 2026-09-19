@@ -26,6 +26,13 @@ Views.hub = {
               <span class="js-partage-label">Partager</span>
             </button>`;
 
+    // Date de version des présentations "L'outil qui pilote toute l'usine"
+    // (js/presentation-usine.js) : en pied de carte, pour que le commercial
+    // sache à quelle période le document a été établi. Jamais dans le
+    // document lui-même. Vide si le fichier de la présentation n'est pas chargé.
+    const dateVersion = (window.PresentationUsine && window.PresentationUsine.dateVersion) || '';
+    const piedDate = dateVersion ? `<span class="hub-card-date">Version du ${dateVersion}</span>` : '';
+
     return `
       <div class="hub">
         <div class="hub-kicker">${kicker}</div>
@@ -40,6 +47,16 @@ Views.hub = {
             <span class="hub-card-desc">La plateforme en un coup d'œil — les 8 Blocs Fonctionnels qui couvrent tous les métiers de l'usine, à présenter en rendez-vous ou à envoyer telle quelle.</span>
             <span class="hub-card-cta">Consulter <span>&#8594;</span></span>
             ${boutonPartage('#/presentation', 'Copier le lien de partage de la Présentation Exécutive')}
+          </div>
+
+          <div class="hub-card" data-nav="#/presentation-usine" role="button" tabindex="0" aria-label="Ouvrir la présentation L'outil qui pilote toute l'usine">
+            <span class="hub-card-eyebrow">Vue d'ensemble</span>
+            <span class="hub-card-badge -public">PAGE COMMERCIALE</span>
+            <span class="hub-card-title">L'outil qui pilote toute l'usine</span>
+            <span class="hub-card-desc">Ce que BATEXCI ERP gère aujourd'hui, ce qu'il ne gère pas encore et les versions avancées prévues de ses modules : une page lisible sur téléphone, à envoyer telle quelle.</span>
+            <span class="hub-card-cta">Consulter <span>&#8594;</span></span>
+            ${boutonPartage('#/presentation-usine', "Copier le lien de partage de la présentation L'outil qui pilote toute l'usine")}
+            ${piedDate}
           </div>
 
           <div class="hub-card -featured" data-nav="#/tour-application" role="button" tabindex="0" aria-label="Ouvrir le Tour de l'Application">
@@ -88,6 +105,17 @@ Views.hub = {
             <span class="hub-card-cta">Consulter <span>&#8594;</span></span>
             ${boutonPartage('#/expression-besoins', 'Copier le lien de partage du Cahier des Charges Client')}
           </div>
+
+          ${modeClient ? '' : `
+          <div class="hub-card" data-nav="#/presentation-usine-pca" role="button" tabindex="0" aria-label="Ouvrir la présentation L'outil qui pilote toute l'usine, avec le regard du PCA">
+            <span class="hub-card-eyebrow">Vue d'ensemble</span>
+            <span class="hub-card-badge -reference">AVEC LE REGARD DU PCA</span>
+            <span class="hub-card-title">L'outil qui pilote toute l'usine, avec le regard du PCA</span>
+            <span class="hub-card-desc">La même présentation, avec la section qui montre le tableau de bord du Président du Conseil d'Administration et sa vue partageable en lecture seule.</span>
+            <span class="hub-card-cta">Consulter <span>&#8594;</span></span>
+            ${boutonPartage('#/presentation-usine-pca', "Copier le lien de partage de la présentation avec le regard du PCA")}
+            ${piedDate}
+          </div>`}
         </div>
 
         <div class="hub-partage-tout">

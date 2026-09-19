@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>BATEXCI ERP</title>
+<style>
+  :root {
+    --primary: #1a3a63;
+    --primary-deep: #0d2140;
+    --background: #eef0f4;
+    --card: #ffffff;
+    --border: #e0e2e8;
+    --ink: #1a2233;
+    --muted: #767d8c;
+    --green: #1f7a3d;
+    --green-soft: #eaf6ee;
+    --gold: #8a6a1f;
+    --gold-soft: #f7f0dd;
+    --muted-tile: #f1f2f5;
+    --font-display: "Manrope", -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --primary: #5b86c2;
+      --primary-deep: #0a1626;
+      --background: #12151d;
+      --card: #1c2230;
+      --border: #3a4152;
+      --ink: #eef0f4;
+      --muted: #9aa1b0;
+      --green: #4caf72;
+      --green-soft: #173323;
+      --gold: #dcb964;
+      --gold-soft: #332612;
+      --muted-tile: #232937;
+    }
+  }
+  :root[data-theme="dark"] {
+    --primary: #5b86c2;
+    --primary-deep: #0a1626;
+    --background: #12151d;
+    --card: #1c2230;
+    --border: #3a4152;
+    --ink: #eef0f4;
+    --muted: #9aa1b0;
+    --green: #4caf72;
+    --green-soft: #173323;
+    --gold: #dcb964;
+    --gold-soft: #332612;
+    --muted-tile: #232937;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+  }
+  .page { max-width: 760px; margin: 0 auto; padding: 0 0 60px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(155deg, var(--primary) 0%, var(--primary-deep) 100%);
+    color: #ffffff;
+    padding: 48px 40px 40px;
+    border-radius: 0 0 32px 32px;
+  }
+  .hero .eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); font-weight: 800; line-height: 1.1; margin: 10px 0 14px; text-wrap: balance; }
+  .hero p { font-size: 15px; color: rgba(255,255,255,.82); max-width: 50ch; margin: 0; }
+  .hero .stats { display: flex; gap: 22px; margin-top: 26px; flex-wrap: wrap; }
+  .hero .stat b { display: block; font-family: var(--font-display); font-size: 22px; font-weight: 800; }
+  .hero .stat span { font-size: 10.5px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .04em; }
+
+  main { padding: 40px 40px 0; }
+
+  .kicker { font-family: var(--font-display); font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); margin: 0 0 6px; }
+  .headline { font-family: var(--font-display); font-size: 22px; font-weight: 800; line-height: 1.2; margin: 0 0 8px; text-wrap: balance; }
+  .lede { font-size: 14px; color: var(--muted); max-width: 58ch; margin: 0 0 24px; }
+
+  section + section { margin-top: 44px; border-top: 1px solid var(--border); padding-top: 40px; }
+
+  /* ---------- Timeline (comment ca marche) ---------- */
+  .timeline { position: relative; margin-top: 22px; padding-left: 46px; }
+  .timeline::before { content: ""; position: absolute; left: 19px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-step { position: relative; padding-bottom: 22px; }
+  .tl-step:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -46px; top: 0; width: 40px; height: 40px; border-radius: 12px;
+    background: var(--card); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center;
+    font-size: 17px; z-index: 1;
+  }
+  .tl-step b { font-family: var(--font-display); font-size: 14.5px; display: block; margin-bottom: 2px; }
+  .tl-step span { font-size: 13px; color: var(--muted); }
+  .tl-note { margin-top: 18px; background: var(--muted-tile); border-radius: 12px; padding: 12px 16px; font-size: 12.5px; color: var(--ink); }
+  .tl-note b { color: var(--primary); }
+
+  /* ---------- Role grid ---------- */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 20px; }
+  .role-tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
+  .role-tile .icon { font-size: 20px; }
+  .role-tile b { display: block; font-family: var(--font-display); font-size: 11.5px; margin-top: 6px; line-height: 1.25; }
+
+  /* ---------- Capability tiles ---------- */
+  .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 20px; }
+  .cap-tile { display: flex; gap: 12px; background: var(--green-soft); border-radius: 14px; padding: 14px 16px; }
+  .cap-tile .icon { font-size: 20px; flex: none; }
+  .cap-tile b { display: block; font-family: var(--font-display); font-size: 13px; color: var(--ink); margin-bottom: 2px; }
+  .cap-tile span { font-size: 12px; color: var(--muted); }
+
+  .gap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 18px; }
+  .gap-tile { background: var(--muted-tile); border: 1px dashed var(--border); border-radius: 12px; padding: 12px 14px; }
+  .gap-tile .icon { font-size: 16px; }
+  .gap-tile b { display: block; font-family: var(--font-display); font-size: 12px; margin-top: 4px; line-height: 1.3; }
+  .gap-note { margin-top: 14px; font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- Evolutions futures ---------- */
+  .evo-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+  .evo-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 12px; display: grid; grid-template-columns: 158px 1fr 1fr; gap: 10px; align-items: stretch; }
+  .evo-head { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
+  .evo-head .icon { width: 36px; height: 36px; border-radius: 10px; background: var(--muted-tile); display: flex; align-items: center; justify-content: center; font-size: 18px; flex: none; }
+  .evo-head b { font-family: var(--font-display); font-size: 15px; }
+  .evo-row { border-radius: 10px; padding: 9px 12px; }
+  .evo-row .label { display: block; font-family: var(--font-display); font-size: 9.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 2px; }
+  .evo-row span:last-child { font-size: 12.5px; line-height: 1.4; }
+  .evo-now { background: var(--muted-tile); }
+  .evo-now .label { color: var(--muted); }
+  .evo-now span:last-child { color: var(--muted); }
+  .evo-next { background: var(--gold-soft); border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent); }
+  .evo-next .label { color: var(--gold); }
+  .evo-next span:last-child { color: var(--ink); }
+
+  .also-title { font-family: var(--font-display); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 26px 0 10px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent); color: var(--primary); background: color-mix(in srgb, var(--primary) 7%, transparent); border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight: 600; }
+  .evo-note { margin-top: 18px; font-size: 12.5px; color: var(--muted); }
+
+
+  footer { margin: 44px 40px 0; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  footer .brand { font-family: var(--font-display); font-weight: 800; font-size: 13px; color: var(--primary); }
+  footer .note { font-size: 11.5px; color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .evo-card { grid-template-columns: 1fr; }
+    .evo-head { padding: 2px 4px 4px; }
+  }
+  @media (max-width: 520px) {
+    .hero { padding: 36px 22px 32px; }
+    main { padding: 32px 22px 0; }
+    footer { margin: 36px 22px 0; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="eyebrow">BATEXCI · Zone Industrielle de Sotuba, Bamako</div>
+    <h1>L'outil qui pilote toute l'usine</h1>
+    <p>Un seul système, du premier contact client jusqu'à la livraison. Pensé pour chaque métier de l'usine, pas seulement pour un bureau.</p>
+    <div class="stats">
+      <div class="stat"><b>18</b><span>Rôles, chacun son espace</span></div>
+      <div class="stat"><b>13</b><span>Étapes de production suivies</span></div>
+      <div class="stat"><b>1</b><span>Porte d'entrée pour tout lancer</span></div>
+    </div>
+  </div>
+
+  <main>
+    <section>
+      <div class="kicker">Le principe</div>
+      <h2 class="headline">Comment ça marche, du premier clic à la livraison</h2>
+      <p class="lede">Une seule porte d'entrée : la prise de commande. Tout le reste s'enchaîne, sans ressaisie et sans information qui se perd d'un bureau à l'autre.</p>
+
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-dot">📝</div>
+          <b>Commande</b>
+          <span>Un commercial saisit une commande. Le client est automatiquement créé ou retrouvé s'il existe déjà, rien à ressaisir ailleurs.</span>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">🎨</div>
+          <b>Dessin</b>
+          <span>Le Studio Dessin propose la maquette. Le client doit valider avant que quoi que ce soit ne parte en fabrication.</span>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">✅</div>
+          <b>Validation</b>
+          <span>Acompte, accord de lancement : chaque signature nécessaire est vérifiée par le système avant d'ouvrir la suite.</span>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">🏭</div>
+          <b>Production</b>
+          <span>13 étapes réelles suivies une à une, du traitement graphique jusqu'à l'emballage. Chaque poste rapporte son propre travail.</span>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">📦</div>
+          <b>Magasin</b>
+          <span>Réception vérifiée à deux signatures : jamais une seule personne qui contrôle et valide en même temps.</span>
+        </div>
+        <div class="tl-step">
+          <div class="tl-dot">🚚</div>
+          <b>Livraison</b>
+          <span>Sortie confirmée, dossier clôturé. Tout reste consultable, pour toujours, par qui a le droit de le voir.</span>
+        </div>
+      </div>
+
+      <div class="tl-note"><b>À chaque étape</b>, la bonne personne, et jamais une autre, voit ce qui la concerne et pose sa validation. Rien n'avance sans la bonne signature, au bon endroit.</div>
+    </section>
+
+    <section>
+      <div class="kicker">L'organisation</div>
+      <h2 class="headline">Un espace de travail pour chaque métier</h2>
+      <p class="lede">Personne ne voit l'écran du voisin. Chaque personne se connecte et retrouve uniquement ce qui la concerne, avec les bons outils pour agir.</p>
+
+      <div class="role-grid">
+        <div class="role-tile"><div class="icon">🧾</div><b>Commercial</b></div>
+        <div class="role-tile"><div class="icon">🎯</div><b>Resp. Commercial</b></div>
+        <div class="role-tile"><div class="icon">🎨</div><b>Studio Dessin</b></div>
+        <div class="role-tile"><div class="icon">🏭</div><b>Chef de Production</b></div>
+        <div class="role-tile"><div class="icon">🤝</div><b>Assistant Chef de Production</b></div>
+        <div class="role-tile"><div class="icon">⚙️</div><b>Chef d'Équipe</b></div>
+        <div class="role-tile"><div class="icon">🛠️</div><b>Directeur Technique</b></div>
+        <div class="role-tile"><div class="icon">📦</div><b>Magasin</b></div>
+        <div class="role-tile"><div class="icon">🚚</div><b>Logistique</b></div>
+        <div class="role-tile"><div class="icon">💵</div><b>Caisse</b></div>
+        <div class="role-tile"><div class="icon">🧮</div><b>Comptabilité</b></div>
+        <div class="role-tile"><div class="icon">🏦</div><b>DAF</b></div>
+        <div class="role-tile"><div class="icon">📊</div><b>Contrôle de Gestion</b></div>
+        <div class="role-tile"><div class="icon">👥</div><b>RH</b></div>
+        <div class="role-tile"><div class="icon">🛎️</div><b>Support</b></div>
+        <div class="role-tile"><div class="icon">🛡️</div><b>Gardien</b></div>
+        <div class="role-tile"><div class="icon">🏬</div><b>Showroom</b></div>
+        <div class="role-tile"><div class="icon">🧭</div><b>Direction</b></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="kicker">Le périmètre</div>
+      <h2 class="headline">Ce que l'outil gère aujourd'hui</h2>
+      <p class="lede">Déjà construit, déjà en service :</p>
+
+      <div class="cap-grid">
+        <div class="cap-tile"><span class="icon">📋</span><div><b>Commandes &amp; devis</b><span>Création, suivi, historique complet par client.</span></div></div>
+        <div class="cap-tile"><span class="icon">🖨️</span><div><b>Circuit de fabrication complet</b><span>Les 13 étapes réelles, du traitement graphique à l'emballage.</span></div></div>
+        <div class="cap-tile"><span class="icon">📦</span><div><b>Stock &amp; catalogue</b><span>Réception, mouvements, produits finis.</span></div></div>
+        <div class="cap-tile"><span class="icon">💵</span><div><b>Caisse &amp; encaissements</b><span>Tous les modes de règlement, clôture de journée.</span></div></div>
+        <div class="cap-tile"><span class="icon">🧮</span><div><b>Comptabilité &amp; coût de revient</b><span>Marge réelle, jamais une estimation.</span></div></div>
+        <div class="cap-tile"><span class="icon">👥</span><div><b>Personnel &amp; accès</b><span>Un rôle, des droits précis, jamais plus que nécessaire.</span></div></div>
+        <div class="cap-tile"><span class="icon">📊</span><div><b>Rapports</b><span>Financier, commercial, production : chiffres réels.</span></div></div>
+        <div class="cap-tile"><span class="icon">🔒</span><div><b>Sécurité par rôle</b><span>Chaque action vérifiée côté système, pas seulement à l'écran.</span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="kicker">En toute transparence</div>
+      <h2 class="headline">Ce qu'il ne gère pas encore</h2>
+      <p class="lede">L'outil grandit une étape à la fois, jamais tout à la fois, pour ne rien précipiter ni casser ce qui marche déjà.</p>
+
+      <div class="gap-grid">
+        <div class="gap-tile"><span class="icon">🧵</span><b>Atelier de filature</b></div>
+        <div class="gap-tile"><span class="icon">🎨</span><b>Atelier de teinture</b></div>
+        <div class="gap-tile"><span class="icon">👕</span><b>Atelier de confection</b></div>
+        <div class="gap-tile"><span class="icon">🏬</span><b>Stock de tissu écru (matière première)</b></div>
+      </div>
+      <p class="gap-note">Prochaines étapes de la feuille de route : construites dans l'ordre, chacune vérifiée avant de passer à la suivante.</p>
+    </section>
+
+    <section>
+      <div class="kicker">La suite</div>
+      <h2 class="headline">Évolutions futures</h2>
+      <p class="lede">Le socle de lancement couvre l'essentiel de chaque métier. Certains modules déjà présents y existent dans une version volontairement limitée : leurs versions avancées sont prévues en Phase 2.</p>
+
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-head"><div class="icon">🧮</div><b>Comptabilité</b></div>
+          <div class="evo-row evo-now"><span class="label">Aujourd'hui</span><span>Facturation, caisse, coût de revient et rapport financier.</span></div>
+          <div class="evo-row evo-next"><span class="label">Version avancée</span><span>Connecteur SYSCOHADA et SAGE : export automatisé vers un logiciel comptable tiers.</span></div>
+        </div>
+        <div class="evo-card">
+          <div class="evo-head"><div class="icon">👥</div><b>Ressources humaines</b></div>
+          <div class="evo-row evo-now"><span class="label">Aujourd'hui</span><span>Annuaire du personnel, comptes et droits d'accès par métier.</span></div>
+          <div class="evo-row evo-next"><span class="label">Version avancée</span><span>Paie et pointage avancés, aujourd'hui non couverts.</span></div>
+        </div>
+        <div class="evo-card">
+          <div class="evo-head"><div class="icon">🛡️</div><b>Sécurité</b></div>
+          <div class="evo-row evo-now"><span class="label">Aujourd'hui</span><span>Contrôle de sortie au portail (QR ou manuel), droits précis par rôle, trace de chaque action.</span></div>
+          <div class="evo-row evo-next"><span class="label">Version avancée</span><span>Sécurité et sortie avancées, avec suivi des visiteurs.</span></div>
+        </div>
+      </div>
+
+      <div class="also-title">Et aussi en Phase 2</div>
+      <div class="pill-row">
+        <span class="pill">Magasin avancé : pièces et outillage</span>
+        <span class="pill">Stocks de matières premières avancés : achats et approvisionnement</span>
+        <span class="pill">Séparation des couleurs : prépresse numérique</span>
+        <span class="pill">Portails de vente en ligne et marketing</span>
+        <span class="pill">Notifications et alertes SMS</span>
+        <span class="pill">Connecteurs IoT pour les machines</span>
+        <span class="pill">Écrans de poste</span>
+        <span class="pill">Matrice de décision d'urgence</span>
+      </div>
+      <p class="evo-note">Ces extensions s'ajoutent au socle de lancement, sans rupture des habitudes de travail déjà en place.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <span class="brand">BATEXCI ERP</span>
+    <span class="note">Présentation interne : l'outil continue d'évoluer chaque semaine.</span>
+  </footer>
+</div>
+</body>
+</html>

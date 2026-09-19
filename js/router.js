@@ -23,6 +23,8 @@
     if (hash === "#/expression-besoins") return "besoins";
     if (hash === "#/licences") return "licences";
     if (hash === "#/tour-application") return "tourApplication";
+    if (hash === "#/presentation-usine") return "presentationUsine";
+    if (hash === "#/presentation-usine-pca") return "presentationUsinePca";
     return "hub";
   }
 

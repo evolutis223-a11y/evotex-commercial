@@ -14,6 +14,7 @@ Contenu déjà en place, aucune donnée sensible, pensé pour être montré ou e
 - **Socle de Lancement** (`#/socle-lancement`)
 - **Grille de Licences** (`#/licences`)
 - **Cahier des Charges Client** (`#/expression-besoins`)
+- **L'outil qui pilote toute l'usine** (`#/presentation-usine`) et sa version avec le regard du PCA (`#/presentation-usine-pca`), ajoutées le 19/09/2026 : deux présentations pour deux cibles, avec une mention « Version du JJ/MM/AAAA » sous le document, réservée au commercial (voir README)
 
 Aucun mot de passe. Le hub public (`#/`) reste le point d'entrée visible.
 

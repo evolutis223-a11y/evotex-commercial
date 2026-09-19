@@ -1,0 +1,66 @@
+/* Présentation "L'outil qui pilote toute l'usine" (19/09/2026).
+   1) Cadre autour du document : barre du haut, document dans un iframe, bande
+      de date en dessous. La date n'est jamais dans le document lui-même.
+   2) Pied de carte du hub portant la date de version.
+   3) Lecture par un prospect : la date est une information pour le commercial,
+      elle disparaît des liens de partage. */
+
+.pu {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: linear-gradient(180deg, var(--evx-navy-deep) 0%, var(--evx-navy) 100%);
+}
+
+.pu-topbar { flex: none; padding: 12px 24px; }
+.pu-topbar .evx-retour { color: var(--evx-blue-light); }
+.pu-topbar .evx-retour:hover { color: #8fb4de; }
+
+.pu-cadre {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+}
+
+.pu-date {
+  flex: none;
+  margin: 0;
+  padding: 9px 24px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--evx-onDark-label);
+  background: rgba(10, 20, 36, 0.6);
+  border-top: 1px solid rgba(133, 178, 230, 0.22);
+}
+
+/* Pied de la carte du hub : une bande qui déborde du remplissage de
+   .hub-card (32px 28px, voir hub.css) pour toucher les bords de la carte.
+   Le rayon bas (19px) suit celui de la carte (20px) moins sa bordure. */
+.hub-card-date {
+  display: block;
+  margin: 6px -28px -32px;
+  padding: 10px 28px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--evx-onDark-label);
+  background: rgba(10, 20, 36, 0.38);
+  border-top: 1px solid rgba(133, 178, 230, 0.22);
+  border-radius: 0 0 19px 19px;
+}
+
+/* Mode partage (router.js) : le prospect voit le document seul, plein cadre,
+   sans barre ni date. En partage complet, le hub reste visible mais sans
+   les dates (information réservée au commercial). */
+html.evx-partage .pu-topbar,
+html.evx-partage .pu-date,
+html.evx-partage-complet .pu-date,
+html.evx-partage-complet .hub-card-date {
+  display: none !important;
+}
